@@ -10,5 +10,23 @@
 	<atom:link href="https://fucangyu.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
     
+    <item>
+      <title>about</title>
+      <link>https://fucangyu.github.io/tags/about/</link>
+      <pubDate>Sat, 10 Nov 2018 20:59:00 +0800</pubDate>
+      
+      <guid>https://fucangyu.github.io/tags/about/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>django</title>
+      <link>https://fucangyu.github.io/tags/django/</link>
+      <pubDate>Sat, 10 Nov 2018 21:34:22 +0800</pubDate>
+      
+      <guid>https://fucangyu.github.io/tags/django/</guid>
+      <description></description>
+    </item>
+    
   </channel>
 </rss>
