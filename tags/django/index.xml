@@ -13,10 +13,10 @@
     
     <item>
       <title>Django orm改字段名造成数据丢失</title>
-      <link>https://fucangyu.github.io/post/django-orm-change-columen-name/</link>
+      <link>https://fucangyu.github.io/post/django-orm-change-field-name/</link>
       <pubDate>Sat, 10 Nov 2018 21:34:22 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/django-orm-change-columen-name/</guid>
+      <guid>https://fucangyu.github.io/post/django-orm-change-field-name/</guid>
       <description>&lt;h3 id=&#34;一-现场&#34;&gt;一. 现场：&lt;/h3&gt;
 
 &lt;p&gt;以为是修改一个变量名，但在django orm内部并不这么认为：&lt;/p&gt;

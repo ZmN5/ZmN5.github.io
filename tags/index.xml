@@ -6,9 +6,19 @@
     <description>Recent content in Tags on 何时</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
+    <lastBuildDate>Sun, 11 Nov 2018 02:19:24 +0800</lastBuildDate>
     
 	<atom:link href="https://fucangyu.github.io/tags/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>CPS</title>
+      <link>https://fucangyu.github.io/tags/cps/</link>
+      <pubDate>Sun, 11 Nov 2018 02:19:24 +0800</pubDate>
+      
+      <guid>https://fucangyu.github.io/tags/cps/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>about</title>
@@ -20,11 +30,38 @@
     </item>
     
     <item>
+      <title>continuation</title>
+      <link>https://fucangyu.github.io/tags/continuation/</link>
+      <pubDate>Sun, 11 Nov 2018 02:19:24 +0800</pubDate>
+      
+      <guid>https://fucangyu.github.io/tags/continuation/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>django</title>
       <link>https://fucangyu.github.io/tags/django/</link>
       <pubDate>Sat, 10 Nov 2018 21:34:22 +0800</pubDate>
       
       <guid>https://fucangyu.github.io/tags/django/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>lisp</title>
+      <link>https://fucangyu.github.io/tags/lisp/</link>
+      <pubDate>Sun, 11 Nov 2018 02:19:24 +0800</pubDate>
+      
+      <guid>https://fucangyu.github.io/tags/lisp/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>racket</title>
+      <link>https://fucangyu.github.io/tags/racket/</link>
+      <pubDate>Sun, 11 Nov 2018 02:19:24 +0800</pubDate>
+      
+      <guid>https://fucangyu.github.io/tags/racket/</guid>
       <description></description>
     </item>
     

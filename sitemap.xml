@@ -3,7 +3,14 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://fucangyu.github.io/post/django-orm-change-columen-name/</loc>
+    <loc>https://fucangyu.github.io/post/cps1/</loc>
+    <lastmod>2018-11-11T02:19:24+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://fucangyu.github.io/post/django-orm-change-field-name/</loc>
     <lastmod>2018-11-10T21:34:22+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -17,6 +24,13 @@
   </url>
   
   <url>
+    <loc>https://fucangyu.github.io/tags/cps/</loc>
+    <lastmod>2018-11-11T02:19:24+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://fucangyu.github.io/categories/</loc>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
@@ -24,13 +38,14 @@
   
   <url>
     <loc>https://fucangyu.github.io/post/</loc>
-    <lastmod>2018-11-10T21:34:22+08:00</lastmod>
+    <lastmod>2018-11-11T02:19:24+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://fucangyu.github.io/tags/</loc>
+    <lastmod>2018-11-11T02:19:24+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -38,6 +53,13 @@
   <url>
     <loc>https://fucangyu.github.io/tags/about/</loc>
     <lastmod>2018-11-10T20:59:00+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://fucangyu.github.io/tags/continuation/</loc>
+    <lastmod>2018-11-11T02:19:24+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -57,6 +79,13 @@
   </url>
   
   <url>
+    <loc>https://fucangyu.github.io/tags/lisp/</loc>
+    <lastmod>2018-11-11T02:19:24+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://fucangyu.github.io/categories/personal/</loc>
     <lastmod>2018-11-10T20:59:00+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -71,8 +100,15 @@
   </url>
   
   <url>
+    <loc>https://fucangyu.github.io/tags/racket/</loc>
+    <lastmod>2018-11-11T02:19:24+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://fucangyu.github.io/</loc>
-    <lastmod>2018-11-10T21:34:22+08:00</lastmod>
+    <lastmod>2018-11-11T02:19:24+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
