@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://fucangyu.github.io/sitemap.xml
