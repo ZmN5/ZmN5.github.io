@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-cn">
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
@@ -44,7 +44,7 @@
 <meta property="og:description" content="好好写代码，好好生活" />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://fucangyu.github.io/" />
-<meta property="og:updated_time" content="2018-11-10T20:59:00&#43;08:00"/>
+<meta property="og:updated_time" content="2018-11-10T21:34:22&#43;08:00"/>
 
 <meta itemprop="name" content="何时">
 <meta itemprop="description" content="好好写代码，好好生活">
@@ -114,6 +114,252 @@
           <section id="posts" class="posts">
     <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/django-orm-change-columen-name/">Django orm改字段名造成数据丢失</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2018-11-10 </span>
+      
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h3 id="一-现场">一. 现场：</h3>
+
+<p>以为是修改一个变量名，但在django orm内部并不这么认为：</p>
+
+<p>model:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">旧列名：
+cos_path = models.CharField(max_length=200, null=True, verbose_name=&#39;存储路径&#39;)
+
+新列名:
+storage_path = models.CharField(max_length=200, null=True,verbose_name=&#39;存储路径&#39;)</pre></td></tr></table>
+</div>
+</div>
+<p>migrations:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">operations = [
+    migrations.RemoveField(
+        model_name=&#39;insurancedocument&#39;,
+        name=&#39;cos_path&#39;,
+    ),
+    migrations.AddField(
+        model_name=&#39;insurancedocument&#39;,
+        name=&#39;storage_path&#39;,
+       field=models.CharField(max_length=200, null=True, verbose_name=&#39;存储路径&#39;),
+    ),</pre></td></tr></table>
+</div>
+</div>
+<p>sql:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">BEGIN;
+--
+-- Remove field cos_path from insurancedocument
+--
+ALTER TABLE `apis_insurancedocument` DROP COLUMN `cos_path`;
+--
+-- Add field storage_path to insurancedocument
+--
+ALTER TABLE `apis_insurancedocument` ADD COLUMN `storage_path` varchar(200) NULL;
+COMMIT;</pre></td></tr></table>
+</div>
+</div>
+<p>所以在Django orm里面认为这是删去了一个字段，然后又新增了一个字段，然后数据就丢了。</p>
+
+<h3 id="二-其他django改列名手段">二. 其他django改列名手段</h3>
+
+<h4 id="1-利用db-column-改名">1. 利用db_column 改名</h4>
+
+<p>操作如下，利用db_column来改变字段名的，然后：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">cos_path = models.CharField(max_length=200, null=True, verbose_name=&#39;存储路径&#39;)
+
+storage_path = models.CharField(max_length=200, null=True, db_column=&#39;cos_path&#39;, verbose_name=&#39;存储路径&#39;)</pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">BEGIN;
+--
+-- Remove field cos_path from insurancedocument
+--
+ALTER TABLE `apis_insurancedocument` DROP COLUMN `cos_path`;
+--
+-- Add field storage_path to insurancedocument
+--
+ALTER TABLE `apis_insurancedocument` ADD COLUMN `cos_path` varchar(200) NULL;
+COMMIT;</pre></td></tr></table>
+</div>
+</div>
+<p>django orm会先把cos_path那个字段给drop掉，数据还会丢失。</p>
+
+<h4 id="2-利用rename-field改名">2. 利用rename field改名</h4>
+
+<p>(1) 利用python manage.py makemigrations &ndash;empty apis创建一个新的migrations文件, 编辑：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">from django.db import migrations
+from django.db import models
+
+
+class Migration(migrations.Migration):
+
+    dependencies = [
+        (&#39;apis&#39;, &#39;0006_auto_20180724_1039&#39;),
+    ]
+
+    operations = [
+        migrations.AlterField(
+            model_name=&#39;insurancedocument&#39;,
+            name=&#39;cos_path&#39;,
+            field=models.CharField(
+                max_length=200, null=True, verbose_name=&#39;存储路径&#39;
+            )
+        ),
+        migrations.RenameField(
+            model_name=&#39;insurancedocument&#39;,
+            old_name=&#39;cos_path&#39;,
+            new_name=&#39;storage_path&#39;,
+        ),
+    ]</pre></td></tr></table>
+</div>
+</div>
+<p>(2)执行的sql语句：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">BEGIN;
+--
+-- Alter field cos_path on insurancedocument
+--
+--
+-- Rename field cos_path on insurancedocument to storage_path
+--
+ALTER TABLE `apis_insurancedocument` CHANGE `cos_path` `storage_path` varchar(200) NULL;
+COMMIT;</pre></td></tr></table>
+</div>
+</div>
+<p>这时候django才认为执行的是改名操作， 查看migrate之后的数据库发现数据没有丢失。</p>
+
+<p>但是这种操作对mysql来说貌似都是重建一张新表，然后把旧表内容插入新表里面，耗时长, 需要停服 而且危险， 所以补充毅总说的一种方法：</p>
+
+<h4 id="3-不停服改名">3 不停服改名</h4>
+
+<ol>
+<li>先加列，改代码来读老列&amp;&amp;双写，</li>
+<li>通过 sql 或者代码复制原列数据到新列，</li>
+<li>代码再切换成读写新列，</li>
+<li>再做清理老列的事情</li>
+</ol>
+
+<h4 id="4-还是不要改名字了">4 还是不要改名字了</h4>
+
+<h2 id="反思">反思:</h2>
+
+<hr />
+
+<ol>
+<li>在线上执行这种需要Schema Operations的事情，确认是否必要</li>
+<li>还是不要用django migration了</li>
+<li>执行sqlmigrate， 确认django orm到底会干什么事情</li>
+<li>本地实验，证明操作无害</li>
+</ol>
+    </div>
+    <div class="read-more">
+      <a href="/post/django-orm-change-columen-name/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/about/">About</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2018-11-10 </span>
@@ -123,10 +369,18 @@
   
   <div class="post-content">
     <div class="post-summary">
-      
+      <ul>
+<li>现在北京</li>
+<li>工作中主要使用Python</li>
+<li>脚本工程师，十八线程序员</li>
+<li>在学racket，越来越喜欢这门语言</li>
+<li>正在continuation和macro的坑里面</li>
+<li>对k8s和docker极有兴趣</li>
+<li>越来越胖了</li>
+</ul>
     </div>
     <div class="read-more">
-      <a href="/post/about/" class="read-more-link">Read more..</a>
+      <a href="/post/about/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>
@@ -152,11 +406,11 @@
 
 <div class="copyright">
   <span class="power-by">
-    Powered by <a class="hexo-link" href="https://gohugo.io">Hugo</a>
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
   </span>
   <span class="division">|</span>
   <span class="theme-info">
-    Theme - 
+    主题 - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
 
