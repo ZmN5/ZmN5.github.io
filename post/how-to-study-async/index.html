@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>怎么理解异步?(1) - 何时</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="fcy" /><meta name="description" content="零 从刚开始学Python到现在，一直对异步都只有一个很模糊的印象。 什么是event_loop，event和loop是到底什么关系？ 具体的业务" /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.51 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://fucangyu.github.io/post/how-to-study-async/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.93844dae.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="怎么理解异步?(1)" />
+<meta property="og:description" content="零 从刚开始学Python到现在，一直对异步都只有一个很模糊的印象。 什么是event_loop，event和loop是到底什么关系？ 具体的业务" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://fucangyu.github.io/post/how-to-study-async/" /><meta property="article:published_time" content="2018-12-29T20:52:03&#43;08:00"/>
+<meta property="article:modified_time" content="2018-12-29T20:52:03&#43;08:00"/>
+
+<meta itemprop="name" content="怎么理解异步?(1)">
+<meta itemprop="description" content="零 从刚开始学Python到现在，一直对异步都只有一个很模糊的印象。 什么是event_loop，event和loop是到底什么关系？ 具体的业务">
+
+
+<meta itemprop="datePublished" content="2018-12-29T20:52:03&#43;08:00" />
+<meta itemprop="dateModified" content="2018-12-29T20:52:03&#43;08:00" />
+<meta itemprop="wordCount" content="1825">
+
+
+
+<meta itemprop="keywords" content="" />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="怎么理解异步?(1)"/>
+<meta name="twitter:description" content="零 从刚开始学Python到现在，一直对异步都只有一个很模糊的印象。 什么是event_loop，event和loop是到底什么关系？ 具体的业务"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">何时</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">何时</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">怎么理解异步?(1)</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2018-12-29 </span>
+        
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      <h3 id="零">零</h3>
+
+<p>从刚开始学Python到现在，一直对异步都只有一个很模糊的印象。</p>
+
+<ol>
+<li>什么是event_loop，event和loop是到底什么关系？</li>
+<li>具体的业务和异步框架到底是怎么交互的?</li>
+<li>协程、生成器、回调到底是什么关系?</li>
+<li>协程和线程是什么关系?</li>
+</ol>
+
+<h3 id="一-先从同步说起">一、先从同步说起</h3>
+
+<p>如果是一个普通的同步爬虫，会是怎么工作的：</p>
+
+<ol>
+<li>建立连接</li>
+<li>分块读取内容</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">socket</span>
+
+<span class="k">def</span> <span class="nf">fetch</span><span class="p">():</span>
+    <span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">()</span>
+    <span class="n">sock</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="s1">&#39;www.baidu.com&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;GET / HTTP1.0</span><span class="se">\r\n</span><span class="s1">Host: baidu.com</span><span class="se">\r\n\r\n</span><span class="s1">&#39;</span>
+    <span class="n">sock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">))</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+    <span class="n">chunk</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">chunk</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">+=</span> <span class="n">chunk</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
+
+    <span class="n">parse_links</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">parse_links</span><span class="p">(</span><span class="n">response</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;recv: {len(response)} bytes&#39;</span><span class="p">)</span>
+
+
+<span class="n">fetch</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>这段代码中需要注意的是什么？读取的每个分块的内容都会存进<code>本地变量</code>中，读取完毕后返回。</p>
+
+<h3 id="二-轮询异步">二、 轮询异步</h3>
+
+<p>在上面的代码中， <code>connect</code>和<code>recv</code>会阻塞代码等待操作完成，如果不想在这里阻塞会该怎么样呢</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">socket</span>
+
+
+<span class="k">def</span> <span class="nf">fetch</span><span class="p">():</span>
+    <span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">()</span>
+    <span class="n">sock</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">sock</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="s1">&#39;www.baidu.com&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
+    <span class="k">except</span> <span class="n">BlockingIOError</span><span class="p">:</span>
+        <span class="k">pass</span>
+
+    <span class="n">send</span><span class="p">(</span><span class="n">sock</span><span class="p">)</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="n">recv</span><span class="p">(</span><span class="n">sock</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;recv: {len(response)}&#39;</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">send</span><span class="p">(</span><span class="n">sock</span><span class="p">):</span>
+    <span class="n">request</span> <span class="o">=</span> <span class="n">f</span><span class="s1">&#39;GET / HTTP.0</span><span class="se">\r\n</span><span class="s1">Host: baide.com</span><span class="se">\r\n\r\n</span><span class="s1">&#39;</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">sock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">))</span>
+            <span class="k">print</span><span class="p">(</span><span class="s1">&#39;sent&#39;</span><span class="p">)</span>
+            <span class="k">break</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+
+<span class="k">def</span> <span class="nf">recv_chunk</span><span class="p">(</span><span class="n">sock</span><span class="p">):</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">chunk</span> <span class="o">=</span> <span class="n">sock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">chunk</span>
+        <span class="k">except</span> <span class="ne">IOError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+
+<span class="k">def</span> <span class="nf">recv</span><span class="p">(</span><span class="n">sock</span><span class="p">):</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+    <span class="n">chunk</span> <span class="o">=</span> <span class="n">recv_chunk</span><span class="p">(</span><span class="n">sock</span><span class="p">)</span>
+    <span class="k">while</span> <span class="n">chunk</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">+=</span> <span class="n">chunk</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="n">recv_chunk</span><span class="p">(</span><span class="n">sock</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">response</span>
+
+
+<span class="n">fetch</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>大概步骤为：</p>
+
+<ol>
+<li>建立连接</li>
+<li>不停的轮询现在可不可以发消息，可以的话就发送</li>
+<li>不停的轮询现在可不可以读一个块的消息，可以的读一下</li>
+<li>利用本地变量拼接所有的块，返回</li>
+</ol>
+
+<p><code>sock.setblocking(False)</code>把连接改为异步模式，这样<code>connect</code>和<code>recv</code>都不再阻塞, 和之前的代码相比有几个不同的地方：</p>
+
+<ol>
+<li>异步模式<code>connect</code>时候会默认抛出<code>BlockingIOError</code></li>
+<li>在异步模式下，不能知道什么时候<code>connect</code>连接完成，可以执行<code>send</code>，所以这时候要不停的轮询</li>
+<li>同样，也不知道什么时候可以<code>recv</code>这时候同样需要轮询</li>
+<li>在每次<code>recv</code>到的代码块也是存在本地变量中</li>
+</ol>
+
+<p>可以发现，这样的异步效率比同步更加低，在上面的同步代码中，可以利用多线程, 每个线程占用一个端口来提高效率，但是在这种轮询模式下，CPU会极其繁忙，加上GIL的限制，多线程的效率会比同步模式,甚至单线程低的多。</p>
+
+<h3 id="三-事件驱动-回调">三、事件驱动-回调</h3>
+
+<p>很明显上面的异步不是我们想要的，如果想提高异步效率，可以采用事件驱动，从<code>不停的问有没有活干</code>改为<code>有活干的话通知我一声</code>，在Unix系统中，一般可以采用<code>select</code>(远古时代), <code>poll</code>, <code>epoll</code>(Linux), <code>kqueue</code>(BSD), 这些怎么工作的就是另外一个话题了，这里暂不讨论。</p>
+
+<p>用原生的接口编程还是很困难的，还好在Python里面封装了很好用的接口</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span><span class="lnt">41
+</span><span class="lnt">42
+</span><span class="lnt">43
+</span><span class="lnt">44
+</span><span class="lnt">45
+</span><span class="lnt">46
+</span><span class="lnt">47
+</span><span class="lnt">48
+</span><span class="lnt">49
+</span><span class="lnt">50
+</span><span class="lnt">51
+</span><span class="lnt">52
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">socket</span>
+<span class="kn">from</span> <span class="nn">selectors</span> <span class="kn">import</span> <span class="n">DefaultSelector</span><span class="p">,</span> <span class="n">EVENT_WRITE</span><span class="p">,</span> <span class="n">EVENT_READ</span>
+
+<span class="n">selector</span> <span class="o">=</span> <span class="n">DefaultSelector</span><span class="p">()</span>
+
+
+<span class="k">class</span> <span class="nc">Fetcher</span><span class="p">:</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span> <span class="o">=</span> <span class="bp">None</span>
+
+    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="s1">&#39;www.zhihu.com&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
+        <span class="k">except</span> <span class="n">BlockingIOError</span><span class="p">:</span>
+            <span class="k">pass</span>
+
+        <span class="n">selector</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">EVENT_WRITE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">connected</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">connected</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;connected&#39;</span><span class="p">)</span>
+        <span class="n">selector</span><span class="o">.</span><span class="n">unregister</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">fd</span><span class="p">)</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="s1">&#39;GET / HTTP1.1</span><span class="se">\r\n</span><span class="s1">Host: www.zhihu.com</span><span class="se">\r\n\r\n</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">))</span>
+        <span class="n">selector</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">fd</span><span class="p">,</span> <span class="n">EVENT_READ</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_response</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">read_response</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
+        <span class="n">chunk</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">+=</span> <span class="n">chunk</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">selector</span><span class="o">.</span><span class="n">unregister</span><span class="p">(</span><span class="n">key</span><span class="o">.</span><span class="n">fd</span><span class="p">)</span>
+            <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;recv count: {len(self.response)}&#39;</span><span class="p">)</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">parse_response</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">parse_response</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;recv count: {len(self.response)}&#39;</span><span class="p">)</span>
+
+
+
+<span class="k">def</span> <span class="nf">loop</span><span class="p">():</span>
+    <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">select</span><span class="p">()</span>
+        <span class="k">for</span> <span class="n">event_key</span><span class="p">,</span> <span class="n">event_mask</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
+            <span class="n">cb</span> <span class="o">=</span> <span class="n">event_key</span><span class="o">.</span><span class="n">data</span>
+            <span class="n">cb</span><span class="p">(</span><span class="n">event_key</span><span class="p">,</span> <span class="n">event_mask</span><span class="p">)</span>
+
+
+<span class="n">Fetcher</span><span class="p">()</span><span class="o">.</span><span class="n">fetch</span><span class="p">()</span>
+<span class="n">loop</span><span class="p">()</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>梳理一下这个的执行步骤：</p>
+
+<ol>
+<li>显式指明<code>sock</code>和<code>response</code>保存在<code>self</code></li>
+<li>建立连接，利用三元组注册<code>可写</code>事件， (<code>文件描述符fd</code>, <code>类型</code>, <code>回调函数</code>)</li>
+<li>连接建立之后，取消注册事件，发送request, 同时注册可读事件</li>
+<li>每次有可读事件时候，读取<code>4k</code>的信息</li>
+<li>读取完成后，取消注册事件</li>
+</ol>
+
+<p>和上面最大的不同在于，无论是<code>同步请求</code>还是<code>轮询异步</code>, 自始至终的控制流都是在一个函数内，<code>response</code>和<code>sock</code>保存在本地变量中，也就是<code>stack</code>中(在Python中其实是保存在<code>heap</code>里面)。</p>
+
+<p>但是在这个回调版本中，控制流大概为<code>fetch</code> -&gt; <code>loop</code> -&gt; <code>connected</code> -&gt; <code>loop</code> -&gt; <code>read_response</code> -&gt; <code>loop</code>&hellip;-&gt; <code>read_response</code>， 可以看到控制流在不同的函数之间跳转，需要我们手动、显示的保存需要的值给之后的控制流使用。</p>
+
+<p>也就是说，我们要显示的保存当前的<code>continuation</code>，等待事件发生的时候继续执行当前函数。这样就可以做到，当当前代码执行完，需要等待io事件发生时候，就移交控制流，让其他代码段有执行的机会，事件发生时候，当前代码继续执行，不用轮询，不用阻塞。</p>
+
+<p>但是这样有什么问题呢？</p>
+
+<p>比如如果，在<code>parse_response</code>时候发生问题</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="nf">parsed_response</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;recv count: {len(self.response)}&#39;</span><span class="p">)</span>
+	<span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;parse error&#39;</span><span class="p">)</span></code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">connected</span>
+<span class="n">recv</span> <span class="n">count</span><span class="p">:</span> <span class="mi">335</span>
+<span class="n">Traceback</span> <span class="p">(</span><span class="n">most</span> <span class="n">recent</span> <span class="n">call</span> <span class="n">last</span><span class="p">):</span>
+  <span class="n">File</span> <span class="s2">&#34;test.py&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">51</span><span class="p">,</span> <span class="ow">in</span> <span class="o">&lt;</span><span class="n">module</span><span class="o">&gt;</span>
+    <span class="n">loop</span><span class="p">()</span>
+  <span class="n">File</span> <span class="s2">&#34;test.py&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">47</span><span class="p">,</span> <span class="ow">in</span> <span class="n">loop</span>
+    <span class="n">cb</span><span class="p">(</span><span class="n">event_key</span><span class="p">,</span> <span class="n">event_mask</span><span class="p">)</span>
+  <span class="n">File</span> <span class="s2">&#34;test.py&#34;</span><span class="p">,</span> <span class="n">line</span> <span class="mi">36</span><span class="p">,</span> <span class="ow">in</span> <span class="n">read_response</span>
+    <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="s1">&#39;parse error&#39;</span><span class="p">)</span>
+<span class="ne">Exception</span><span class="p">:</span> <span class="n">parse</span> <span class="n">error</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>这个时候我们完全不知道从哪调用的这个函数，这个函数要往哪去， 我们丢失了<code>continuation</code>, 丢失了控制流信息。</p>
+
+<p>那么，该怎么办？</p>
+
+<p>还记得上面的<code>同步</code>和<code>轮询</code>吗? 这两个版本没有丢失<code>continuation</code>, 没有丢失<code>控制流</code>， 因为所有代码段再次开始执行时候所需要的信息都在一个函数内！！！</p>
+
+<p>那么异步能不能也这样？也就是，在一个函数内，需要的时候停止，事件发生时候再次开始执行？</p>
+
+<p>等等……这不就是生成器吗？！</p>
+    </div>
+
+    <footer class="post-footer">
+      
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/cps1/">
+            <span class="next-text nav-default">怎么理解CPS?(1)</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="cangyufu@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/fucangyu" class="iconfont icon-github" title="github"></a>
+  <a href="https://fucangyu.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2018
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">fcy</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
