@@ -72,6 +72,20 @@
   </url>
   
   <url>
+    <loc>https://fucangyu.github.io/tags/async/</loc>
+    <lastmod>2018-12-30T09:23:43+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://fucangyu.github.io/categories/async/</loc>
+    <lastmod>2018-12-30T09:23:43+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://fucangyu.github.io/tags/continuation/</loc>
     <lastmod>2018-11-11T02:19:24+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -116,6 +130,13 @@
   <url>
     <loc>https://fucangyu.github.io/tags/racket/</loc>
     <lastmod>2018-11-11T02:19:24+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://fucangyu.github.io/tags/yield-from/</loc>
+    <lastmod>2018-12-30T09:23:43+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>

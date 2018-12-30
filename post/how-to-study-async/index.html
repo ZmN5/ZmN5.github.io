@@ -54,7 +54,7 @@
 
 
 
-<meta itemprop="keywords" content="" />
+<meta itemprop="keywords" content="async,yield from," />
 <meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="怎么理解异步?(1)"/>
 <meta name="twitter:description" content="零 从刚开始学Python到现在，一直对异步都只有一个很模糊的印象。 什么是event_loop，event和loop是到底什么关系？ 具体的业务"/>
@@ -124,7 +124,9 @@
 
       <div class="post-meta">
         <span class="post-time"> 2018-12-29 </span>
-        
+        <div class="post-category">
+            <a href="/categories/async/"> async </a>
+            </div>
         
       </div>
     </header>
@@ -504,7 +506,10 @@
     </div>
 
     <footer class="post-footer">
-      
+      <div class="post-tags">
+          <a href="/tags/async/">async</a>
+          <a href="/tags/yield-from/">yield from</a>
+          </div>
       <nav class="post-nav">
         <a class="prev" href="/post/how-to-study-async2/">
             <i class="iconfont icon-left"></i>
@@ -520,7 +525,20 @@
     </footer>
   </article>
         </div>
-        
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'https-fucangyu-github-io';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
       </div>
     </main>
