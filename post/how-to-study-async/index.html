@@ -50,7 +50,7 @@
 
 <meta itemprop="datePublished" content="2018-12-29T20:52:03&#43;08:00" />
 <meta itemprop="dateModified" content="2018-12-29T20:52:03&#43;08:00" />
-<meta itemprop="wordCount" content="1825">
+<meta itemprop="wordCount" content="1835">
 
 
 
@@ -496,17 +496,21 @@
 
 <p>那么，该怎么办？</p>
 
-<p>还记得上面的<code>同步</code>和<code>轮询</code>吗? 这两个版本没有丢失<code>continuation</code>, 没有丢失<code>控制流</code>， 因为所有代码段再次开始执行时候所需要的信息都在一个函数内！！！</p>
+<p>还记得上面的<code>同步</code>和<code>轮询</code>吗? 这两个版本没有丢失<code>continuation</code>, 没有丢失<code>控制流</code>，不用显式保存共享状态， 因为所有代码段再次开始执行时候所需要的信息都在一个函数内！！！</p>
 
 <p>那么异步能不能也这样？也就是，在一个函数内，需要的时候停止，事件发生时候再次开始执行？</p>
 
-<p>等等……这不就是生成器吗？！</p>
+<p>等等……这不就是<code>协程</code>吗？！</p>
     </div>
 
     <footer class="post-footer">
       
       <nav class="post-nav">
-        
+        <a class="prev" href="/post/how-to-study-async2/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">怎么理解异步(2)</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
         <a class="next" href="/post/cps1/">
             <span class="next-text nav-default">怎么理解CPS?(1)</span>
             <span class="next-text nav-mobile">下一篇</span>
