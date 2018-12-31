@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 何时</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 30 Dec 2018 09:23:43 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 31 Dec 2018 20:47:08 +0800</lastBuildDate>
     
 	<atom:link href="https://fucangyu.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>2018小结</title>
+      <link>https://fucangyu.github.io/post/summary-2018/</link>
+      <pubDate>Mon, 31 Dec 2018 20:47:08 +0800</pubDate>
+      
+      <guid>https://fucangyu.github.io/post/summary-2018/</guid>
+      <description>2018过完了，马上就就要27了。 27了！！！ 2018是人生中第一个从始至终都在上班的年份，最大的感受就是，时间过的好快啊！ 一、身体： 明显的</description>
+    </item>
     
     <item>
       <title>怎么理解异步(2)</title>

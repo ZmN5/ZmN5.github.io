@@ -3,6 +3,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://fucangyu.github.io/post/summary-2018/</loc>
+    <lastmod>2018-12-31T20:47:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://fucangyu.github.io/post/how-to-study-async2/</loc>
     <lastmod>2018-12-30T09:23:43+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -38,6 +45,13 @@
   </url>
   
   <url>
+    <loc>https://fucangyu.github.io/tags/2018/</loc>
+    <lastmod>2018-12-31T20:47:08+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://fucangyu.github.io/tags/cps/</loc>
     <lastmod>2018-11-11T02:19:24+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -52,14 +66,14 @@
   
   <url>
     <loc>https://fucangyu.github.io/post/</loc>
-    <lastmod>2018-12-30T09:23:43+08:00</lastmod>
+    <lastmod>2018-12-31T20:47:08+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
   
   <url>
     <loc>https://fucangyu.github.io/tags/</loc>
-    <lastmod>2018-11-11T02:19:24+08:00</lastmod>
+    <lastmod>2018-12-31T20:47:08+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -143,7 +157,7 @@
   
   <url>
     <loc>https://fucangyu.github.io/</loc>
-    <lastmod>2018-12-30T09:23:43+08:00</lastmod>
+    <lastmod>2018-12-31T20:47:08+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
