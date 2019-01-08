@@ -213,24 +213,24 @@
 <p>model:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">旧列名：
-cos_path = models.CharField(max_length=200, null=True, verbose_name=&#39;存储路径&#39;)
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="err">旧列名：</span>
+<span class="n">cos_path</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;存储路径&#39;</span><span class="p">)</span>
 
-新列名:
-storage_path = models.CharField(max_length=200, null=True,verbose_name=&#39;存储路径&#39;)</pre></td></tr></table>
+<span class="err">新列名</span><span class="p">:</span>
+<span class="n">storage_path</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;存储路径&#39;</span><span class="p">)</span></code></pre></td></tr></table>
 </div>
 </div>
 <p>migrations:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -240,24 +240,24 @@ storage_path = models.CharField(max_length=200, null=True,verbose_name=&#39;存�
 </span><span class="lnt"> 8
 </span><span class="lnt"> 9
 </span><span class="lnt">10
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">operations = [
-    migrations.RemoveField(
-        model_name=&#39;insurancedocument&#39;,
-        name=&#39;cos_path&#39;,
-    ),
-    migrations.AddField(
-        model_name=&#39;insurancedocument&#39;,
-        name=&#39;storage_path&#39;,
-       field=models.CharField(max_length=200, null=True, verbose_name=&#39;存储路径&#39;),
-    ),</pre></td></tr></table>
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">operations</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">migrations</span><span class="o">.</span><span class="n">RemoveField</span><span class="p">(</span>
+        <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;insurancedocument&#39;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;cos_path&#39;</span><span class="p">,</span>
+    <span class="p">),</span>
+    <span class="n">migrations</span><span class="o">.</span><span class="n">AddField</span><span class="p">(</span>
+        <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;insurancedocument&#39;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="s1">&#39;storage_path&#39;</span><span class="p">,</span>
+       <span class="n">field</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;存储路径&#39;</span><span class="p">),</span>
+    <span class="p">),</span></code></pre></td></tr></table>
 </div>
 </div>
 <p>sql:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -267,18 +267,18 @@ storage_path = models.CharField(max_length=200, null=True,verbose_name=&#39;存�
 </span><span class="lnt"> 8
 </span><span class="lnt"> 9
 </span><span class="lnt">10
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">BEGIN;
---
--- Remove field cos_path from insurancedocument
---
-ALTER TABLE `apis_insurancedocument` DROP COLUMN `cos_path`;
---
--- Add field storage_path to insurancedocument
---
-ALTER TABLE `apis_insurancedocument` ADD COLUMN `storage_path` varchar(200) NULL;
-COMMIT;</pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">BEGIN</span><span class="p">;</span>
+<span class="c1">--
+</span><span class="c1">-- Remove field cos_path from insurancedocument
+</span><span class="c1">--
+</span><span class="c1"></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">apis_insurancedocument</span><span class="o">`</span> <span class="k">DROP</span> <span class="k">COLUMN</span> <span class="o">`</span><span class="n">cos_path</span><span class="o">`</span><span class="p">;</span>
+<span class="c1">--
+</span><span class="c1">-- Add field storage_path to insurancedocument
+</span><span class="c1">--
+</span><span class="c1"></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">apis_insurancedocument</span><span class="o">`</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="o">`</span><span class="n">storage_path</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span> <span class="k">NULL</span><span class="p">;</span>
+<span class="k">COMMIT</span><span class="p">;</span></code></pre></td></tr></table>
 </div>
 </div>
 <p>所以在Django orm里面认为这是删去了一个字段，然后又新增了一个字段，然后数据就丢了。</p>
@@ -290,18 +290,18 @@ COMMIT;</pre></td></tr></table>
 <p>操作如下，利用db_column来改变字段名的，然后：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">cos_path = models.CharField(max_length=200, null=True, verbose_name=&#39;存储路径&#39;)
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">cos_path</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;存储路径&#39;</span><span class="p">)</span>
 
-storage_path = models.CharField(max_length=200, null=True, db_column=&#39;cos_path&#39;, verbose_name=&#39;存储路径&#39;)</pre></td></tr></table>
+<span class="n">storage_path</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="s1">&#39;cos_path&#39;</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;存储路径&#39;</span><span class="p">)</span></code></pre></td></tr></table>
 </div>
 </div><div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -311,18 +311,18 @@ storage_path = models.CharField(max_length=200, null=True, db_column=&#39;cos_pa
 </span><span class="lnt"> 8
 </span><span class="lnt"> 9
 </span><span class="lnt">10
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">BEGIN;
---
--- Remove field cos_path from insurancedocument
---
-ALTER TABLE `apis_insurancedocument` DROP COLUMN `cos_path`;
---
--- Add field storage_path to insurancedocument
---
-ALTER TABLE `apis_insurancedocument` ADD COLUMN `cos_path` varchar(200) NULL;
-COMMIT;</pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">BEGIN</span><span class="p">;</span>
+<span class="c1">--
+</span><span class="c1">-- Remove field cos_path from insurancedocument
+</span><span class="c1">--
+</span><span class="c1"></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">apis_insurancedocument</span><span class="o">`</span> <span class="k">DROP</span> <span class="k">COLUMN</span> <span class="o">`</span><span class="n">cos_path</span><span class="o">`</span><span class="p">;</span>
+<span class="c1">--
+</span><span class="c1">-- Add field storage_path to insurancedocument
+</span><span class="c1">--
+</span><span class="c1"></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">apis_insurancedocument</span><span class="o">`</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="o">`</span><span class="n">cos_path</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span> <span class="k">NULL</span><span class="p">;</span>
+<span class="k">COMMIT</span><span class="p">;</span></code></pre></td></tr></table>
 </div>
 </div>
 <p>django orm会先把cos_path那个字段给drop掉，数据还会丢失。</p>
@@ -332,7 +332,7 @@ COMMIT;</pre></td></tr></table>
 <p>(1) 利用python manage.py makemigrations &ndash;empty apis创建一个新的migrations文件, 编辑：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt"> 1
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -356,38 +356,38 @@ COMMIT;</pre></td></tr></table>
 </span><span class="lnt">22
 </span><span class="lnt">23
 </span><span class="lnt">24
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">from django.db import migrations
-from django.db import models
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">migrations</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
 
 
-class Migration(migrations.Migration):
+<span class="k">class</span> <span class="nc">Migration</span><span class="p">(</span><span class="n">migrations</span><span class="o">.</span><span class="n">Migration</span><span class="p">):</span>
 
-    dependencies = [
-        (&#39;apis&#39;, &#39;0006_auto_20180724_1039&#39;),
-    ]
+    <span class="n">dependencies</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="s1">&#39;apis&#39;</span><span class="p">,</span> <span class="s1">&#39;0006_auto_20180724_1039&#39;</span><span class="p">),</span>
+    <span class="p">]</span>
 
-    operations = [
-        migrations.AlterField(
-            model_name=&#39;insurancedocument&#39;,
-            name=&#39;cos_path&#39;,
-            field=models.CharField(
-                max_length=200, null=True, verbose_name=&#39;存储路径&#39;
-            )
-        ),
-        migrations.RenameField(
-            model_name=&#39;insurancedocument&#39;,
-            old_name=&#39;cos_path&#39;,
-            new_name=&#39;storage_path&#39;,
-        ),
-    ]</pre></td></tr></table>
+    <span class="n">operations</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">migrations</span><span class="o">.</span><span class="n">AlterField</span><span class="p">(</span>
+            <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;insurancedocument&#39;</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="s1">&#39;cos_path&#39;</span><span class="p">,</span>
+            <span class="n">field</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+                <span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="s1">&#39;存储路径&#39;</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">migrations</span><span class="o">.</span><span class="n">RenameField</span><span class="p">(</span>
+            <span class="n">model_name</span><span class="o">=</span><span class="s1">&#39;insurancedocument&#39;</span><span class="p">,</span>
+            <span class="n">old_name</span><span class="o">=</span><span class="s1">&#39;cos_path&#39;</span><span class="p">,</span>
+            <span class="n">new_name</span><span class="o">=</span><span class="s1">&#39;storage_path&#39;</span><span class="p">,</span>
+        <span class="p">),</span>
+    <span class="p">]</span></code></pre></td></tr></table>
 </div>
 </div>
 <p>(2)执行的sql语句：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><span class="lnt">1
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -396,17 +396,17 @@ class Migration(migrations.Migration):
 </span><span class="lnt">7
 </span><span class="lnt">8
 </span><span class="lnt">9
-</span></pre></td>
+</span></code></pre></td>
 <td class="lntd">
-<pre class="chroma">BEGIN;
---
--- Alter field cos_path on insurancedocument
---
---
--- Rename field cos_path on insurancedocument to storage_path
---
-ALTER TABLE `apis_insurancedocument` CHANGE `cos_path` `storage_path` varchar(200) NULL;
-COMMIT;</pre></td></tr></table>
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">BEGIN</span><span class="p">;</span>
+<span class="c1">--
+</span><span class="c1">-- Alter field cos_path on insurancedocument
+</span><span class="c1">--
+</span><span class="c1">--
+</span><span class="c1">-- Rename field cos_path on insurancedocument to storage_path
+</span><span class="c1">--
+</span><span class="c1"></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">apis_insurancedocument</span><span class="o">`</span> <span class="n">CHANGE</span> <span class="o">`</span><span class="n">cos_path</span><span class="o">`</span> <span class="o">`</span><span class="n">storage_path</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span> <span class="k">NULL</span><span class="p">;</span>
+<span class="k">COMMIT</span><span class="p">;</span></code></pre></td></tr></table>
 </div>
 </div>
 <p>这时候django才认为执行的是改名操作， 查看migrate之后的数据库发现数据没有丢失。</p>
