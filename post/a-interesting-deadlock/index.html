@@ -43,8 +43,11 @@
 在一个复杂的项目中，你永远不知道哪一行代码会调用同步代码阻塞主线程，Racing condition just happens under pressure, and anything that may block will eventually block, 可能会发生的事情终将要发生。
 所以作者建议:
  This is usually the time when I suggest to separate the server into two parts: &amp;ldquo;normal blocking with ORM&amp;rdquo; and &amp;ldquo;asynchronous without ORM&amp;rdquo;.
- 不过倒是想起另外一个问题了, 现在公司业务都是用的gunicorn&#43;gevent, 这个内部是怎么解决这个问题的呢，想不明白诶。。。
-不过联想到gevent的协程是抢占式的，会不会是因为破坏了不可抢占条件而避免了死锁呢，给自己留个问题吧。
+ 不过倒是想起另外一个问题了, 现在公司业务都是用的gunicorn&#43;gevent, 这个内部是怎么解决这个问题的呢
+可以猜测一下：
+上面的例子造成死锁是因为有协程调用同步操作, 而gevent是通过monkey_path的操作从底层改变所有请求的行为，就没有这个问题了。
+不过还有其他问题。
+monkey_patch针对Python代码有效，如果数据库连接器用的是c扩展，emmm&amp;hellip;可以大胆的猜测一下可能的bug
 参考资料：
  现代操作系统 https://python-gino.readthedocs.io/zh/latest/why.html#the-story " /><meta name="keywords" content="Hugo, theme, even" />
 
@@ -149,9 +152,15 @@ A simple fix would be to defer the database operations into threads, so that the
 This is usually the time when I suggest to separate the server into two parts: &ldquo;normal blocking with ORM&rdquo; and &ldquo;asynchronous without ORM&rdquo;.
 
 
-不过倒是想起另外一个问题了, 现在公司业务都是用的gunicorn&#43;gevent, 这个内部是怎么解决这个问题的呢，想不明白诶。。。
+不过倒是想起另外一个问题了, 现在公司业务都是用的gunicorn&#43;gevent, 这个内部是怎么解决这个问题的呢
 
-不过联想到gevent的协程是抢占式的，会不会是因为破坏了不可抢占条件而避免了死锁呢，给自己留个问题吧。
+可以猜测一下：
+
+上面的例子造成死锁是因为有协程调用同步操作, 而gevent是通过monkey_path的操作从底层改变所有请求的行为，就没有这个问题了。
+
+不过还有其他问题。
+
+monkey_patch针对Python代码有效，如果数据库连接器用的是c扩展，emmm&hellip;可以大胆的猜测一下可能的bug
 
 参考资料：
 
@@ -160,8 +169,8 @@ This is usually the time when I suggest to separate the server into two parts: &
 https://python-gino.readthedocs.io/zh/latest/why.html#the-story
 " />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://fucangyu.github.io/post/a-interesting-deadlock/" /><meta property="article:published_time" content="2019-01-16T22:43:13&#43;08:00"/>
-<meta property="article:modified_time" content="2019-01-16T22:43:13&#43;08:00"/>
+<meta property="og:url" content="https://fucangyu.github.io/post/a-interesting-deadlock/" /><meta property="article:published_time" content="2019-01-17T01:03:13&#43;08:00"/>
+<meta property="article:modified_time" content="2019-01-17T01:03:13&#43;08:00"/>
 
 <meta itemprop="name" content="一种有意思的死锁">
 <meta itemprop="description" content="刚闲逛时候发现有一篇文章讲了一种有意思的死锁，不是亲身经历，但是也很有意思了。
@@ -244,9 +253,15 @@ A simple fix would be to defer the database operations into threads, so that the
 This is usually the time when I suggest to separate the server into two parts: &ldquo;normal blocking with ORM&rdquo; and &ldquo;asynchronous without ORM&rdquo;.
 
 
-不过倒是想起另外一个问题了, 现在公司业务都是用的gunicorn&#43;gevent, 这个内部是怎么解决这个问题的呢，想不明白诶。。。
+不过倒是想起另外一个问题了, 现在公司业务都是用的gunicorn&#43;gevent, 这个内部是怎么解决这个问题的呢
 
-不过联想到gevent的协程是抢占式的，会不会是因为破坏了不可抢占条件而避免了死锁呢，给自己留个问题吧。
+可以猜测一下：
+
+上面的例子造成死锁是因为有协程调用同步操作, 而gevent是通过monkey_path的操作从底层改变所有请求的行为，就没有这个问题了。
+
+不过还有其他问题。
+
+monkey_patch针对Python代码有效，如果数据库连接器用的是c扩展，emmm&hellip;可以大胆的猜测一下可能的bug
 
 参考资料：
 
@@ -256,9 +271,9 @@ https://python-gino.readthedocs.io/zh/latest/why.html#the-story
 ">
 
 
-<meta itemprop="datePublished" content="2019-01-16T22:43:13&#43;08:00" />
-<meta itemprop="dateModified" content="2019-01-16T22:43:13&#43;08:00" />
-<meta itemprop="wordCount" content="1178">
+<meta itemprop="datePublished" content="2019-01-17T01:03:13&#43;08:00" />
+<meta itemprop="dateModified" content="2019-01-17T01:03:13&#43;08:00" />
+<meta itemprop="wordCount" content="1268">
 
 
 
@@ -345,9 +360,15 @@ A simple fix would be to defer the database operations into threads, so that the
 This is usually the time when I suggest to separate the server into two parts: &ldquo;normal blocking with ORM&rdquo; and &ldquo;asynchronous without ORM&rdquo;.
 
 
-不过倒是想起另外一个问题了, 现在公司业务都是用的gunicorn&#43;gevent, 这个内部是怎么解决这个问题的呢，想不明白诶。。。
+不过倒是想起另外一个问题了, 现在公司业务都是用的gunicorn&#43;gevent, 这个内部是怎么解决这个问题的呢
 
-不过联想到gevent的协程是抢占式的，会不会是因为破坏了不可抢占条件而避免了死锁呢，给自己留个问题吧。
+可以猜测一下：
+
+上面的例子造成死锁是因为有协程调用同步操作, 而gevent是通过monkey_path的操作从底层改变所有请求的行为，就没有这个问题了。
+
+不过还有其他问题。
+
+monkey_patch针对Python代码有效，如果数据库连接器用的是c扩展，emmm&hellip;可以大胆的猜测一下可能的bug
 
 参考资料：
 
@@ -420,7 +441,7 @@ https://python-gino.readthedocs.io/zh/latest/why.html#the-story
       <h1 class="post-title">一种有意思的死锁</h1>
 
       <div class="post-meta">
-        <span class="post-time"> 2019-01-16 </span>
+        <span class="post-time"> 2019-01-17 </span>
         <div class="post-category">
             <a href="/categories/sticker/"> sticker </a>
             </div>
@@ -510,9 +531,15 @@ https://python-gino.readthedocs.io/zh/latest/why.html#the-story
 <p>This is usually the time when I suggest to separate the server into two parts: &ldquo;normal blocking with ORM&rdquo; and &ldquo;asynchronous without ORM&rdquo;.</p>
 </blockquote>
 
-<p>不过倒是想起另外一个问题了, 现在公司业务都是用的<code>gunicorn</code>+<code>gevent</code>, 这个内部是怎么解决这个问题的呢，想不明白诶。。。</p>
+<p>不过倒是想起另外一个问题了, 现在公司业务都是用的<code>gunicorn</code>+<code>gevent</code>, 这个内部是怎么解决这个问题的呢</p>
 
-<p>不过联想到<code>gevent</code>的协程是抢占式的，会不会是因为破坏了<code>不可抢占条件</code>而避免了死锁呢，给自己留个问题吧。</p>
+<p>可以猜测一下：</p>
+
+<p>上面的例子造成死锁是因为有协程调用同步操作, 而gevent是通过<code>monkey_path</code>的操作从底层改变所有请求的行为，就没有这个问题了。</p>
+
+<p>不过还有其他问题。</p>
+
+<p><code>monkey_patch</code>针对Python代码有效，如果数据库连接器用的是c扩展，emmm&hellip;可以大胆的猜测一下可能的bug</p>
 
 <p>参考资料：</p>
 

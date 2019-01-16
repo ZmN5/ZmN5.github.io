@@ -6,7 +6,7 @@
     <description>Recent content on 何时</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Wed, 16 Jan 2019 22:43:13 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 17 Jan 2019 01:03:13 +0800</lastBuildDate>
     
 	<atom:link href="https://fucangyu.github.io/index.xml" rel="self" type="application/rss+xml" />
     
@@ -14,7 +14,7 @@
     <item>
       <title>一种有意思的死锁</title>
       <link>https://fucangyu.github.io/post/a-interesting-deadlock/</link>
-      <pubDate>Wed, 16 Jan 2019 22:43:13 +0800</pubDate>
+      <pubDate>Thu, 17 Jan 2019 01:03:13 +0800</pubDate>
       
       <guid>https://fucangyu.github.io/post/a-interesting-deadlock/</guid>
       <description>&lt;p&gt;刚闲逛时候发现有&lt;a href=&#34;https://python-gino.readthedocs.io/zh/latest/why.html#the-story&#34;&gt;一篇文章&lt;/a&gt;讲了一种有意思的死锁，不是亲身经历，但是也很有意思了。&lt;/p&gt;
@@ -97,9 +97,15 @@
 &lt;p&gt;This is usually the time when I suggest to separate the server into two parts: &amp;ldquo;normal blocking with ORM&amp;rdquo; and &amp;ldquo;asynchronous without ORM&amp;rdquo;.&lt;/p&gt;
 &lt;/blockquote&gt;
 
-&lt;p&gt;不过倒是想起另外一个问题了, 现在公司业务都是用的&lt;code&gt;gunicorn&lt;/code&gt;+&lt;code&gt;gevent&lt;/code&gt;, 这个内部是怎么解决这个问题的呢，想不明白诶。。。&lt;/p&gt;
+&lt;p&gt;不过倒是想起另外一个问题了, 现在公司业务都是用的&lt;code&gt;gunicorn&lt;/code&gt;+&lt;code&gt;gevent&lt;/code&gt;, 这个内部是怎么解决这个问题的呢&lt;/p&gt;
 
-&lt;p&gt;不过联想到&lt;code&gt;gevent&lt;/code&gt;的协程是抢占式的，会不会是因为破坏了&lt;code&gt;不可抢占条件&lt;/code&gt;而避免了死锁呢，给自己留个问题吧。&lt;/p&gt;
+&lt;p&gt;可以猜测一下：&lt;/p&gt;
+
+&lt;p&gt;上面的例子造成死锁是因为有协程调用同步操作, 而gevent是通过&lt;code&gt;monkey_path&lt;/code&gt;的操作从底层改变所有请求的行为，就没有这个问题了。&lt;/p&gt;
+
+&lt;p&gt;不过还有其他问题。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;monkey_patch&lt;/code&gt;针对Python代码有效，如果数据库连接器用的是c扩展，emmm&amp;hellip;可以大胆的猜测一下可能的bug&lt;/p&gt;
 
 &lt;p&gt;参考资料：&lt;/p&gt;
 
