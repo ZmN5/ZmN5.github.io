@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>一种有意思的死锁 - 何时</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="fcy" /><meta name="description" content="刚闲逛时候发现有一篇文章讲了一种有意思的死锁，不是亲身经历，但是也很有意思了。
+先会议一下死锁的定义是什么？翻出压箱底的现代操作系统:
+ 如果一个进程集合中的每个进程都只能等待由该进程集合中的其他进程才能引发的事件，那么，该进程集合就是死锁的。
+ 所以，还是不知道什么是死锁。
+举个例子，
+ 比如甲乙两人同时去食堂吃饭，食堂里面只有一个碗和一双筷子，甲抢到了碗，乙抢到了筷子，甲等乙放下筷子，乙等甲放下碗，结果两个人都饿死了。
+ 又比如:
+ A和B两个进程同时去写数据库，A锁住了第n行去读第m行，B锁住了第m行去读第n行，结果A，B都无限期等下去了。
+ 无论是甲,乙,还是A,B,都在等待另一个已经死锁的进程释放资源。因为所有的进程都不能运行，所以资源永远无法被释放，所以所有进程都不能被唤醒。进程的数量以及占有和请求的资源数量都是无关紧要的，而无论资源和何种类型都会发生何种结果，所以这种死锁被称为资源死锁。
+好了，抄书结束，划重点。
+好吧，上面这段话都是重点。
+废话👆
+下面看占有和请求的资源数量都是无关紧要的🌰
+ For example, the first coroutine starts a transaction and updated a row, then the second coroutine tries to update the same row before the first coroutine closes the transaction. The second coroutine will block the whole thread at the non-async update, waiting for the row lock to be released, but the releasing is in the first coroutine which is blocked by the second coroutine. Thus it will block forever.
+ 之前在协程中，每时每刻实际都只有一件事在执行，发生死锁的概率应该不高吧。too young啊
+比如第一个协程发起事务更新数据库中的一行，这时候第二个协程试图更新同一行，如果第二个协程是非异步的更新，那么它就要等待第一个协程释放资源，但是这时候整个线程已经被第二个线程阻塞了，第一个协程无法释放资源，deadlock!
+回忆一下书本中关于资源死锁的四个条件，回忆一下:
+ 互斥条件 占有和等待条件 不可抢占条件 环路等待条件  这四个条件只要有一个不成立那么资源死锁就不会发生。
+好了现在套用一下上面这个例子。
+ 数据库行锁和当前线程执行都是互斥的，✅ 第一个协程占有了数据库中的锁等待线程执行权，第二个协程占有了当前协程的执行等待行锁，✅ 不可抢占，✅ 环路等待，第二个线程等待行锁，第一个线程等待有机会被执行，✅  死锁bingo!
+怎么解决呢？
+ A simple fix would be to defer the database operations into threads, so that they won&amp;rsquo;t block the main thread, thus won&amp;rsquo;t cause a dead lock easily. It usually works and there is even a library to do so. However when it comes to ORM, things become dirty.
+ 把数据库相关操作扔给其他线程去执行，确保不会阻塞主线程就行了。
+但是真的就行了吗？
+在一个复杂的项目中，你永远不知道哪一行代码会调用同步代码阻塞主线程，Racing condition just happens under pressure, and anything that may block will eventually block, 可能会发生的事情终将要发生。
+所以作者建议:
+ This is usually the time when I suggest to separate the server into two parts: &amp;ldquo;normal blocking with ORM&amp;rdquo; and &amp;ldquo;asynchronous without ORM&amp;rdquo;.
+ 不过倒是想起另外一个问题了, 现在公司业务都是用的gunicorn&#43;gevent, 这个内部是怎么解决这个问题的呢，想不明白诶。。。
+不过联想到gevent的协程是抢占式的，会不会是因为破坏了不可抢占条件而避免了死锁呢，给自己留个问题吧。
+参考资料：
+ 现代操作系统 https://python-gino.readthedocs.io/zh/latest/why.html#the-story " /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.51 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://fucangyu.github.io/post/a-interesting-deadlock/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.93844dae.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="一种有意思的死锁" />
+<meta property="og:description" content="刚闲逛时候发现有一篇文章讲了一种有意思的死锁，不是亲身经历，但是也很有意思了。
+
+先会议一下死锁的定义是什么？翻出压箱底的现代操作系统:
+
+
+如果一个进程集合中的每个进程都只能等待由该进程集合中的其他进程才能引发的事件，那么，该进程集合就是死锁的。
+
+
+所以，还是不知道什么是死锁。
+
+举个例子，
+
+
+比如甲乙两人同时去食堂吃饭，食堂里面只有一个碗和一双筷子，甲抢到了碗，乙抢到了筷子，甲等乙放下筷子，乙等甲放下碗，结果两个人都饿死了。
+
+
+又比如:
+
+
+A和B两个进程同时去写数据库，A锁住了第n行去读第m行，B锁住了第m行去读第n行，结果A，B都无限期等下去了。
+
+
+无论是甲,乙,还是A,B,都在等待另一个已经死锁的进程释放资源。因为所有的进程都不能运行，所以资源永远无法被释放，所以所有进程都不能被唤醒。进程的数量以及占有和请求的资源数量都是无关紧要的，而无论资源和何种类型都会发生何种结果，所以这种死锁被称为资源死锁。
+
+好了，抄书结束，划重点。
+
+好吧，上面这段话都是重点。
+
+废话👆
+
+下面看占有和请求的资源数量都是无关紧要的🌰
+
+
+For example, the first coroutine starts a transaction and updated a row, then the second coroutine tries to update the same row before the first coroutine closes the transaction. The second coroutine will block the whole thread at the non-async update, waiting for the row lock to be released, but the releasing is in the first coroutine which is blocked by the second coroutine. Thus it will block forever.
+
+
+之前在协程中，每时每刻实际都只有一件事在执行，发生死锁的概率应该不高吧。too young啊
+
+比如第一个协程发起事务更新数据库中的一行，这时候第二个协程试图更新同一行，如果第二个协程是非异步的更新，那么它就要等待第一个协程释放资源，但是这时候整个线程已经被第二个线程阻塞了，第一个协程无法释放资源，deadlock!
+
+回忆一下书本中关于资源死锁的四个条件，回忆一下:
+
+
+互斥条件
+占有和等待条件
+不可抢占条件
+环路等待条件
+
+
+这四个条件只要有一个不成立那么资源死锁就不会发生。
+
+好了现在套用一下上面这个例子。
+
+
+数据库行锁和当前线程执行都是互斥的，✅
+第一个协程占有了数据库中的锁等待线程执行权，第二个协程占有了当前协程的执行等待行锁，✅
+不可抢占，✅
+环路等待，第二个线程等待行锁，第一个线程等待有机会被执行，✅
+
+
+死锁bingo!
+
+怎么解决呢？
+
+
+A simple fix would be to defer the database operations into threads, so that they won&rsquo;t block the main thread, thus won&rsquo;t cause a dead lock easily. It usually works and there is even a library to do so. However when it comes to ORM, things become dirty.
+
+
+把数据库相关操作扔给其他线程去执行，确保不会阻塞主线程就行了。
+
+但是真的就行了吗？
+
+在一个复杂的项目中，你永远不知道哪一行代码会调用同步代码阻塞主线程，Racing condition just happens under pressure, and anything that may block will eventually block, 可能会发生的事情终将要发生。
+
+所以作者建议:
+
+
+This is usually the time when I suggest to separate the server into two parts: &ldquo;normal blocking with ORM&rdquo; and &ldquo;asynchronous without ORM&rdquo;.
+
+
+不过倒是想起另外一个问题了, 现在公司业务都是用的gunicorn&#43;gevent, 这个内部是怎么解决这个问题的呢，想不明白诶。。。
+
+不过联想到gevent的协程是抢占式的，会不会是因为破坏了不可抢占条件而避免了死锁呢，给自己留个问题吧。
+
+参考资料：
+
+
+现代操作系统
+https://python-gino.readthedocs.io/zh/latest/why.html#the-story
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://fucangyu.github.io/post/a-interesting-deadlock/" /><meta property="article:published_time" content="2019-01-16T22:43:13&#43;08:00"/>
+<meta property="article:modified_time" content="2019-01-16T22:43:13&#43;08:00"/>
+
+<meta itemprop="name" content="一种有意思的死锁">
+<meta itemprop="description" content="刚闲逛时候发现有一篇文章讲了一种有意思的死锁，不是亲身经历，但是也很有意思了。
+
+先会议一下死锁的定义是什么？翻出压箱底的现代操作系统:
+
+
+如果一个进程集合中的每个进程都只能等待由该进程集合中的其他进程才能引发的事件，那么，该进程集合就是死锁的。
+
+
+所以，还是不知道什么是死锁。
+
+举个例子，
+
+
+比如甲乙两人同时去食堂吃饭，食堂里面只有一个碗和一双筷子，甲抢到了碗，乙抢到了筷子，甲等乙放下筷子，乙等甲放下碗，结果两个人都饿死了。
+
+
+又比如:
+
+
+A和B两个进程同时去写数据库，A锁住了第n行去读第m行，B锁住了第m行去读第n行，结果A，B都无限期等下去了。
+
+
+无论是甲,乙,还是A,B,都在等待另一个已经死锁的进程释放资源。因为所有的进程都不能运行，所以资源永远无法被释放，所以所有进程都不能被唤醒。进程的数量以及占有和请求的资源数量都是无关紧要的，而无论资源和何种类型都会发生何种结果，所以这种死锁被称为资源死锁。
+
+好了，抄书结束，划重点。
+
+好吧，上面这段话都是重点。
+
+废话👆
+
+下面看占有和请求的资源数量都是无关紧要的🌰
+
+
+For example, the first coroutine starts a transaction and updated a row, then the second coroutine tries to update the same row before the first coroutine closes the transaction. The second coroutine will block the whole thread at the non-async update, waiting for the row lock to be released, but the releasing is in the first coroutine which is blocked by the second coroutine. Thus it will block forever.
+
+
+之前在协程中，每时每刻实际都只有一件事在执行，发生死锁的概率应该不高吧。too young啊
+
+比如第一个协程发起事务更新数据库中的一行，这时候第二个协程试图更新同一行，如果第二个协程是非异步的更新，那么它就要等待第一个协程释放资源，但是这时候整个线程已经被第二个线程阻塞了，第一个协程无法释放资源，deadlock!
+
+回忆一下书本中关于资源死锁的四个条件，回忆一下:
+
+
+互斥条件
+占有和等待条件
+不可抢占条件
+环路等待条件
+
+
+这四个条件只要有一个不成立那么资源死锁就不会发生。
+
+好了现在套用一下上面这个例子。
+
+
+数据库行锁和当前线程执行都是互斥的，✅
+第一个协程占有了数据库中的锁等待线程执行权，第二个协程占有了当前协程的执行等待行锁，✅
+不可抢占，✅
+环路等待，第二个线程等待行锁，第一个线程等待有机会被执行，✅
+
+
+死锁bingo!
+
+怎么解决呢？
+
+
+A simple fix would be to defer the database operations into threads, so that they won&rsquo;t block the main thread, thus won&rsquo;t cause a dead lock easily. It usually works and there is even a library to do so. However when it comes to ORM, things become dirty.
+
+
+把数据库相关操作扔给其他线程去执行，确保不会阻塞主线程就行了。
+
+但是真的就行了吗？
+
+在一个复杂的项目中，你永远不知道哪一行代码会调用同步代码阻塞主线程，Racing condition just happens under pressure, and anything that may block will eventually block, 可能会发生的事情终将要发生。
+
+所以作者建议:
+
+
+This is usually the time when I suggest to separate the server into two parts: &ldquo;normal blocking with ORM&rdquo; and &ldquo;asynchronous without ORM&rdquo;.
+
+
+不过倒是想起另外一个问题了, 现在公司业务都是用的gunicorn&#43;gevent, 这个内部是怎么解决这个问题的呢，想不明白诶。。。
+
+不过联想到gevent的协程是抢占式的，会不会是因为破坏了不可抢占条件而避免了死锁呢，给自己留个问题吧。
+
+参考资料：
+
+
+现代操作系统
+https://python-gino.readthedocs.io/zh/latest/why.html#the-story
+">
+
+
+<meta itemprop="datePublished" content="2019-01-16T22:43:13&#43;08:00" />
+<meta itemprop="dateModified" content="2019-01-16T22:43:13&#43;08:00" />
+<meta itemprop="wordCount" content="1178">
+
+
+
+<meta itemprop="keywords" content="sticker," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="一种有意思的死锁"/>
+<meta name="twitter:description" content="刚闲逛时候发现有一篇文章讲了一种有意思的死锁，不是亲身经历，但是也很有意思了。
+
+先会议一下死锁的定义是什么？翻出压箱底的现代操作系统:
+
+
+如果一个进程集合中的每个进程都只能等待由该进程集合中的其他进程才能引发的事件，那么，该进程集合就是死锁的。
+
+
+所以，还是不知道什么是死锁。
+
+举个例子，
+
+
+比如甲乙两人同时去食堂吃饭，食堂里面只有一个碗和一双筷子，甲抢到了碗，乙抢到了筷子，甲等乙放下筷子，乙等甲放下碗，结果两个人都饿死了。
+
+
+又比如:
+
+
+A和B两个进程同时去写数据库，A锁住了第n行去读第m行，B锁住了第m行去读第n行，结果A，B都无限期等下去了。
+
+
+无论是甲,乙,还是A,B,都在等待另一个已经死锁的进程释放资源。因为所有的进程都不能运行，所以资源永远无法被释放，所以所有进程都不能被唤醒。进程的数量以及占有和请求的资源数量都是无关紧要的，而无论资源和何种类型都会发生何种结果，所以这种死锁被称为资源死锁。
+
+好了，抄书结束，划重点。
+
+好吧，上面这段话都是重点。
+
+废话👆
+
+下面看占有和请求的资源数量都是无关紧要的🌰
+
+
+For example, the first coroutine starts a transaction and updated a row, then the second coroutine tries to update the same row before the first coroutine closes the transaction. The second coroutine will block the whole thread at the non-async update, waiting for the row lock to be released, but the releasing is in the first coroutine which is blocked by the second coroutine. Thus it will block forever.
+
+
+之前在协程中，每时每刻实际都只有一件事在执行，发生死锁的概率应该不高吧。too young啊
+
+比如第一个协程发起事务更新数据库中的一行，这时候第二个协程试图更新同一行，如果第二个协程是非异步的更新，那么它就要等待第一个协程释放资源，但是这时候整个线程已经被第二个线程阻塞了，第一个协程无法释放资源，deadlock!
+
+回忆一下书本中关于资源死锁的四个条件，回忆一下:
+
+
+互斥条件
+占有和等待条件
+不可抢占条件
+环路等待条件
+
+
+这四个条件只要有一个不成立那么资源死锁就不会发生。
+
+好了现在套用一下上面这个例子。
+
+
+数据库行锁和当前线程执行都是互斥的，✅
+第一个协程占有了数据库中的锁等待线程执行权，第二个协程占有了当前协程的执行等待行锁，✅
+不可抢占，✅
+环路等待，第二个线程等待行锁，第一个线程等待有机会被执行，✅
+
+
+死锁bingo!
+
+怎么解决呢？
+
+
+A simple fix would be to defer the database operations into threads, so that they won&rsquo;t block the main thread, thus won&rsquo;t cause a dead lock easily. It usually works and there is even a library to do so. However when it comes to ORM, things become dirty.
+
+
+把数据库相关操作扔给其他线程去执行，确保不会阻塞主线程就行了。
+
+但是真的就行了吗？
+
+在一个复杂的项目中，你永远不知道哪一行代码会调用同步代码阻塞主线程，Racing condition just happens under pressure, and anything that may block will eventually block, 可能会发生的事情终将要发生。
+
+所以作者建议:
+
+
+This is usually the time when I suggest to separate the server into two parts: &ldquo;normal blocking with ORM&rdquo; and &ldquo;asynchronous without ORM&rdquo;.
+
+
+不过倒是想起另外一个问题了, 现在公司业务都是用的gunicorn&#43;gevent, 这个内部是怎么解决这个问题的呢，想不明白诶。。。
+
+不过联想到gevent的协程是抢占式的，会不会是因为破坏了不可抢占条件而避免了死锁呢，给自己留个问题吧。
+
+参考资料：
+
+
+现代操作系统
+https://python-gino.readthedocs.io/zh/latest/why.html#the-story
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">何时</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">何时</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">一种有意思的死锁</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-01-16 </span>
+        <div class="post-category">
+            <a href="/categories/sticker/"> sticker </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      <p>刚闲逛时候发现有<a href="https://python-gino.readthedocs.io/zh/latest/why.html#the-story">一篇文章</a>讲了一种有意思的死锁，不是亲身经历，但是也很有意思了。</p>
+
+<p>先会议一下死锁的定义是什么？翻出压箱底的<code>现代操作系统</code>:</p>
+
+<blockquote>
+<p>如果一个进程集合中的每个进程都只能等待由该进程集合中的其他进程才能引发的事件，那么，该进程集合就是死锁的。</p>
+</blockquote>
+
+<p>所以，还是不知道什么是死锁。</p>
+
+<p>举个例子，</p>
+
+<blockquote>
+<p>比如甲乙两人同时去食堂吃饭，食堂里面只有一个碗和一双筷子，甲抢到了碗，乙抢到了筷子，甲等乙放下筷子，乙等甲放下碗，结果两个人都饿死了。</p>
+</blockquote>
+
+<p>又比如:</p>
+
+<blockquote>
+<p>A和B两个进程同时去写数据库，A锁住了第n行去读第m行，B锁住了第m行去读第n行，结果A，B都无限期等下去了。</p>
+</blockquote>
+
+<p>无论是<code>甲</code>,<code>乙</code>,还是<code>A</code>,<code>B</code>,都在等待另一个已经死锁的进程释放资源。因为所有的进程都不能运行，所以资源永远无法被释放，所以所有进程都不能被唤醒。进程的数量以及占有和请求的资源数量都是无关紧要的，而无论资源和何种类型都会发生何种结果，所以这种死锁被称为资源死锁。</p>
+
+<p>好了，抄书结束，划重点。</p>
+
+<p>好吧，上面这段话都是重点。</p>
+
+<p>废话👆</p>
+
+<p>下面看<code>占有和请求的资源数量都是无关紧要的🌰</code></p>
+
+<blockquote>
+<p>For example, the first coroutine starts a transaction and updated a row, then the second coroutine tries to update the same row before the first coroutine closes the transaction. The second coroutine will block the whole thread at the non-async update, waiting for the row lock to be released, but the releasing is in the first coroutine which is blocked by the second coroutine. Thus it will block forever.</p>
+</blockquote>
+
+<p>之前在协程中，每时每刻实际都只有一件事在执行，发生死锁的概率应该不高吧。too young啊</p>
+
+<p>比如第一个协程发起事务更新数据库中的一行，这时候第二个协程试图更新同一行，如果第二个协程是非异步的更新，那么它就要等待第一个协程释放资源，但是这时候整个线程已经被第二个线程阻塞了，第一个协程无法释放资源，deadlock!</p>
+
+<p>回忆一下书本中关于资源死锁的四个条件，回忆一下:</p>
+
+<ol>
+<li>互斥条件</li>
+<li>占有和等待条件</li>
+<li>不可抢占条件</li>
+<li>环路等待条件</li>
+</ol>
+
+<p>这四个条件只要有一个不成立那么资源死锁就不会发生。</p>
+
+<p>好了现在套用一下上面这个例子。</p>
+
+<ol>
+<li>数据库行锁和当前线程执行都是互斥的，✅</li>
+<li>第一个协程占有了数据库中的锁等待线程执行权，第二个协程占有了当前协程的执行等待行锁，✅</li>
+<li>不可抢占，✅</li>
+<li>环路等待，第二个线程等待行锁，第一个线程等待有机会被执行，✅</li>
+</ol>
+
+<p>死锁bingo!</p>
+
+<p>怎么解决呢？</p>
+
+<blockquote>
+<p>A simple fix would be to defer the database operations into threads, so that they won&rsquo;t block the main thread, thus won&rsquo;t cause a dead lock easily. It usually works and there is even a library to do so. However when it comes to ORM, things become dirty.</p>
+</blockquote>
+
+<p>把数据库相关操作扔给其他线程去执行，确保不会阻塞主线程就行了。</p>
+
+<p>但是真的就行了吗？</p>
+
+<p>在一个复杂的项目中，你永远不知道哪一行代码会调用同步代码阻塞主线程，<code>Racing condition just happens under pressure, and anything that may block will eventually block</code>, 可能会发生的事情终将要发生。</p>
+
+<p>所以作者建议:</p>
+
+<blockquote>
+<p>This is usually the time when I suggest to separate the server into two parts: &ldquo;normal blocking with ORM&rdquo; and &ldquo;asynchronous without ORM&rdquo;.</p>
+</blockquote>
+
+<p>不过倒是想起另外一个问题了, 现在公司业务都是用的<code>gunicorn</code>+<code>gevent</code>, 这个内部是怎么解决这个问题的呢，想不明白诶。。。</p>
+
+<p>不过联想到<code>gevent</code>的协程是抢占式的，会不会是因为破坏了<code>不可抢占条件</code>而避免了死锁呢，给自己留个问题吧。</p>
+
+<p>参考资料：</p>
+
+<ol>
+<li>现代操作系统</li>
+<li><a href="https://python-gino.readthedocs.io/zh/latest/why.html#the-story">https://python-gino.readthedocs.io/zh/latest/why.html#the-story</a></li>
+</ol>
+    </div>
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/sticker/">sticker</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/summary-2018/">
+            <span class="next-text nav-default">2018小结</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="disqus_thread"></div>
+    <script type="text/javascript">
+    (function() {
+      
+      
+      if (window.location.hostname === 'localhost') return;
+
+      var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+      var disqus_shortname = 'https-fucangyu-github-io';
+      dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="cangyufu@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/fucangyu" class="iconfont icon-github" title="github"></a>
+  <a href="https://fucangyu.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">fcy</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

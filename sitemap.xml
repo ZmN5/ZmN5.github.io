@@ -3,6 +3,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://fucangyu.github.io/post/a-interesting-deadlock/</loc>
+    <lastmod>2019-01-16T22:43:13+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
     <loc>https://fucangyu.github.io/post/summary-2018/</loc>
     <lastmod>2018-12-31T20:47:08+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -66,7 +73,7 @@
   
   <url>
     <loc>https://fucangyu.github.io/post/</loc>
-    <lastmod>2018-12-31T20:47:08+08:00</lastmod>
+    <lastmod>2019-01-16T22:43:13+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
@@ -149,6 +156,20 @@
   </url>
   
   <url>
+    <loc>https://fucangyu.github.io/tags/sticker/</loc>
+    <lastmod>2019-01-16T22:43:13+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
+    <loc>https://fucangyu.github.io/categories/sticker/</loc>
+    <lastmod>2019-01-16T22:43:13+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0</priority>
+  </url>
+  
+  <url>
     <loc>https://fucangyu.github.io/tags/yield-from/</loc>
     <lastmod>2018-12-30T09:23:43+08:00</lastmod>
     <changefreq>weekly</changefreq>
@@ -157,7 +178,7 @@
   
   <url>
     <loc>https://fucangyu.github.io/</loc>
-    <lastmod>2018-12-31T20:47:08+08:00</lastmod>
+    <lastmod>2019-01-16T22:43:13+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0</priority>
   </url>
