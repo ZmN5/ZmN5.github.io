@@ -50,7 +50,7 @@
 
 <meta itemprop="datePublished" content="2019-01-20T19:55:58&#43;08:00" />
 <meta itemprop="dateModified" content="2019-01-20T19:55:58&#43;08:00" />
-<meta itemprop="wordCount" content="2005">
+<meta itemprop="wordCount" content="2003">
 
 
 
@@ -139,7 +139,7 @@
 
 <h2 id="描述符协议是什么">描述符协议是什么？</h2>
 
-<p>如果一个类实现了<code>__set__</code>, <code>__get__</code>, <code>__delete__</code>，这三个中任意一个或者多个方法，那么就实现了描述符协议，它的实例这就是一个描述符，同时要明白这也是一个类方法。具体描述符协议如下：</p>
+<p>如果一个类实现了<code>__set__</code>, <code>__get__</code>, <code>__delete__</code>，这三个中任意一个或者多个方法，那么就实现了描述符协议，它的实例这就是一个描述符，同时要明白这也是一个类属性。具体描述符协议如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
@@ -156,7 +156,7 @@
 <span class="n">descr</span><span class="o">.</span><span class="fm">__delete__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="o">--&gt;</span> <span class="bp">None</span></code></pre></td></tr></table>
 </div>
 </div>
-<p>在Python中，对象属性的默认查找顺序，距离来说是这样的，比如<code>a.x</code></p>
+<p>在Python中，对象属性的默认查找顺序，举例来说是这样的，比如<code>a.x</code></p>
 
 <ol>
 <li>先查找<code>a.__dict__['x']</code></li>
@@ -338,8 +338,6 @@
 </span><span class="lnt">27
 </span><span class="lnt">28
 </span><span class="lnt">29
-</span><span class="lnt">30
-</span><span class="lnt">31
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">DataDescriptor</span><span class="p">:</span>
@@ -356,8 +354,6 @@
 
 <span class="k">class</span> <span class="nc">Test</span><span class="p">:</span>
     <span class="n">a</span> <span class="o">=</span> <span class="n">DataDescriptor</span><span class="p">()</span>
-
-
 
     <span class="k">def</span> <span class="fm">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
         <span class="s2">&#34;&#34;&#34;
