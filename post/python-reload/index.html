@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Python Reload - 租块墓地，俯瞰师范学院</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="fcy" /><meta name="description" content="和算法同学的合作，一般都是调用算法同学写的package, 然后开始胡搞 但是现在有一个需求，要动态加载算法同学的代码，为什么会有这么奇怪的需求" /><meta name="keywords" content="python, reload" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.51 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://fucangyu.github.io/post/python-reload/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.93844dae.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Python Reload" />
+<meta property="og:description" content="和算法同学的合作，一般都是调用算法同学写的package, 然后开始胡搞 但是现在有一个需求，要动态加载算法同学的代码，为什么会有这么奇怪的需求" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://fucangyu.github.io/post/python-reload/" /><meta property="article:published_time" content="2019-03-28T22:11:54&#43;08:00"/>
+<meta property="article:modified_time" content="2019-03-28T22:11:54&#43;08:00"/>
+
+<meta itemprop="name" content="Python Reload">
+<meta itemprop="description" content="和算法同学的合作，一般都是调用算法同学写的package, 然后开始胡搞 但是现在有一个需求，要动态加载算法同学的代码，为什么会有这么奇怪的需求">
+
+
+<meta itemprop="datePublished" content="2019-03-28T22:11:54&#43;08:00" />
+<meta itemprop="dateModified" content="2019-03-28T22:11:54&#43;08:00" />
+<meta itemprop="wordCount" content="1200">
+
+
+
+<meta itemprop="keywords" content="python," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python Reload"/>
+<meta name="twitter:description" content="和算法同学的合作，一般都是调用算法同学写的package, 然后开始胡搞 但是现在有一个需求，要动态加载算法同学的代码，为什么会有这么奇怪的需求"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">租块墓地，俯瞰师范学院</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">租块墓地，俯瞰师范学院</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Python Reload</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-03-28 </span>
+        
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      
+
+<p>和算法同学的合作，一般都是调用算法同学写的<code>package</code>, 然后开始胡搞</p>
+
+<p>但是现在有一个需求，要动态加载算法同学的代码，为什么会有这么奇怪的需求，因为是甲方爸爸提出的啊。</p>
+
+<h2 id="一-第一个思路当然就是-reload-了">一、 第一个思路当然就是<code>reload</code>了</h2>
+
+<p>算法同学之前一直把Python代码打包成动态链接库<code>.so</code>文件。能不能<code>reload</code> so文件呢，过程就不放了，答案就是完全行不通。</p>
+
+<h2 id="二-zipimport">二、zipimport</h2>
+
+<p>Python是可以从zip包里面导入代码的，那能不能用这个呢。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span><span class="lnt">29
+</span><span class="lnt">30
+</span><span class="lnt">31
+</span><span class="lnt">32
+</span><span class="lnt">33
+</span><span class="lnt">34
+</span><span class="lnt">35
+</span><span class="lnt">36
+</span><span class="lnt">37
+</span><span class="lnt">38
+</span><span class="lnt">39
+</span><span class="lnt">40
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">zipimport</span>
+<span class="kn">import</span> <span class="nn">zipfile</span>
+
+<span class="n">pyfile</span> <span class="o">=</span> <span class="s1">&#39;zip_test.py&#39;</span>
+<span class="n">zfile</span> <span class="o">=</span> <span class="s1">&#39;zip_test.zip&#39;</span>
+
+
+<span class="k">def</span> <span class="nf">zip_file</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="bp">None</span><span class="p">:</span>
+    <span class="k">with</span> <span class="n">zipfile</span><span class="o">.</span><span class="n">ZipFile</span><span class="p">(</span><span class="n">zfile</span><span class="p">,</span> <span class="s1">&#39;w&#39;</span><span class="p">)</span> <span class="k">as</span> <span class="n">zf</span><span class="p">:</span>
+        <span class="n">zf</span><span class="o">.</span><span class="n">writestr</span><span class="p">(</span><span class="n">pyfile</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span>
+
+<span class="c1"># --- step1 ---</span>
+
+
+<span class="n">code</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;
+</span><span class="s1">def func():
+</span><span class="s1">    return 1
+</span><span class="s1">&#39;&#39;&#39;</span>
+
+<span class="n">zip_file</span><span class="p">()</span>
+
+<span class="n">importer</span> <span class="o">=</span> <span class="n">zipimport</span><span class="o">.</span><span class="n">zipimporter</span><span class="p">(</span><span class="s1">&#39;zip_test.zip&#39;</span><span class="p">)</span>
+
+<span class="n">module</span> <span class="o">=</span> <span class="n">importer</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="s1">&#39;zip_test&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">func</span><span class="p">())</span>
+
+
+<span class="c1"># --- step2 ---</span>
+
+<span class="n">code</span> <span class="o">=</span> <span class="s1">&#39;&#39;&#39;
+</span><span class="s1">def func():
+</span><span class="s1">    return 2
+</span><span class="s1">&#39;&#39;&#39;</span>
+
+<span class="n">zip_file</span><span class="p">()</span>
+
+<span class="n">importer</span> <span class="o">=</span> <span class="n">zipimport</span><span class="o">.</span><span class="n">zipimporter</span><span class="p">(</span><span class="s1">&#39;zip_test.zip&#39;</span><span class="p">)</span>
+
+<span class="n">module</span> <span class="o">=</span> <span class="n">importer</span><span class="o">.</span><span class="n">load_module</span><span class="p">(</span><span class="s1">&#39;zip_test&#39;</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">module</span><span class="o">.</span><span class="n">func</span><span class="p">())</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>打印的结果为:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">1
+2</pre></td></tr></table>
+</div>
+</div>
+<p>说明是可以做到的，但是在实验的过程中有一个致命的确定，如果用<code>zip</code>打包不统一，比如用的系统打包工具，偶尔会出现导出<code>zip</code>错误，造成整个服务只有重启才行。既然是打包的问题，那就换一种打包方式，换成Python代码打包方式，打包成<code>egg</code>是否就解决了这个问题呢。</p>
+
+<h2 id="三-egg-reload">三、egg + reload</h2>
+
+<p>首先我们copy from stack overflow，复制一个打包egg的脚本:</p>
+
+<p><a href="https://stackoverflow.com/questions/47286690/how-do-i-create-and-load-an-egg-file-in-python">https://stackoverflow.com/questions/47286690/how-do-i-create-and-load-an-egg-file-in-python</a></p>
+
+<p>然后写一个简单的被导入的包</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma"># ├── egg_test_raw
+# │   ├── __init__.py
+# │   └── func.py
+
+# __init__.py
+
+from importlib import reload
+
+from . import func
+
+reload(func)
+
+# func.py
+
+def test_func():
+    return 1</pre></td></tr></table>
+</div>
+</div>
+<p>我们会把这个包打包两次，只是返回值不同，分别命名为<code>egg_test_v1.egg</code>和<code>egg_test_v2.egg</code></p>
+
+<p>然后:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span><span class="lnt">27
+</span><span class="lnt">28
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># main.py</span>
+
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="nb">reload</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="s1">&#39;egg_test_v1.egg&#39;</span><span class="p">,</span> <span class="s1">&#39;egg_test.egg&#39;</span><span class="p">)</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;egg_test.egg&#39;</span><span class="p">)</span>
+
+<span class="c1">#  --- step 1 ---</span>
+
+<span class="kn">import</span> <span class="nn">egg_test</span>
+
+<span class="kn">from</span> <span class="nn">egg_test.func</span> <span class="kn">import</span> <span class="n">test_func</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">test_func</span><span class="p">())</span>
+
+
+<span class="c1"># --- step 2 ---</span>
+
+<span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="s1">&#39;egg_test_v2.egg&#39;</span><span class="p">,</span> <span class="s1">&#39;egg_test.egg&#39;</span><span class="p">)</span>
+
+<span class="nb">reload</span><span class="p">(</span><span class="n">egg_test</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">egg_test.func</span> <span class="kn">import</span> <span class="n">test_func</span>
+
+<span class="k">print</span><span class="p">(</span><span class="n">test_func</span><span class="p">())</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>看到结果会输出</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">1
+2</pre></td></tr></table>
+</div>
+</div>
+<p>是不是大功告成了呢？？
+？？？
+？？？</p>
+
+<p>！！！！！！当然不是</p>
+
+<h2 id="四-尽量不用reload">四、尽量不用reload</h2>
+
+<p>我以为可以交作业时候，去问了一下教授会不会有什么坑，结果教授说</p>
+
+<blockquote>
+<p>尽量不要用reload</p>
+</blockquote>
+
+<p>不过，为什么呢？教授说reload之后，需要手动清理之前的所有已经<code>load</code>的对象。</p>
+
+<p>什么？ <code>reload</code>之后，之前的对象还在吗？？？？</p>
+
+<p>做个试验，把上面的代码复制一份，稍微修改一下:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span><span class="lnt">26
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">from</span> <span class="nn">importlib</span> <span class="kn">import</span> <span class="nb">reload</span>
+<span class="kn">import</span> <span class="nn">shutil</span>
+
+<span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="s1">&#39;egg_test_v1.egg&#39;</span><span class="p">,</span> <span class="s1">&#39;egg_test.egg&#39;</span><span class="p">)</span>
+
+<span class="n">sys</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s1">&#39;egg_test.egg&#39;</span><span class="p">)</span>
+
+<span class="c1">#  --- step 1 ---</span>
+
+<span class="kn">import</span> <span class="nn">egg_test</span>
+
+<span class="kn">from</span> <span class="nn">egg_test.func</span> <span class="kn">import</span> <span class="n">test_func</span>
+
+
+
+<span class="c1"># --- step 2 ---</span>
+
+<span class="n">shutil</span><span class="o">.</span><span class="n">copyfile</span><span class="p">(</span><span class="s1">&#39;egg_test_v2.egg&#39;</span><span class="p">,</span> <span class="s1">&#39;egg_test.egg&#39;</span><span class="p">)</span>
+
+
+<span class="nb">reload</span><span class="p">(</span><span class="n">egg_test</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">egg_test.func</span> <span class="kn">import</span> <span class="n">test_func</span> <span class="k">as</span> <span class="n">func2</span>
+
+<span class="k">assert</span> <span class="n">test_fun</span> <span class="ow">is</span> <span class="n">func2</span></code></pre></td></tr></table>
+</div>
+</div>
+<p>输出：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span></pre></td>
+<td class="lntd">
+<pre class="chroma">Traceback (most recent call last):
+  File &#34;main.py&#34;, line 26, in &lt;module&gt;
+    assert test_func is func2
+AssertionError</pre></td></tr></table>
+</div>
+</div>
+<p>之前的对象确实仍然存在，并没有被回收！！！</p>
+
+<p>而且通常算法同学的对象还都特别大，细思极恐！！！</p>
+
+<p>但是要手动清理之前的对象吗，别开玩笑！！！</p>
+
+<p>所以，该怎么办？</p>
+
+<p>首先，不用<code>reload</code></p>
+
+<h2 id="五-新起进程">五、新起进程</h2>
+
+<p>我们需要的是可以reload代码，同时清理之前的对象，同时这些是异步任务，那么就可以把整个服务重启嘛！！</p>
+
+<p>但是服务在甲方的集群里面部署，并没有那么高的权限。</p>
+
+<p>但是在Python里面，import代码的机制是，在每个进程里面import一遍代码。</p>
+
+<p>所以新开一个进程跑任务就行了嘛</p>
+
+<p>还有一个问题，zipimport的对象会被回收么？</p>
+
+<h3 id="代码链接">代码链接：</h3>
+
+<p><a href="https://github.com/fucangyu/blog-code/tree/master/python_reload">https://github.com/fucangyu/blog-code/tree/master/python_reload</a></p>
+
+    </div>
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/python/">python</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/python-descriptor/">
+            <span class="next-text nav-default">Python描述符协议总结</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="cangyufu@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/fucangyu" class="iconfont icon-github" title="github"></a>
+  <a href="https://fucangyu.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">fcy</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

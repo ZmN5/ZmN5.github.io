@@ -6,10 +6,19 @@
     <description>Recent content in python on 租块墓地，俯瞰师范学院</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 20 Jan 2019 19:55:58 +0800</lastBuildDate>
+    <lastBuildDate>Thu, 28 Mar 2019 22:11:54 +0800</lastBuildDate>
     
 	<atom:link href="https://fucangyu.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>Python Reload</title>
+      <link>https://fucangyu.github.io/post/python-reload/</link>
+      <pubDate>Thu, 28 Mar 2019 22:11:54 +0800</pubDate>
+      
+      <guid>https://fucangyu.github.io/post/python-reload/</guid>
+      <description>和算法同学的合作，一般都是调用算法同学写的package, 然后开始胡搞 但是现在有一个需求，要动态加载算法同学的代码，为什么会有这么奇怪的需求</description>
+    </item>
     
     <item>
       <title>Python描述符协议总结</title>
