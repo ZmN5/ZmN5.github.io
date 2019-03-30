@@ -50,7 +50,7 @@
 
 <meta itemprop="datePublished" content="2019-03-30T23:04:44&#43;08:00" />
 <meta itemprop="dateModified" content="2019-03-30T23:04:44&#43;08:00" />
-<meta itemprop="wordCount" content="984">
+<meta itemprop="wordCount" content="989">
 
 
 
@@ -159,17 +159,17 @@
 
 <h4 id="3-1-本地-sock5-代理">3.1 本地<code>sock5</code>代理</h4>
 
-<ol>
+<ul>
 <li>安装</li>
-</ol>
+</ul>
 
 <blockquote>
 <p>pip install shadowsocks</p>
 </blockquote>
 
-<ol>
+<ul>
 <li>编辑</li>
-</ol>
+</ul>
 
 <blockquote>
 <p>vim /etc/shadowsocks.json</p>
@@ -200,9 +200,9 @@
 <span class="p">}</span></code></pre></td></tr></table>
 </div>
 </div>
-<ol>
+<ul>
 <li>启动：</li>
-</ol>
+</ul>
 
 <blockquote>
 <p><code>sslocal -c /etc/shadowsocks.json start</code></p>
@@ -212,17 +212,17 @@
 
 <p>sock5代理是不能直接给终端用的，需要转换为<code>http</code>代理，这里用<code>prioxy</code></p>
 
-<ol>
+<ul>
 <li>安装</li>
-</ol>
+</ul>
 
 <blockquote>
 <p>brew install privoxy</p>
 </blockquote>
 
-<ol>
+<ul>
 <li>编辑</li>
-</ol>
+</ul>
 
 <blockquote>
 <p>vim /usr/local/etc/privoxy/config</p>
@@ -235,25 +235,27 @@
 forward-socks5 / 127.0.0.1:1080 .</p>
 </blockquote>
 
-<ol>
+<ul>
 <li>启动</li>
-</ol>
+</ul>
 
 <blockquote>
 <p>/usr/local/Cellar/privoxy/3.0.26/sbin/privoxy /usr/local/etc/privoxy/config</p>
 </blockquote>
 
-<p>3.3 vagrant设置</p>
+<h4 id="3-3-vagrant设置">3.3 vagrant设置</h4>
 
 <p>为了比较方便的设置虚拟机里面的代理，用了vagrant插件</p>
 
-<p>安装</p>
+<ul>
+<li>安装</li>
+</ul>
 
 <blockquote>
 <p>vagrant plugin install vagrant-proxyconf</p>
 </blockquote>
 
-<h4 id="3-3-vagrant配置文件">3.3 vagrant配置文件</h4>
+<h4 id="3-4-vagrant配置文件">3.4 vagrant配置文件</h4>
 
 <ul>
 <li>编辑<code>Vagrantfile</code></li>
@@ -348,7 +350,7 @@ forward-socks5 / 127.0.0.1:1080 .</p>
 <span class="k">end</span></code></pre></td></tr></table>
 </div>
 </div>
-<h4 id="小结">小结</h4>
+<h4 id="3-5-小结">3.5 小结</h4>
 
 <p>第一次主要尝试就是这些了，结果是失败，因为一个未知名的错误，Google提示man in middle之类的，当时是凌晨四点，就放弃去睡了。</p>
 
@@ -396,6 +398,8 @@ forward-socks5 / 127.0.0.1:1080 .</p>
 <p>第二次尝试主要就是这个了。</p>
 
 <p>结果集群成功拉起来了，但是<code>calico-node</code>和<code>calico-controller</code>pod <code>ERROR</code>折腾了好久没有头绪，好像是calico访问etcd时候出错，（再次严重怀疑智商）, 先记录下来，我要睡觉。</p>
+
+<p>代码: <a href="https://github.com/fucangyu/my-k8s-cluster">https://github.com/fucangyu/my-k8s-cluster</a></p>
 
     </div>
 
