@@ -6,10 +6,19 @@
     <description>Recent content on 租块墓地，俯瞰师范学院</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Thu, 28 Mar 2019 22:11:54 +0800</lastBuildDate>
+    <lastBuildDate>Sat, 30 Mar 2019 23:04:44 +0800</lastBuildDate>
     
 	<atom:link href="https://fucangyu.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>一次失败的k8s部署经历</title>
+      <link>https://fucangyu.github.io/post/failed-k8s-cluster/</link>
+      <pubDate>Sat, 30 Mar 2019 23:04:44 +0800</pubDate>
+      
+      <guid>https://fucangyu.github.io/post/failed-k8s-cluster/</guid>
+      <description>这篇文章将会完全是混乱的结构，混乱的记录。 昨天下班想，这个周末要把拖了很久的自己建一个k8s集群这件事给办了，结果没想到，终究还是只做了一半</description>
+    </item>
     
     <item>
       <title>Python Reload</title>
