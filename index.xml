@@ -415,17 +415,17 @@
     </item>
     
     <item>
-      <title>About</title>
+      <title>About Me</title>
       <link>https://fucangyu.github.io/post/about/</link>
       <pubDate>Sat, 10 Nov 2018 20:59:00 +0800</pubDate>
       
       <guid>https://fucangyu.github.io/post/about/</guid>
       <description>&lt;ul&gt;
-&lt;li&gt;现在北京&lt;/li&gt;
+&lt;li&gt;在北京&lt;/li&gt;
 &lt;li&gt;工作中主要使用Python&lt;/li&gt;
 &lt;li&gt;脚本工程师，十八线程序员&lt;/li&gt;
-&lt;li&gt;在学racket，越来越喜欢这门语言&lt;/li&gt;
-&lt;li&gt;正在continuation和macro的坑里面&lt;/li&gt;
+&lt;li&gt;在学&lt;del&gt;racket&lt;/del&gt;scala，越来越喜欢这门语言&lt;/li&gt;
+&lt;li&gt;&lt;del&gt;正在continuation和macro的坑里面&lt;/del&gt;&lt;/li&gt;
 &lt;li&gt;对k8s和docker极有兴趣&lt;/li&gt;
 &lt;li&gt;越来越胖了&lt;/li&gt;
 &lt;/ul&gt;</description>
