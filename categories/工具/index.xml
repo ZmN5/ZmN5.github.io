@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>工具 on 租块墓地，俯瞰师范学院</title>
+    <link>https://fucangyu.github.io/categories/%E5%B7%A5%E5%85%B7/</link>
+    <description>Recent content in 工具 on 租块墓地，俯瞰师范学院</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en</language>
+    <lastBuildDate>Sun, 30 Jun 2019 17:40:01 +0800</lastBuildDate>
+    
+	<atom:link href="https://fucangyu.github.io/categories/%E5%B7%A5%E5%85%B7/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>初始化开发环境</title>
+      <link>https://fucangyu.github.io/post/new-env/</link>
+      <pubDate>Sun, 30 Jun 2019 17:40:01 +0800</pubDate>
+      
+      <guid>https://fucangyu.github.io/post/new-env/</guid>
+      <description>&lt;p&gt;最近入职新公司，用自己的电脑没有补贴，那当然用公司电脑喽，所以所有的环境都要重装。通过这次重装确认了几个对我来说，本地开发一定会用到的软件。&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;&lt;p&gt;brew&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;emmm，这个就不解释了，在mac下时必备的&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;git&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;brew install git&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Tmux&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;安装： brew install tmux&lt;/li&gt;
+&lt;li&gt;安装tpm：&lt;a href=&#34;https://github.com/tmux-plugins/tpm&#34;&gt;https://github.com/tmux-plugins/tpm&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;配置参考：&lt;a href=&#34;https://github.com/fucangyu/my-config/blob/master/dot.tmux.conf&#34;&gt;https://github.com/fucangyu/my-config/blob/master/dot.tmux.conf&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;Vim8&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;brew reinstall vim &amp;ndash;with-python3 &amp;ndash;with-luajit&lt;/li&gt;
+&lt;li&gt;安装插件管理工具Plug: &lt;a href=&#34;https://github.com/junegunn/vim-plug&#34;&gt;https://github.com/junegunn/vim-plug&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;安装&lt;code&gt;universal-tags&lt;/code&gt;:  &lt;a href=&#34;https://github.com/universal-ctags/ctags&#34;&gt;https://github.com/universal-ctags/ctags&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;安装插件： &lt;a href=&#34;https://github.com/fucangyu/my-config/blob/master/dot.vimrc&#34;&gt;https://github.com/fucangyu/my-config/blob/master/dot.vimrc&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;zsh/oh-my-zsh&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;安装&lt;code&gt;zsh&lt;/code&gt;: &lt;a href=&#34;https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH&#34;&gt;https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;安装&lt;code&gt;oh-my-zsh&lt;/code&gt;: &lt;a href=&#34;https://github.com/robbyrussell/oh-my-zsh&#34;&gt;https://github.com/robbyrussell/oh-my-zsh&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;安装包管理器&lt;code&gt;zplug&lt;/code&gt;： brew install zplug&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;安装fd：&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;安装： &lt;a href=&#34;https://github.com/sharkdp/fd&#34;&gt;https://github.com/sharkdp/fd&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;fzf&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;安装： brew install fzf&lt;/li&gt;
+&lt;li&gt;$(brew &amp;ndash;prefix)/opt/fzf/install&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;ag&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;安装参考： &lt;a href=&#34;https://github.com/ggreer/the_silver_searcher&#34;&gt;https://github.com/ggreer/the_silver_searcher&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;z jump&lt;/p&gt;
+
+&lt;ol&gt;
+&lt;li&gt;安装参考： &lt;a href=&#34;https://github.com/rupa/z&#34;&gt;https://github.com/rupa/z&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;vscode&lt;/p&gt;
+
+&lt;p&gt;写前端代码时候，感觉用vim还是难受&lt;/p&gt;&lt;/li&gt;
+
+&lt;li&gt;&lt;p&gt;typora&lt;/p&gt;
+
+&lt;p&gt;试过很多个&lt;code&gt;markdown&lt;/code&gt;编辑工具，感觉还是这个比较好用&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;</description>
+    </item>
+    
+  </channel>
+</rss>
