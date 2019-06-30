@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>初始化开发环境 - 租块墓地，俯瞰师范学院</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="何时" /><meta name="description" content="最近入职新公司，用自己的电脑没有补贴，那当然用公司电脑喽，所以所有的环境都要重装。通过这次重装确认了几个对我来说，本地开发一定会用到的软件。
+ brew
+ emmm，这个就不解释了，在mac下时必备的  git
+ brew install git  Tmux
+ 安装： brew install tmux 安装tpm：https://github.com/tmux-plugins/tpm 配置参考：https://github.com/fucangyu/my-config/blob/master/dot.tmux.conf  Vim8
+ brew reinstall vim &amp;ndash;with-python3 &amp;ndash;with-luajit 安装插件管理工具Plug: https://github.com/junegunn/vim-plug 安装universal-tags: https://github.com/universal-ctags/ctags 安装插件： https://github.com/fucangyu/my-config/blob/master/dot.vimrc  zsh/oh-my-zsh
+ 安装zsh: https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH 安装oh-my-zsh: https://github.com/robbyrussell/oh-my-zsh 安装包管理器zplug： brew install zplug  安装fd：
+ 安装： https://github.com/sharkdp/fd  fzf
+ 安装： brew install fzf $(brew &amp;ndash;prefix)/opt/fzf/install  ag
+ 安装参考： https://github.com/ggreer/the_silver_searcher  z jump
+ 安装参考： https://github.com/rupa/z  vscode
+写前端代码时候，感觉用vim还是难受
+ typora
+试过很多个markdown编辑工具，感觉还是这个比较好用
+ " /><meta name="keywords" content="开发环境" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.51 with even 4.0.0" />
+
+
+<link rel="canonical" href="https://fucangyu.github.io/post/new-env/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.93844dae.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="初始化开发环境" />
+<meta property="og:description" content="最近入职新公司，用自己的电脑没有补贴，那当然用公司电脑喽，所以所有的环境都要重装。通过这次重装确认了几个对我来说，本地开发一定会用到的软件。
+
+
+brew
+
+
+emmm，这个就不解释了，在mac下时必备的
+
+
+git
+
+
+brew install git
+
+
+Tmux
+
+
+安装： brew install tmux
+安装tpm：https://github.com/tmux-plugins/tpm
+配置参考：https://github.com/fucangyu/my-config/blob/master/dot.tmux.conf
+
+
+Vim8
+
+
+brew reinstall vim &ndash;with-python3 &ndash;with-luajit
+安装插件管理工具Plug: https://github.com/junegunn/vim-plug
+安装universal-tags:  https://github.com/universal-ctags/ctags
+安装插件： https://github.com/fucangyu/my-config/blob/master/dot.vimrc
+
+
+zsh/oh-my-zsh
+
+
+安装zsh: https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH
+安装oh-my-zsh: https://github.com/robbyrussell/oh-my-zsh
+安装包管理器zplug： brew install zplug
+
+
+安装fd：
+
+
+安装： https://github.com/sharkdp/fd
+
+
+fzf
+
+
+安装： brew install fzf
+$(brew &ndash;prefix)/opt/fzf/install
+
+
+ag
+
+
+安装参考： https://github.com/ggreer/the_silver_searcher
+
+
+z jump
+
+
+安装参考： https://github.com/rupa/z
+
+
+vscode
+
+写前端代码时候，感觉用vim还是难受
+
+typora
+
+试过很多个markdown编辑工具，感觉还是这个比较好用
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://fucangyu.github.io/post/new-env/" /><meta property="article:published_time" content="2019-06-30T17:40:01&#43;08:00"/>
+<meta property="article:modified_time" content="2019-06-30T17:40:01&#43;08:00"/>
+
+<meta itemprop="name" content="初始化开发环境">
+<meta itemprop="description" content="最近入职新公司，用自己的电脑没有补贴，那当然用公司电脑喽，所以所有的环境都要重装。通过这次重装确认了几个对我来说，本地开发一定会用到的软件。
+
+
+brew
+
+
+emmm，这个就不解释了，在mac下时必备的
+
+
+git
+
+
+brew install git
+
+
+Tmux
+
+
+安装： brew install tmux
+安装tpm：https://github.com/tmux-plugins/tpm
+配置参考：https://github.com/fucangyu/my-config/blob/master/dot.tmux.conf
+
+
+Vim8
+
+
+brew reinstall vim &ndash;with-python3 &ndash;with-luajit
+安装插件管理工具Plug: https://github.com/junegunn/vim-plug
+安装universal-tags:  https://github.com/universal-ctags/ctags
+安装插件： https://github.com/fucangyu/my-config/blob/master/dot.vimrc
+
+
+zsh/oh-my-zsh
+
+
+安装zsh: https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH
+安装oh-my-zsh: https://github.com/robbyrussell/oh-my-zsh
+安装包管理器zplug： brew install zplug
+
+
+安装fd：
+
+
+安装： https://github.com/sharkdp/fd
+
+
+fzf
+
+
+安装： brew install fzf
+$(brew &ndash;prefix)/opt/fzf/install
+
+
+ag
+
+
+安装参考： https://github.com/ggreer/the_silver_searcher
+
+
+z jump
+
+
+安装参考： https://github.com/rupa/z
+
+
+vscode
+
+写前端代码时候，感觉用vim还是难受
+
+typora
+
+试过很多个markdown编辑工具，感觉还是这个比较好用
+">
+
+
+<meta itemprop="datePublished" content="2019-06-30T17:40:01&#43;08:00" />
+<meta itemprop="dateModified" content="2019-06-30T17:40:01&#43;08:00" />
+<meta itemprop="wordCount" content="374">
+
+
+
+<meta itemprop="keywords" content="开发环境,工具," />
+<meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="初始化开发环境"/>
+<meta name="twitter:description" content="最近入职新公司，用自己的电脑没有补贴，那当然用公司电脑喽，所以所有的环境都要重装。通过这次重装确认了几个对我来说，本地开发一定会用到的软件。
+
+
+brew
+
+
+emmm，这个就不解释了，在mac下时必备的
+
+
+git
+
+
+brew install git
+
+
+Tmux
+
+
+安装： brew install tmux
+安装tpm：https://github.com/tmux-plugins/tpm
+配置参考：https://github.com/fucangyu/my-config/blob/master/dot.tmux.conf
+
+
+Vim8
+
+
+brew reinstall vim &ndash;with-python3 &ndash;with-luajit
+安装插件管理工具Plug: https://github.com/junegunn/vim-plug
+安装universal-tags:  https://github.com/universal-ctags/ctags
+安装插件： https://github.com/fucangyu/my-config/blob/master/dot.vimrc
+
+
+zsh/oh-my-zsh
+
+
+安装zsh: https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH
+安装oh-my-zsh: https://github.com/robbyrussell/oh-my-zsh
+安装包管理器zplug： brew install zplug
+
+
+安装fd：
+
+
+安装： https://github.com/sharkdp/fd
+
+
+fzf
+
+
+安装： brew install fzf
+$(brew &ndash;prefix)/opt/fzf/install
+
+
+ag
+
+
+安装参考： https://github.com/ggreer/the_silver_searcher
+
+
+z jump
+
+
+安装参考： https://github.com/rupa/z
+
+
+vscode
+
+写前端代码时候，感觉用vim还是难受
+
+typora
+
+试过很多个markdown编辑工具，感觉还是这个比较好用
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">租块墓地，俯瞰师范学院</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/tags/">
+        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">租块墓地，俯瞰师范学院</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/tags/">Tags</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">初始化开发环境</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2019-06-30 </span>
+        <div class="post-category">
+            <a href="/categories/%E5%B7%A5%E5%85%B7/"> 工具 </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      <p>最近入职新公司，用自己的电脑没有补贴，那当然用公司电脑喽，所以所有的环境都要重装。通过这次重装确认了几个对我来说，本地开发一定会用到的软件。</p>
+
+<ol>
+<li><p>brew</p>
+
+<ol>
+<li>emmm，这个就不解释了，在mac下时必备的</li>
+</ol></li>
+
+<li><p>git</p>
+
+<ol>
+<li>brew install git</li>
+</ol></li>
+
+<li><p>Tmux</p>
+
+<ol>
+<li>安装： brew install tmux</li>
+<li>安装tpm：<a href="https://github.com/tmux-plugins/tpm">https://github.com/tmux-plugins/tpm</a></li>
+<li>配置参考：<a href="https://github.com/fucangyu/my-config/blob/master/dot.tmux.conf">https://github.com/fucangyu/my-config/blob/master/dot.tmux.conf</a></li>
+</ol></li>
+
+<li><p>Vim8</p>
+
+<ol>
+<li>brew reinstall vim &ndash;with-python3 &ndash;with-luajit</li>
+<li>安装插件管理工具Plug: <a href="https://github.com/junegunn/vim-plug">https://github.com/junegunn/vim-plug</a></li>
+<li>安装<code>universal-tags</code>:  <a href="https://github.com/universal-ctags/ctags">https://github.com/universal-ctags/ctags</a></li>
+<li>安装插件： <a href="https://github.com/fucangyu/my-config/blob/master/dot.vimrc">https://github.com/fucangyu/my-config/blob/master/dot.vimrc</a></li>
+</ol></li>
+
+<li><p>zsh/oh-my-zsh</p>
+
+<ol>
+<li>安装<code>zsh</code>: <a href="https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH">https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH</a></li>
+<li>安装<code>oh-my-zsh</code>: <a href="https://github.com/robbyrussell/oh-my-zsh">https://github.com/robbyrussell/oh-my-zsh</a></li>
+<li>安装包管理器<code>zplug</code>： brew install zplug</li>
+</ol></li>
+
+<li><p>安装fd：</p>
+
+<ol>
+<li>安装： <a href="https://github.com/sharkdp/fd">https://github.com/sharkdp/fd</a></li>
+</ol></li>
+
+<li><p>fzf</p>
+
+<ol>
+<li>安装： brew install fzf</li>
+<li>$(brew &ndash;prefix)/opt/fzf/install</li>
+</ol></li>
+
+<li><p>ag</p>
+
+<ol>
+<li>安装参考： <a href="https://github.com/ggreer/the_silver_searcher">https://github.com/ggreer/the_silver_searcher</a></li>
+</ol></li>
+
+<li><p>z jump</p>
+
+<ol>
+<li>安装参考： <a href="https://github.com/rupa/z">https://github.com/rupa/z</a></li>
+</ol></li>
+
+<li><p>vscode</p>
+
+<p>写前端代码时候，感觉用vim还是难受</p></li>
+
+<li><p>typora</p>
+
+<p>试过很多个<code>markdown</code>编辑工具，感觉还是这个比较好用</p></li>
+</ol>
+    </div>
+
+    <footer class="post-footer">
+      <div class="post-tags">
+          <a href="/tags/%E5%BC%80%E5%8F%91%E7%8E%AF%E5%A2%83/">开发环境</a>
+          <a href="/tags/%E5%B7%A5%E5%85%B7/">工具</a>
+          </div>
+      <nav class="post-nav">
+        
+        <a class="next" href="/post/failed-k8s-cluster/">
+            <span class="next-text nav-default">一次失败的k8s部署经历</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="cangyufu@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/fucangyu" class="iconfont icon-github" title="github"></a>
+  <a href="https://fucangyu.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2019
+    <span class="heart">
+      <i class="iconfont icon-heart"></i>
+    </span>
+    <span class="author">fcy</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>
