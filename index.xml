@@ -6,10 +6,19 @@
     <description>Recent content on 租块墓地，俯瞰师范学院</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sun, 30 Jun 2019 17:40:01 +0800</lastBuildDate>
+    <lastBuildDate>Tue, 23 Jul 2019 21:51:21 +0800</lastBuildDate>
     
 	<atom:link href="https://fucangyu.github.io/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>从上家公司学到的</title>
+      <link>https://fucangyu.github.io/post/learned-from-ein/</link>
+      <pubDate>Tue, 23 Jul 2019 21:51:21 +0800</pubDate>
+      
+      <guid>https://fucangyu.github.io/post/learned-from-ein/</guid>
+      <description>从爱因离开快一个月了，感觉有些东西需要总结一下了。 坚持不写code smell的代码 祖师爷建议的一些规范，pep8/gofmt/isort之类</description>
+    </item>
     
     <item>
       <title>初始化开发环境</title>
