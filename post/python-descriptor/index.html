@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>Python描述符协议总结 - 租块墓地，俯瞰师范学院</title>
+  <title>Python描述符协议总结 - 何时</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -23,10 +23,10 @@
 
 
 
-<meta name="generator" content="Hugo 0.51 with even 4.0.0" />
+<meta name="generator" content="Hugo 0.63.2 with theme even" />
 
 
-<link rel="canonical" href="https://fucangyu.github.io/post/python-descriptor/" />
+<link rel="canonical" href="https://ZmN5.github.io/post/python-descriptor/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -34,28 +34,25 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.93844dae.min.css" rel="stylesheet">
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:title" content="Python描述符协议总结" />
 <meta property="og:description" content="本文主要翻译自Descriptor HowTo Guide, 另外加了一下自己的理解。 描述符协议是什么？ 如果一个类实现了__set__, __get__, __delete__，这三" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://fucangyu.github.io/post/python-descriptor/" /><meta property="article:published_time" content="2019-01-20T19:55:58&#43;08:00"/>
-<meta property="article:modified_time" content="2019-01-20T19:55:58&#43;08:00"/>
-
+<meta property="og:url" content="https://ZmN5.github.io/post/python-descriptor/" />
+<meta property="article:published_time" content="2019-01-20T19:55:58+08:00" />
+<meta property="article:modified_time" content="2019-01-20T19:55:58+08:00" />
 <meta itemprop="name" content="Python描述符协议总结">
 <meta itemprop="description" content="本文主要翻译自Descriptor HowTo Guide, 另外加了一下自己的理解。 描述符协议是什么？ 如果一个类实现了__set__, __get__, __delete__，这三">
-
-
 <meta itemprop="datePublished" content="2019-01-20T19:55:58&#43;08:00" />
 <meta itemprop="dateModified" content="2019-01-20T19:55:58&#43;08:00" />
-<meta itemprop="wordCount" content="2003">
+<meta itemprop="wordCount" content="2061">
 
 
 
-<meta itemprop="keywords" content="python," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="python," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="Python描述符协议总结"/>
 <meta name="twitter:description" content="本文主要翻译自Descriptor HowTo Guide, 另外加了一下自己的理解。 描述符协议是什么？ 如果一个类实现了__set__, __get__, __delete__，这三"/>
 
@@ -72,7 +69,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">租块墓地，俯瞰师范学院</a>
+    <a href="/" class="logo">何时</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -96,7 +93,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">租块墓地，俯瞰师范学院</a>
+  <a href="/" class="logo">何时</a>
 </div>
 
 <nav class="site-navbar">
@@ -133,46 +130,37 @@
 
     
     <div class="post-content">
-      
-
-<p>本文主要翻译自<a href="https://docs.python.org/3.6/howto/descriptor.html#functions-and-methods">Descriptor HowTo Guide</a>, 另外加了一下自己的理解。</p>
-
+      <p>本文主要翻译自<a href="https://docs.python.org/3.6/howto/descriptor.html#functions-and-methods">Descriptor HowTo Guide</a>, 另外加了一下自己的理解。</p>
 <h2 id="描述符协议是什么">描述符协议是什么？</h2>
-
 <p>如果一个类实现了<code>__set__</code>, <code>__get__</code>, <code>__delete__</code>，这三个中任意一个或者多个方法，那么就实现了描述符协议，它的实例这就是一个描述符，同时要明白这也是一个类属性。具体描述符协议如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
 </span><span class="lnt">5
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">descr</span><span class="o">.</span><span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span> <span class="o">--&gt;</span> <span class="n">value</span>
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">descr</span><span class="o">.</span><span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="nb">type</span><span class="o">=</span><span class="bp">None</span><span class="p">)</span> <span class="o">-</span><span class="o">-</span><span class="o">&gt;</span> <span class="n">value</span>
 
-<span class="n">descr</span><span class="o">.</span><span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">--&gt;</span> <span class="bp">None</span>
+<span class="n">descr</span><span class="o">.</span><span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span> <span class="o">-</span><span class="o">-</span><span class="o">&gt;</span> <span class="bp">None</span>
 
-<span class="n">descr</span><span class="o">.</span><span class="fm">__delete__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="o">--&gt;</span> <span class="bp">None</span></code></pre></td></tr></table>
+<span class="n">descr</span><span class="o">.</span><span class="fm">__delete__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">obj</span><span class="p">)</span> <span class="o">-</span><span class="o">-</span><span class="o">&gt;</span> <span class="bp">None</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>在Python中，对象属性的默认查找顺序，举例来说是这样的，比如<code>a.x</code></p>
-
+</div><p>在Python中，对象属性的默认查找顺序，举例来说是这样的，比如<code>a.x</code></p>
 <ol>
 <li>先查找<code>a.__dict__['x']</code></li>
 <li>如果没有查到的话, <code>type(a).__dict__['x']</code>沿着<code>方法解析顺序</code>(MRO) 继续向上查找，除了元类</li>
 </ol>
-
 <p>如果要查找的属性是一个实现了描述符协议的对象的话，python也许会用描述符方法覆盖上面的这种默认的查找行为。这种调用优先顺序依赖于哪种描述符方法被定义了。</p>
-
 <p>另外，如果同时实现了<code>__set__</code>, <code>__get__</code>，被称为<code>数据描述符</code>(<code>data descriptor</code>), 如果只实现了<code>__get__</code>方法，那么被称为<code>非数据描述符</code>? why? 因为非数据描述符一般用于<code>方法</code>(当然也可以用于其他情况)</p>
-
 <p><code>数据描述符</code>和<code>非数据描述符</code>的最主要区别在于，这两个是怎么覆盖对实例字典的访问（毕竟Python是一门构建字典之上的语言嘛）。如果实例的字典有一个字段和描述符有同样的名字，在这种情况下，数据描述符和非数据描述符会有不同的表现, 对数据描述符来说，数据描述符会被优先访问，对非数据描述符来说，实例字典会被优先访问。这种情况造成了，如果想使用描述符使一个属性变为<code>只读的</code>， 那么就只能使用数据描述符，并且在<code>__set__</code>方法中<code>raise AttributeError</code></p>
-
 <p>举例来说:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -187,33 +175,33 @@
 </span><span class="lnt">13
 </span><span class="lnt">14
 </span><span class="lnt">15
+</span><span class="lnt">16
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">NotDataDescriptor</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;In descriptor&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="p">)</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">In descriptor</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">Test</span><span class="p">:</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">NotDataDescriptor</span><span class="p">()</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">NotDataDescriptor</span><span class="p">(</span><span class="p">)</span>
 
-<span class="n">t</span> <span class="o">=</span> <span class="n">Test</span><span class="p">()</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Test</span><span class="p">(</span><span class="p">)</span>
 <span class="n">t</span><span class="o">.</span><span class="n">a</span>   <span class="c1"># (1) print -&gt;  In descriptor</span>
 <span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span> <span class="c1"># (2) print -&gt; {}</span>
 
-<span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span>
+<span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">a</span><span class="s1">&#39;</span>
 <span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="c1">#  (3) print -&gt; a</span>
-<span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span> <span class="c1"># print -&gt; {&#39;a&#39;: &#39;a&#39;} </span></code></pre></td></tr></table>
-</div>
-</div>
-<p>在上面的例子中，<code>a</code>是一个非数据描述符, 所以在当<code>t.a</code>时候，触发<code>__get__</code>, 打印出了<code>In descriptor</code>，查看这时候的<code>__dict__</code>为空。</p>
+<span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span> <span class="c1"># print -&gt; {&#39;a&#39;: &#39;a&#39;} </span>
 
+</code></pre></td></tr></table>
+</div>
+</div><p>在上面的例子中，<code>a</code>是一个非数据描述符, 所以在当<code>t.a</code>时候，触发<code>__get__</code>, 打印出了<code>In descriptor</code>，查看这时候的<code>__dict__</code>为空。</p>
 <p>当要给<code>t.a='a'</code>，给<code>t.a</code>赋值时候，这时候有两种选择，覆盖实例字典<code>t.__dict__['a'] = 'a'</code>, 或者覆盖描述符属性<code>type(t).__dict__['a'].__set__('a', 'a')</code>, 因为<code>a</code>是一个非数据描述符，没有<code>t.a.__set__</code>方法，所以只能使用第一种。当再次读取<code>t.a</code>时候，因为<code>a</code>是一个非数据描述符，所以覆盖实例字典的优先级高于非数据描述符, 触发第一种操作， 打印出<code>a</code>，这时候查看<code>t.__dict__</code>会发现，新增的值确实在实例字典中了。</p>
-
 <p>如果同样的例子改写为数据描述符呢?</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -239,48 +227,43 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">DataDescriptor</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="bp">None</span>
 
-    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;In descriptor&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="p">)</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">In descriptor</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
 
-    <span class="k">def</span> <span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">value</span> <span class="o">*</span> <span class="mi">2</span>
 
 
 <span class="k">class</span> <span class="nc">Test</span><span class="p">:</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">DataDescriptor</span><span class="p">()</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">DataDescriptor</span><span class="p">(</span><span class="p">)</span>
 
 
-<span class="n">t</span> <span class="o">=</span> <span class="n">Test</span><span class="p">()</span> <span class="c1"># print -&gt; In descriptor</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Test</span><span class="p">(</span><span class="p">)</span> <span class="c1"># print -&gt; In descriptor</span>
 <span class="n">t</span><span class="o">.</span><span class="n">a</span>
 <span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span> <span class="c1"># print -&gt; {}</span>
 
-<span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span>
+<span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">a</span><span class="s1">&#39;</span>
 <span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="c1"># print -&gt; In descriptor\naa</span>
-<span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>  <span class="c1"># print {}</span></code></pre></td></tr></table>
+<span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span>  <span class="c1"># print {}</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="描述符调用规则">描述符调用规则</h2>
-
+</div><h2 id="描述符调用规则">描述符调用规则</h2>
 <p>对<code>obj.d</code>的调用取决于<code>obj</code>是一个<code>对象object</code>还是一个<code>类class</code></p>
-
 <p>对象来说，比如对<code>b.x</code>的访问来说，<code>object.__getattribute__()</code>会把对<code>b.x</code>的调用转变为<code>type(b).__dict__['x'].__get__(b, type(b))</code>, 这种方法的实现依赖于一种调用链：</p>
-
 <ol>
 <li>数据描述符的调用优先于实例变量</li>
 <li>实例变量的调用优先于非数据描述符</li>
 <li>最低的优先权为<code>__getattr__</code></li>
 </ol>
-
 <p>对类<code>class</code>来说，<code>type.__getattribute__()</code>, 把<code>B.x</code>的调用转变为<code>B.__dict__['x'].__get__(None, B)</code></p>
-
 <p>Python代码描述如下：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt">1
+<pre class="chroma"><code><span class="lnt">1
 </span><span class="lnt">2
 </span><span class="lnt">3
 </span><span class="lnt">4
@@ -288,16 +271,15 @@
 </span><span class="lnt">6
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="fm">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
-    <span class="s2">&#34;Emulate type_getattro() in Objects/typeobject.c&#34;</span>
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="k">def</span> <span class="fm">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span><span class="p">:</span>
+    <span class="sa"></span><span class="s2">&#34;</span><span class="s2">Emulate type_getattro() in Objects/typeobject.c</span><span class="s2">&#34;</span>
     <span class="n">v</span> <span class="o">=</span> <span class="nb">object</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">key</span><span class="p">)</span>
-    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="s1">&#39;__get__&#39;</span><span class="p">):</span>
+    <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">v</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">__get__</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">v</span><span class="o">.</span><span class="fm">__get__</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
-    <span class="k">return</span> <span class="n">v</span></code></pre></td></tr></table>
+    <span class="k">return</span> <span class="n">v</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>重要的几点在于：</p>
-
+</div><p>重要的几点在于：</p>
 <ol>
 <li>描述符是被<code>__getattribute__</code>调用的</li>
 <li>覆写<code>__getattribute__</code>会阻止自动调用描述符</li>
@@ -305,11 +287,10 @@
 <li>数据描述符会一直覆盖实例字典</li>
 <li>非数据描述符会一直被实例字典覆盖</li>
 </ol>
-
 <p>在上面两个栗子中，我如果自定义<code>__getattribute__</code>会怎么样：</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -338,43 +319,45 @@
 </span><span class="lnt">27
 </span><span class="lnt">28
 </span><span class="lnt">29
+</span><span class="lnt">30
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">DataDescriptor</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="bp">None</span>
 
-    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;In descriptor&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="p">)</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">In descriptor</span><span class="s1">&#39;</span><span class="p">)</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_data</span>
 
-    <span class="k">def</span> <span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">value</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__set__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">value</span><span class="p">)</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">_data</span> <span class="o">=</span> <span class="n">value</span> <span class="o">*</span> <span class="mi">2</span>
 
 
 <span class="k">class</span> <span class="nc">Test</span><span class="p">:</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">DataDescriptor</span><span class="p">()</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">DataDescriptor</span><span class="p">(</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="s2">&#34;&#34;&#34;
-</span><span class="s2">        丧心病狂一点，直接返回None吧
-</span><span class="s2">        &#34;&#34;&#34;</span>
+    <span class="k">def</span> <span class="fm">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span><span class="p">:</span>
+        <span class="sa"></span><span class="s2">&#34;&#34;&#34;</span><span class="s2">
+</span><span class="s2"></span><span class="s2">        丧心病狂一点，直接返回None吧</span><span class="s2">
+</span><span class="s2"></span><span class="s2">        </span><span class="s2">&#34;&#34;&#34;</span>
         <span class="k">return</span> <span class="bp">None</span>
 
 
-<span class="n">t</span> <span class="o">=</span> <span class="n">Test</span><span class="p">()</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Test</span><span class="p">(</span><span class="p">)</span>
 <span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="c1"># 没有print，因为__get__没有被调用 </span>
 <span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span> <span class="c1"># print -&gt; None</span>
 
-<span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span>
+<span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">a</span><span class="s1">&#39;</span>
 <span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="n">a</span><span class="p">)</span> <span class="c1"># print -&gt; None</span>
-<span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span> <span class="c1"># print -&gt; None</span></code></pre></td></tr></table>
+<span class="k">print</span><span class="p">(</span><span class="n">t</span><span class="o">.</span><span class="vm">__dict__</span><span class="p">)</span> <span class="c1"># print -&gt; None</span>
+
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>或者简单改写一下调用优先顺序:</p>
+</div><p>或者简单改写一下调用优先顺序:</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -403,39 +386,36 @@
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="k">class</span> <span class="nc">NotDataDescriptor</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="p">):</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;In descriptor&#39;</span><span class="p">)</span>
+    <span class="k">def</span> <span class="fm">__get__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">instance</span><span class="p">,</span> <span class="n">owner</span><span class="p">)</span><span class="p">:</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">In descriptor</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">Test</span><span class="p">:</span>
-    <span class="n">a</span> <span class="o">=</span> <span class="n">NotDataDescriptor</span><span class="p">()</span>
+    <span class="n">a</span> <span class="o">=</span> <span class="n">NotDataDescriptor</span><span class="p">(</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="s1">&#39;test&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">test</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">test</span><span class="s1">&#39;</span>
 
-    <span class="k">def</span> <span class="fm">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">):</span>
-        <span class="s2">&#34;&#34;&#34;
-</span><span class="s2">        对非数据描述符由优先调用实例字典改为略过实例字典不调用
-</span><span class="s2">        &#34;&#34;&#34;</span>
-        <span class="n">value</span> <span class="o">=</span> <span class="nb">type</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">),</span> <span class="n">attr</span><span class="p">)</span>
-        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="s1">&#39;__get__&#39;</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__getattribute__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span><span class="p">:</span>
+        <span class="sa"></span><span class="s2">&#34;&#34;&#34;</span><span class="s2">
+</span><span class="s2"></span><span class="s2">        对非数据描述符由优先调用实例字典改为略过实例字典不调用</span><span class="s2">
+</span><span class="s2"></span><span class="s2">        </span><span class="s2">&#34;&#34;&#34;</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="nb">type</span><span class="o">.</span><span class="fm">__getattribute__</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">,</span> <span class="n">attr</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">value</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">__get__</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">:</span>
             <span class="k">return</span> <span class="n">value</span><span class="o">.</span><span class="fm">__get__</span><span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">self</span><span class="p">)</span>
         <span class="k">return</span> <span class="n">value</span>
 
 
-<span class="n">t</span> <span class="o">=</span> <span class="n">Test</span><span class="p">()</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">Test</span><span class="p">(</span><span class="p">)</span>
 <span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="c1"># print -&gt; In descriptor</span>
 
-<span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="s1">&#39;a&#39;</span>
-<span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="c1"># print -&gt; In descriptor</span></code></pre></td></tr></table>
+<span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">a</span><span class="s1">&#39;</span>
+<span class="n">t</span><span class="o">.</span><span class="n">a</span> <span class="c1"># print -&gt; In descriptor</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<h2 id="常用的描述符">常用的描述符</h2>
-
+</div><h2 id="常用的描述符">常用的描述符</h2>
 <p>之前只知道<code>property</code>， <code>classmethod</code>, <code>staticmethod</code>是用描述符实现的，但是没想到<code>方法method</code>也是用描述符实现的，不过也正好解答长久以来的<code>self</code>是怎么注入方法里面的疑问。当然在Python里面这些都是用c实现的，Python版本参考本文开始时候介绍的那篇文章。</p>
-
 <h2 id="参考资料">参考资料</h2>
-
 <ol>
 <li><a href="https://docs.python.org/3.6/howto/descriptor.html#functions-and-methods">Descriptor HowTo Guide</a></li>
 <li>Python学习手册</li>
@@ -443,7 +423,8 @@
 
     </div>
 
-    <footer class="post-footer">
+    
+<footer class="post-footer">
       <div class="post-tags">
           <a href="/tags/python/">python</a>
           </div>
@@ -477,14 +458,18 @@
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
+  
+
+  
+
       </div>
     </main>
 
     <footer id="footer" class="footer">
       <div class="social-links">
       <a href="cangyufu@gmail.com" class="iconfont icon-email" title="email"></a>
-      <a href="https://github.com/fucangyu" class="iconfont icon-github" title="github"></a>
-  <a href="https://fucangyu.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+      <a href="https://github.com/zmn5" class="iconfont icon-github" title="github"></a>
+  <a href="https://ZmN5.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
 </div>
 
 <div class="copyright">
@@ -502,7 +487,7 @@
   <span class="copyright-year">
     &copy; 
     2017 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -519,7 +504,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
 
 
 

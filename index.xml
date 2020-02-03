@@ -1,231 +1,205 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>租块墓地，俯瞰师范学院</title>
-    <link>https://fucangyu.github.io/</link>
-    <description>Recent content on 租块墓地，俯瞰师范学院</description>
+    <title>何时</title>
+    <link>https://ZmN5.github.io/</link>
+    <description>Recent content on 何时</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Tue, 23 Jul 2019 21:51:21 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 03 Feb 2020 17:28:37 +0800</lastBuildDate>
     
-	<atom:link href="https://fucangyu.github.io/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ZmN5.github.io/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
+      <title>2019年终总结</title>
+      <link>https://ZmN5.github.io/post/2019-summary/</link>
+      <pubDate>Mon, 03 Feb 2020 17:28:37 +0800</pubDate>
+      
+      <guid>https://ZmN5.github.io/post/2019-summary/</guid>
+      <description></description>
+    </item>
+    
+    <item>
       <title>从上家公司学到的</title>
-      <link>https://fucangyu.github.io/post/learned-from-ein/</link>
+      <link>https://ZmN5.github.io/post/learned-from-ein/</link>
       <pubDate>Tue, 23 Jul 2019 21:51:21 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/learned-from-ein/</guid>
+      <guid>https://ZmN5.github.io/post/learned-from-ein/</guid>
       <description>从爱因离开快一个月了，感觉有些东西需要总结一下了。 坚持不写code smell的代码 祖师爷建议的一些规范，pep8/gofmt/isort之类</description>
     </item>
     
     <item>
       <title>初始化开发环境</title>
-      <link>https://fucangyu.github.io/post/new-env/</link>
+      <link>https://ZmN5.github.io/post/new-env/</link>
       <pubDate>Sun, 30 Jun 2019 17:40:01 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/new-env/</guid>
+      <guid>https://ZmN5.github.io/post/new-env/</guid>
       <description>&lt;p&gt;最近入职新公司，用自己的电脑没有补贴，那当然用公司电脑喽，所以所有的环境都要重装。通过这次重装确认了几个对我来说，本地开发一定会用到的软件。&lt;/p&gt;
-
 &lt;ol&gt;
-&lt;li&gt;&lt;p&gt;brew&lt;/p&gt;
-
+&lt;li&gt;
+&lt;p&gt;brew&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;emmm，这个就不解释了，在mac下时必备的&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;git&lt;/p&gt;
-
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;git&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;brew install git&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Tmux&lt;/p&gt;
-
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Tmux&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;安装： brew install tmux&lt;/li&gt;
-&lt;li&gt;安装tpm：&lt;a href=&#34;https://github.com/tmux-plugins/tpm&#34;&gt;https://github.com/tmux-plugins/tpm&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;配置参考：&lt;a href=&#34;https://github.com/fucangyu/my-config/blob/master/dot.tmux.conf&#34;&gt;https://github.com/fucangyu/my-config/blob/master/dot.tmux.conf&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;Vim8&lt;/p&gt;
-
+&lt;li&gt;安装tpm：https://github.com/tmux-plugins/tpm&lt;/li&gt;
+&lt;li&gt;配置参考：https://github.com/zmn5/my-config/blob/master/dot.tmux.conf&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;Vim8&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;brew reinstall vim &amp;ndash;with-python3 &amp;ndash;with-luajit&lt;/li&gt;
 &lt;li&gt;安装插件管理工具Plug: &lt;a href=&#34;https://github.com/junegunn/vim-plug&#34;&gt;https://github.com/junegunn/vim-plug&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;安装&lt;code&gt;universal-tags&lt;/code&gt;:  &lt;a href=&#34;https://github.com/universal-ctags/ctags&#34;&gt;https://github.com/universal-ctags/ctags&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;安装插件： &lt;a href=&#34;https://github.com/fucangyu/my-config/blob/master/dot.vimrc&#34;&gt;https://github.com/fucangyu/my-config/blob/master/dot.vimrc&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;zsh/oh-my-zsh&lt;/p&gt;
-
+&lt;li&gt;安装插件： &lt;a href=&#34;https://github.com/zmn5/my-config/blob/master/dot.vimrc&#34;&gt;https://github.com/zmn5/my-config/blob/master/dot.vimrc&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;zsh/oh-my-zsh&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;安装&lt;code&gt;zsh&lt;/code&gt;: &lt;a href=&#34;https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH&#34;&gt;https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;安装&lt;code&gt;oh-my-zsh&lt;/code&gt;: &lt;a href=&#34;https://github.com/robbyrussell/oh-my-zsh&#34;&gt;https://github.com/robbyrussell/oh-my-zsh&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;安装包管理器&lt;code&gt;zplug&lt;/code&gt;： brew install zplug&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;安装fd：&lt;/p&gt;
-
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;安装fd：&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;安装： &lt;a href=&#34;https://github.com/sharkdp/fd&#34;&gt;https://github.com/sharkdp/fd&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;fzf&lt;/p&gt;
-
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;fzf&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;安装： brew install fzf&lt;/li&gt;
 &lt;li&gt;$(brew &amp;ndash;prefix)/opt/fzf/install&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;ag&lt;/p&gt;
-
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;ag&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;安装参考： &lt;a href=&#34;https://github.com/ggreer/the_silver_searcher&#34;&gt;https://github.com/ggreer/the_silver_searcher&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;z jump&lt;/p&gt;
-
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;z jump&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;安装参考： &lt;a href=&#34;https://github.com/rupa/z&#34;&gt;https://github.com/rupa/z&lt;/a&gt;&lt;/li&gt;
-&lt;/ol&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;vscode&lt;/p&gt;
-
-&lt;p&gt;写前端代码时候，感觉用vim还是难受&lt;/p&gt;&lt;/li&gt;
-
-&lt;li&gt;&lt;p&gt;typora&lt;/p&gt;
-
-&lt;p&gt;试过很多个&lt;code&gt;markdown&lt;/code&gt;编辑工具，感觉还是这个比较好用&lt;/p&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;vscode&lt;/p&gt;
+&lt;p&gt;写前端代码时候，感觉用vim还是难受&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;typora&lt;/p&gt;
+&lt;p&gt;试过很多个&lt;code&gt;markdown&lt;/code&gt;编辑工具，感觉还是这个比较好用&lt;/p&gt;
+&lt;/li&gt;
 &lt;/ol&gt;</description>
     </item>
     
     <item>
       <title>一次失败的k8s部署经历</title>
-      <link>https://fucangyu.github.io/post/failed-k8s-cluster/</link>
+      <link>https://ZmN5.github.io/post/failed-k8s-cluster/</link>
       <pubDate>Sat, 30 Mar 2019 23:04:44 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/failed-k8s-cluster/</guid>
+      <guid>https://ZmN5.github.io/post/failed-k8s-cluster/</guid>
       <description>这篇文章将会完全是混乱的结构，混乱的记录。 昨天下班想，这个周末要把拖了很久的自己建一个k8s集群这件事给办了，结果没想到，终究还是只做了一半</description>
     </item>
     
     <item>
       <title>Python Reload</title>
-      <link>https://fucangyu.github.io/post/python-reload/</link>
+      <link>https://ZmN5.github.io/post/python-reload/</link>
       <pubDate>Thu, 28 Mar 2019 22:11:54 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/python-reload/</guid>
+      <guid>https://ZmN5.github.io/post/python-reload/</guid>
       <description>和算法同学的合作，一般都是调用算法同学写的package, 然后开始胡搞 但是现在有一个需求，要动态加载算法同学的代码，为什么会有这么奇怪的需求</description>
     </item>
     
     <item>
       <title>Python描述符协议总结</title>
-      <link>https://fucangyu.github.io/post/python-descriptor/</link>
+      <link>https://ZmN5.github.io/post/python-descriptor/</link>
       <pubDate>Sun, 20 Jan 2019 19:55:58 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/python-descriptor/</guid>
+      <guid>https://ZmN5.github.io/post/python-descriptor/</guid>
       <description>本文主要翻译自Descriptor HowTo Guide, 另外加了一下自己的理解。 描述符协议是什么？ 如果一个类实现了__set__, __get__, __delete__，这三</description>
     </item>
     
     <item>
       <title>一种有意思的死锁</title>
-      <link>https://fucangyu.github.io/post/a-interesting-deadlock/</link>
+      <link>https://ZmN5.github.io/post/a-interesting-deadlock/</link>
       <pubDate>Thu, 17 Jan 2019 01:03:13 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/a-interesting-deadlock/</guid>
+      <guid>https://ZmN5.github.io/post/a-interesting-deadlock/</guid>
       <description>&lt;p&gt;刚闲逛时候发现有&lt;a href=&#34;https://python-gino.readthedocs.io/zh/latest/why.html#the-story&#34;&gt;一篇文章&lt;/a&gt;讲了一种有意思的死锁，不是亲身经历，但是也很有意思了。&lt;/p&gt;
-
 &lt;p&gt;先会议一下死锁的定义是什么？翻出压箱底的&lt;code&gt;现代操作系统&lt;/code&gt;:&lt;/p&gt;
-
 &lt;blockquote&gt;
 &lt;p&gt;如果一个进程集合中的每个进程都只能等待由该进程集合中的其他进程才能引发的事件，那么，该进程集合就是死锁的。&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;所以，还是不知道什么是死锁。&lt;/p&gt;
-
 &lt;p&gt;举个例子，&lt;/p&gt;
-
 &lt;blockquote&gt;
 &lt;p&gt;比如甲乙两人同时去食堂吃饭，食堂里面只有一个碗和一双筷子，甲抢到了碗，乙抢到了筷子，甲等乙放下筷子，乙等甲放下碗，结果两个人都饿死了。&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;又比如:&lt;/p&gt;
-
 &lt;blockquote&gt;
 &lt;p&gt;A和B两个进程同时去写数据库，A锁住了第n行去读第m行，B锁住了第m行去读第n行，结果A，B都无限期等下去了。&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;无论是&lt;code&gt;甲&lt;/code&gt;,&lt;code&gt;乙&lt;/code&gt;,还是&lt;code&gt;A&lt;/code&gt;,&lt;code&gt;B&lt;/code&gt;,都在等待另一个已经死锁的进程释放资源。因为所有的进程都不能运行，所以资源永远无法被释放，所以所有进程都不能被唤醒。进程的数量以及占有和请求的资源数量都是无关紧要的，而无论资源和何种类型都会发生何种结果，所以这种死锁被称为资源死锁。&lt;/p&gt;
-
 &lt;p&gt;好了，抄书结束，划重点。&lt;/p&gt;
-
 &lt;p&gt;好吧，上面这段话都是重点。&lt;/p&gt;
-
 &lt;p&gt;废话👆&lt;/p&gt;
-
 &lt;p&gt;下面看&lt;code&gt;占有和请求的资源数量都是无关紧要的🌰&lt;/code&gt;&lt;/p&gt;
-
 &lt;blockquote&gt;
 &lt;p&gt;For example, the first coroutine starts a transaction and updated a row, then the second coroutine tries to update the same row before the first coroutine closes the transaction. The second coroutine will block the whole thread at the non-async update, waiting for the row lock to be released, but the releasing is in the first coroutine which is blocked by the second coroutine. Thus it will block forever.&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;之前在协程中，每时每刻实际都只有一件事在执行，发生死锁的概率应该不高吧。too young啊&lt;/p&gt;
-
 &lt;p&gt;比如第一个协程发起事务更新数据库中的一行，这时候第二个协程试图更新同一行，如果第二个协程是非异步的更新，那么它就要等待第一个协程释放资源，但是这时候整个线程已经被第二个线程阻塞了，第一个协程无法释放资源，deadlock!&lt;/p&gt;
-
 &lt;p&gt;回忆一下书本中关于资源死锁的四个条件，回忆一下:&lt;/p&gt;
-
 &lt;ol&gt;
 &lt;li&gt;互斥条件&lt;/li&gt;
 &lt;li&gt;占有和等待条件&lt;/li&gt;
 &lt;li&gt;不可抢占条件&lt;/li&gt;
 &lt;li&gt;环路等待条件&lt;/li&gt;
 &lt;/ol&gt;
-
 &lt;p&gt;这四个条件只要有一个不成立那么资源死锁就不会发生。&lt;/p&gt;
-
 &lt;p&gt;好了现在套用一下上面这个例子。&lt;/p&gt;
-
 &lt;ol&gt;
 &lt;li&gt;数据库行锁和当前线程执行都是互斥的，✅&lt;/li&gt;
 &lt;li&gt;第一个协程占有了数据库中的锁等待线程执行权，第二个协程占有了当前协程的执行等待行锁，✅&lt;/li&gt;
 &lt;li&gt;不可抢占，✅&lt;/li&gt;
 &lt;li&gt;环路等待，第二个线程等待行锁，第一个线程等待有机会被执行，✅&lt;/li&gt;
 &lt;/ol&gt;
-
 &lt;p&gt;死锁bingo!&lt;/p&gt;
-
 &lt;p&gt;怎么解决呢？&lt;/p&gt;
-
 &lt;blockquote&gt;
 &lt;p&gt;A simple fix would be to defer the database operations into threads, so that they won&amp;rsquo;t block the main thread, thus won&amp;rsquo;t cause a dead lock easily. It usually works and there is even a library to do so. However when it comes to ORM, things become dirty.&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;把数据库相关操作扔给其他线程去执行，确保不会阻塞主线程就行了。&lt;/p&gt;
-
 &lt;p&gt;但是真的就行了吗？&lt;/p&gt;
-
 &lt;p&gt;在一个复杂的项目中，你永远不知道哪一行代码会调用同步代码阻塞主线程，&lt;code&gt;Racing condition just happens under pressure, and anything that may block will eventually block&lt;/code&gt;, 可能会发生的事情终将要发生。&lt;/p&gt;
-
 &lt;p&gt;所以作者建议:&lt;/p&gt;
-
 &lt;blockquote&gt;
 &lt;p&gt;This is usually the time when I suggest to separate the server into two parts: &amp;ldquo;normal blocking with ORM&amp;rdquo; and &amp;ldquo;asynchronous without ORM&amp;rdquo;.&lt;/p&gt;
 &lt;/blockquote&gt;
-
 &lt;p&gt;不过倒是想起另外一个问题了, 现在公司业务都是用的&lt;code&gt;gunicorn&lt;/code&gt;+&lt;code&gt;gevent&lt;/code&gt;, 这个内部是怎么解决这个问题的呢&lt;/p&gt;
-
 &lt;p&gt;可以猜测一下：&lt;/p&gt;
-
 &lt;p&gt;上面的例子造成死锁是因为有协程调用同步操作, 而gevent是通过&lt;code&gt;monkey_path&lt;/code&gt;的操作从底层改变所有请求的行为，就没有这个问题了。&lt;/p&gt;
-
 &lt;p&gt;不过还有其他问题。&lt;/p&gt;
-
 &lt;p&gt;&lt;code&gt;monkey_patch&lt;/code&gt;针对Python代码有效，如果数据库连接器用的是c扩展，emmm&amp;hellip;可以大胆的猜测一下可能的bug&lt;/p&gt;
-
 &lt;p&gt;参考资料：&lt;/p&gt;
-
 &lt;ol&gt;
 &lt;li&gt;现代操作系统&lt;/li&gt;
 &lt;li&gt;&lt;a href=&#34;https://python-gino.readthedocs.io/zh/latest/why.html#the-story&#34;&gt;https://python-gino.readthedocs.io/zh/latest/why.html#the-story&lt;/a&gt;&lt;/li&gt;
@@ -234,71 +208,69 @@
     
     <item>
       <title>2018小结</title>
-      <link>https://fucangyu.github.io/post/summary-2018/</link>
+      <link>https://ZmN5.github.io/post/summary-2018/</link>
       <pubDate>Mon, 31 Dec 2018 20:47:08 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/summary-2018/</guid>
+      <guid>https://ZmN5.github.io/post/summary-2018/</guid>
       <description>2018过完了，马上就就要27了。 27了！！！ 2018是人生中第一个从始至终都在上班的年份，最大的感受就是，时间过的好快啊！ 一、身体： 明显的</description>
     </item>
     
     <item>
       <title>怎么理解异步(2)</title>
-      <link>https://fucangyu.github.io/post/how-to-study-async2/</link>
+      <link>https://ZmN5.github.io/post/how-to-study-async2/</link>
       <pubDate>Sun, 30 Dec 2018 09:23:43 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/how-to-study-async2/</guid>
+      <guid>https://ZmN5.github.io/post/how-to-study-async2/</guid>
       <description>先回顾一下上一篇文章怎么理解异步(1) 对异步编程来说，需要代码段在把控制权移交给loop时候，保存当前continuation, 以便于事件发</description>
     </item>
     
     <item>
       <title>怎么理解异步?(1)</title>
-      <link>https://fucangyu.github.io/post/how-to-study-async/</link>
+      <link>https://ZmN5.github.io/post/how-to-study-async/</link>
       <pubDate>Sat, 29 Dec 2018 20:52:03 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/how-to-study-async/</guid>
-      <description>零 从刚开始学Python到现在，一直对异步都只有一个很模糊的印象。 什么是event_loop，event和loop是到底什么关系？ 具体的业务</description>
+      <guid>https://ZmN5.github.io/post/how-to-study-async/</guid>
+      <description></description>
     </item>
     
     <item>
       <title>怎么理解CPS?(1)</title>
-      <link>https://fucangyu.github.io/post/cps1/</link>
+      <link>https://ZmN5.github.io/post/cps1/</link>
       <pubDate>Sun, 11 Nov 2018 02:19:24 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/cps1/</guid>
+      <guid>https://ZmN5.github.io/post/cps1/</guid>
       <description>这段时间学racket终于遇到了传说中的CPS, 不出意外果然很难理解。先来看一下维基百科中对CPS的定义: In functional programming, continuation-passing style (CPS) is a style of programming in which control is passed explicitly</description>
     </item>
     
     <item>
       <title>Django orm改字段名造成数据丢失</title>
-      <link>https://fucangyu.github.io/post/django-orm-change-field-name/</link>
+      <link>https://ZmN5.github.io/post/django-orm-change-field-name/</link>
       <pubDate>Sat, 10 Nov 2018 21:34:22 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/django-orm-change-field-name/</guid>
+      <guid>https://ZmN5.github.io/post/django-orm-change-field-name/</guid>
       <description>&lt;h3 id=&#34;一-现场&#34;&gt;一. 现场：&lt;/h3&gt;
-
 &lt;p&gt;以为是修改一个变量名，但在django orm内部并不这么认为：&lt;/p&gt;
-
 &lt;p&gt;model:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;err&#34;&gt;旧列名：&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;cos_path&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;models&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CharField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;max_length&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;verbose_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;存储路径&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;err&#34;&gt;旧&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;列&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;名&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;：&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;cos_path&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;models&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CharField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;max_length&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;verbose_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;存储路径&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 
-&lt;span class=&#34;err&#34;&gt;新列名&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
-&lt;span class=&#34;n&#34;&gt;storage_path&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;models&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CharField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;max_length&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;verbose_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;存储路径&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;span class=&#34;err&#34;&gt;新&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;列&lt;/span&gt;&lt;span class=&#34;err&#34;&gt;名&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+&lt;span class=&#34;n&#34;&gt;storage_path&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;models&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CharField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;max_length&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;verbose_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;存储路径&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;migrations:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;migrations:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
@@ -312,20 +284,20 @@
 &lt;td class=&#34;lntd&#34;&gt;
 &lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;n&#34;&gt;operations&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
     &lt;span class=&#34;n&#34;&gt;migrations&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;RemoveField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
-        &lt;span class=&#34;n&#34;&gt;model_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;insurancedocument&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-        &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;cos_path&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-    &lt;span class=&#34;p&#34;&gt;),&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;model_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;insurancedocument&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;cos_path&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
     &lt;span class=&#34;n&#34;&gt;migrations&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;AddField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
-        &lt;span class=&#34;n&#34;&gt;model_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;insurancedocument&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-        &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;storage_path&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-       &lt;span class=&#34;n&#34;&gt;field&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;models&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CharField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;max_length&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;verbose_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;存储路径&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt;
-    &lt;span class=&#34;p&#34;&gt;),&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+        &lt;span class=&#34;n&#34;&gt;model_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;insurancedocument&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+        &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;storage_path&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+       &lt;span class=&#34;n&#34;&gt;field&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;models&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CharField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;max_length&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;verbose_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;存储路径&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;sql:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;sql:&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
@@ -339,37 +311,35 @@
 &lt;td class=&#34;lntd&#34;&gt;
 &lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;k&#34;&gt;BEGIN&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;c1&#34;&gt;--
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;-- Remove field cos_path from insurancedocument
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;-- Remove field cos_path from insurancedocument
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
 &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALTER&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;TABLE&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;apis_insurancedocument&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;`&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;DROP&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;COLUMN&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cos_path&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;c1&#34;&gt;--
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;-- Add field storage_path to insurancedocument
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;-- Add field storage_path to insurancedocument
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
 &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALTER&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;TABLE&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;apis_insurancedocument&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;`&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;ADD&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;COLUMN&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;storage_path&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;`&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;varchar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;NULL&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;span class=&#34;k&#34;&gt;COMMIT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;span class=&#34;k&#34;&gt;COMMIT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;所以在Django orm里面认为这是删去了一个字段，然后又新增了一个字段，然后数据就丢了。&lt;/p&gt;
-
+&lt;/div&gt;&lt;p&gt;所以在Django orm里面认为这是删去了一个字段，然后又新增了一个字段，然后数据就丢了。&lt;/p&gt;
 &lt;h3 id=&#34;二-其他django改列名手段&#34;&gt;二. 其他django改列名手段&lt;/h3&gt;
-
-&lt;h4 id=&#34;1-利用db-column-改名&#34;&gt;1. 利用db_column 改名&lt;/h4&gt;
-
+&lt;h4 id=&#34;1-利用db_column-改名&#34;&gt;1. 利用db_column 改名&lt;/h4&gt;
 &lt;p&gt;操作如下，利用db_column来改变字段名的，然后：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;n&#34;&gt;cos_path&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;models&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CharField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;max_length&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;verbose_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;存储路径&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;n&#34;&gt;cos_path&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;models&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CharField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;max_length&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;verbose_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;存储路径&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
 
-&lt;span class=&#34;n&#34;&gt;storage_path&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;models&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CharField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;max_length&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;db_column&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;cos_path&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;verbose_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;存储路径&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;span class=&#34;n&#34;&gt;storage_path&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;models&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CharField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;max_length&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;db_column&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;cos_path&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;verbose_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;存储路径&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
@@ -379,28 +349,30 @@
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;k&#34;&gt;BEGIN&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;
+&lt;span class=&#34;k&#34;&gt;BEGIN&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;c1&#34;&gt;--
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;-- Remove field cos_path from insurancedocument
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;-- Remove field cos_path from insurancedocument
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
 &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALTER&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;TABLE&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;apis_insurancedocument&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;`&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;DROP&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;COLUMN&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cos_path&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;c1&#34;&gt;--
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;-- Add field storage_path to insurancedocument
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;-- Add field storage_path to insurancedocument
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
 &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALTER&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;TABLE&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;apis_insurancedocument&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;`&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;ADD&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;COLUMN&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cos_path&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;`&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;varchar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;NULL&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;span class=&#34;k&#34;&gt;COMMIT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;django orm会先把cos_path那个字段给drop掉，数据还会丢失。&lt;/p&gt;
+&lt;span class=&#34;k&#34;&gt;COMMIT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;django orm会先把cos_path那个字段给drop掉，数据还会丢失。&lt;/p&gt;
 &lt;h4 id=&#34;2-利用rename-field改名&#34;&gt;2. 利用rename field改名&lt;/h4&gt;
-
 &lt;p&gt;(1) 利用python manage.py makemigrations &amp;ndash;empty apis创建一个新的migrations文件, 编辑：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
@@ -424,38 +396,40 @@
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;22
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;23
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;24
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;25
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class=&#34;lntd&#34;&gt;
 &lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;kn&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;django.db&lt;/span&gt; &lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;migrations&lt;/span&gt;
 &lt;span class=&#34;kn&#34;&gt;from&lt;/span&gt; &lt;span class=&#34;nn&#34;&gt;django.db&lt;/span&gt; &lt;span class=&#34;kn&#34;&gt;import&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;models&lt;/span&gt;
 
 
-&lt;span class=&#34;k&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Migration&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;migrations&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Migration&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;):&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;class&lt;/span&gt; &lt;span class=&#34;nc&#34;&gt;Migration&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;migrations&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Migration&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
 
     &lt;span class=&#34;n&#34;&gt;dependencies&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
-        &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;apis&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;s1&#34;&gt;&amp;#39;0006_auto_20180724_1039&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;),&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;apis&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;0006_auto_20180724_1039&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
     &lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
 
     &lt;span class=&#34;n&#34;&gt;operations&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;[&lt;/span&gt;
         &lt;span class=&#34;n&#34;&gt;migrations&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;AlterField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
-            &lt;span class=&#34;n&#34;&gt;model_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;insurancedocument&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-            &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;cos_path&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+            &lt;span class=&#34;n&#34;&gt;model_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;insurancedocument&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+            &lt;span class=&#34;n&#34;&gt;name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;cos_path&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
             &lt;span class=&#34;n&#34;&gt;field&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;models&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;CharField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
-                &lt;span class=&#34;n&#34;&gt;max_length&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;verbose_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;存储路径&amp;#39;&lt;/span&gt;
+                &lt;span class=&#34;n&#34;&gt;max_length&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;null&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;True&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;verbose_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;存储路径&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;
             &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
-        &lt;span class=&#34;p&#34;&gt;),&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
         &lt;span class=&#34;n&#34;&gt;migrations&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;RenameField&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;
-            &lt;span class=&#34;n&#34;&gt;model_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;insurancedocument&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-            &lt;span class=&#34;n&#34;&gt;old_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;cos_path&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-            &lt;span class=&#34;n&#34;&gt;new_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;storage_path&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
-        &lt;span class=&#34;p&#34;&gt;),&lt;/span&gt;
-    &lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+            &lt;span class=&#34;n&#34;&gt;model_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;insurancedocument&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+            &lt;span class=&#34;n&#34;&gt;old_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;cos_path&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+            &lt;span class=&#34;n&#34;&gt;new_name&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;storage_path&lt;/span&gt;&lt;span class=&#34;s1&#34;&gt;&amp;#39;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+        &lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;]&lt;/span&gt;
+
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;(2)执行的sql语句：&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;(2)执行的sql语句：&lt;/p&gt;
 &lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
 &lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
-&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
 &lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
@@ -468,34 +442,27 @@
 &lt;td class=&#34;lntd&#34;&gt;
 &lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-sql&#34; data-lang=&#34;sql&#34;&gt;&lt;span class=&#34;k&#34;&gt;BEGIN&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
 &lt;span class=&#34;c1&#34;&gt;--
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;-- Alter field cos_path on insurancedocument
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;-- Rename field cos_path on insurancedocument to storage_path
-&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;-- Alter field cos_path on insurancedocument
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;-- Rename field cos_path on insurancedocument to storage_path
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;--
 &lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;&lt;span class=&#34;k&#34;&gt;ALTER&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;TABLE&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;apis_insurancedocument&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;`&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;CHANGE&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;cos_path&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;`&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;`&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;storage_path&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;`&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;varchar&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;200&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;NULL&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
-&lt;span class=&#34;k&#34;&gt;COMMIT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;span class=&#34;k&#34;&gt;COMMIT&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;
-&lt;p&gt;这时候django才认为执行的是改名操作， 查看migrate之后的数据库发现数据没有丢失。&lt;/p&gt;
-
+&lt;/div&gt;&lt;p&gt;这时候django才认为执行的是改名操作， 查看migrate之后的数据库发现数据没有丢失。&lt;/p&gt;
 &lt;p&gt;但是这种操作对mysql来说貌似都是重建一张新表，然后把旧表内容插入新表里面，耗时长, 需要停服 而且危险， 所以补充毅总说的一种方法：&lt;/p&gt;
-
 &lt;h4 id=&#34;3-不停服改名&#34;&gt;3 不停服改名&lt;/h4&gt;
-
 &lt;ol&gt;
 &lt;li&gt;先加列，改代码来读老列&amp;amp;&amp;amp;双写，&lt;/li&gt;
 &lt;li&gt;通过 sql 或者代码复制原列数据到新列，&lt;/li&gt;
 &lt;li&gt;代码再切换成读写新列，&lt;/li&gt;
 &lt;li&gt;再做清理老列的事情&lt;/li&gt;
 &lt;/ol&gt;
-
 &lt;h4 id=&#34;4-还是不要改名字了&#34;&gt;4 还是不要改名字了&lt;/h4&gt;
-
 &lt;h2 id=&#34;反思&#34;&gt;反思:&lt;/h2&gt;
-
-&lt;hr /&gt;
-
+&lt;hr&gt;
 &lt;ol&gt;
 &lt;li&gt;在线上执行这种需要Schema Operations的事情，确认是否必要&lt;/li&gt;
 &lt;li&gt;还是不要用django migration了&lt;/li&gt;
@@ -506,10 +473,10 @@
     
     <item>
       <title>About Me</title>
-      <link>https://fucangyu.github.io/post/about/</link>
+      <link>https://ZmN5.github.io/post/about/</link>
       <pubDate>Sat, 10 Nov 2018 20:59:00 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/about/</guid>
+      <guid>https://ZmN5.github.io/post/about/</guid>
       <description>&lt;ul&gt;
 &lt;li&gt;在北京&lt;/li&gt;
 &lt;li&gt;工作中主要使用Python&lt;/li&gt;
