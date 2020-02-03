@@ -1,31 +1,31 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>python on 租块墓地，俯瞰师范学院</title>
-    <link>https://fucangyu.github.io/tags/python/</link>
-    <description>Recent content in python on 租块墓地，俯瞰师范学院</description>
+    <title>python on 何时</title>
+    <link>https://ZmN5.github.io/tags/python/</link>
+    <description>Recent content in python on 何时</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Thu, 28 Mar 2019 22:11:54 +0800</lastBuildDate>
     
-	<atom:link href="https://fucangyu.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ZmN5.github.io/tags/python/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>Python Reload</title>
-      <link>https://fucangyu.github.io/post/python-reload/</link>
+      <link>https://ZmN5.github.io/post/python-reload/</link>
       <pubDate>Thu, 28 Mar 2019 22:11:54 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/python-reload/</guid>
+      <guid>https://ZmN5.github.io/post/python-reload/</guid>
       <description>和算法同学的合作，一般都是调用算法同学写的package, 然后开始胡搞 但是现在有一个需求，要动态加载算法同学的代码，为什么会有这么奇怪的需求</description>
     </item>
     
     <item>
       <title>Python描述符协议总结</title>
-      <link>https://fucangyu.github.io/post/python-descriptor/</link>
+      <link>https://ZmN5.github.io/post/python-descriptor/</link>
       <pubDate>Sun, 20 Jan 2019 19:55:58 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/python-descriptor/</guid>
+      <guid>https://ZmN5.github.io/post/python-descriptor/</guid>
       <description>本文主要翻译自Descriptor HowTo Guide, 另外加了一下自己的理解。 描述符协议是什么？ 如果一个类实现了__set__, __get__, __delete__，这三</description>
     </item>
     

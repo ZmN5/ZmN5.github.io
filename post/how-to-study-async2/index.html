@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-  <title>怎么理解异步(2) - 租块墓地，俯瞰师范学院</title>
+  <title>怎么理解异步(2) - 何时</title>
   <meta name="renderer" content="webkit" />
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
 
@@ -23,10 +23,10 @@
 
 
 
-<meta name="generator" content="Hugo 0.51 with even 4.0.0" />
+<meta name="generator" content="Hugo 0.63.2 with theme even" />
 
 
-<link rel="canonical" href="https://fucangyu.github.io/post/how-to-study-async2/" />
+<link rel="canonical" href="https://ZmN5.github.io/post/how-to-study-async2/" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -34,28 +34,25 @@
 <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
 
 
-<link href="/dist/even.93844dae.min.css" rel="stylesheet">
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
 
 
 <meta property="og:title" content="怎么理解异步(2)" />
 <meta property="og:description" content="先回顾一下上一篇文章怎么理解异步(1) 对异步编程来说，需要代码段在把控制权移交给loop时候，保存当前continuation, 以便于事件发" />
 <meta property="og:type" content="article" />
-<meta property="og:url" content="https://fucangyu.github.io/post/how-to-study-async2/" /><meta property="article:published_time" content="2018-12-30T09:23:43&#43;08:00"/>
-<meta property="article:modified_time" content="2018-12-30T09:23:43&#43;08:00"/>
-
+<meta property="og:url" content="https://ZmN5.github.io/post/how-to-study-async2/" />
+<meta property="article:published_time" content="2018-12-30T09:23:43+08:00" />
+<meta property="article:modified_time" content="2018-12-30T09:23:43+08:00" />
 <meta itemprop="name" content="怎么理解异步(2)">
 <meta itemprop="description" content="先回顾一下上一篇文章怎么理解异步(1) 对异步编程来说，需要代码段在把控制权移交给loop时候，保存当前continuation, 以便于事件发">
-
-
 <meta itemprop="datePublished" content="2018-12-30T09:23:43&#43;08:00" />
 <meta itemprop="dateModified" content="2018-12-30T09:23:43&#43;08:00" />
-<meta itemprop="wordCount" content="1563">
+<meta itemprop="wordCount" content="1564">
 
 
 
-<meta itemprop="keywords" content="async,yield from," />
-<meta name="twitter:card" content="summary"/>
+<meta itemprop="keywords" content="async,yield from," /><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="怎么理解异步(2)"/>
 <meta name="twitter:description" content="先回顾一下上一篇文章怎么理解异步(1) 对异步编程来说，需要代码段在把控制权移交给loop时候，保存当前continuation, 以便于事件发"/>
 
@@ -72,7 +69,7 @@
 <body>
   <div id="mobile-navbar" class="mobile-navbar">
   <div class="mobile-header-logo">
-    <a href="/" class="logo">租块墓地，俯瞰师范学院</a>
+    <a href="/" class="logo">何时</a>
   </div>
   <div class="mobile-navbar-icon">
     <span></span>
@@ -96,7 +93,7 @@
   <div class="container" id="mobile-panel">
     <header id="header" class="header">
         <div class="logo-wrapper">
-  <a href="/" class="logo">租块墓地，俯瞰师范学院</a>
+  <a href="/" class="logo">何时</a>
 </div>
 
 <nav class="site-navbar">
@@ -133,79 +130,53 @@
 
     
     <div class="post-content">
-      
-
-<p>先回顾一下上一篇文章<a href="https://fucangyu.github.io/post/how-to-study-async/">怎么理解异步(1)</a></p>
-
+      <p>先回顾一下上一篇文章<a href="https://zmn5.github.io/post/how-to-study-async/">怎么理解异步(1)</a></p>
 <p>对异步编程来说，需要代码段在把控制权移交给loop时候，保存当前<code>continuation</code>, 以便于事件发生的时候，当前代码段可以继续执行，换句话说，也就是：</p>
-
 <p>程序可以<code>暂停</code>,<code>开始</code>, 想象代码段是一台机器，上面有两个按钮<code>暂停</code>, <code>开始</code>, 这说的不就是Python里面的<code>协程</code>!!!</p>
-
 <p>先来看维基百科怎么讲协程的</p>
-
 <blockquote>
 <p>Coroutines are computer-program components that generalize subroutines for non-preemptive multitasking, by allowing multiple entry points for suspending and resuming execution at certain locations.</p>
 </blockquote>
-
 <p>主要看这面这段话:</p>
-
 <blockquote>
 <p>Subroutines are special cases of coroutines.[3] When subroutines are invoked, execution begins at the start, and once a subroutine exits, it is finished; an instance of a subroutine only returns once, and does not hold state between invocations. By contrast, coroutines can exit by calling other coroutines, which may later return to the point where they were invoked in the original coroutine; from the coroutine&rsquo;s point of view, it is not exiting but calling another coroutine.[3] Thus, a coroutine instance holds state, and varies between invocations; there can be multiple instances of a given coroutine at once. The difference between calling another coroutine by means of &ldquo;yielding&rdquo; to it and simply calling another routine (which then, also, would return to the original point), is that the relationship between two coroutines which yield to each other is not that of caller-callee, but instead symmetric.</p>
 </blockquote>
-
 <p>英语渣就不翻译了，大概是：</p>
-
 <p>对子例程来说:</p>
-
 <ol>
 <li>子例程只是协程的一种特例</li>
 <li>子例程从代码开始处执行，一旦退出就结束</li>
 <li>在多次调用之间并没有状态保存</li>
 </ol>
-
 <p>对协程来说：</p>
-
 <ol>
 <li>可以通过调用其他协程退出</li>
 <li>协程可以在多次被唤醒之间保存状态</li>
 </ol>
-
 <p>还有<a href="https://stackoverflow.com/questions/553704/what-is-a-coroutine">Stack Overflow</a>中的一个回答：</p>
-
 <blockquote>
 <p>Coroutines and concurrency are largely orthogonal. Coroutines are a general control structure whereby flow control is cooperatively passed between two different routines without returning.</p>
-
-<p>The &lsquo;yield&rsquo; statement in Python is a good example. It creates a coroutine. When the &lsquo;yield &rsquo; is encountered the current state of the function is saved and control is returned to the calling function. The calling function can then transfer execution back to the yielding function and its state will be restored to the point where the &lsquo;yield&rsquo; was encountered and execution will continue.</p>
+<p>The &lsquo;yield&rsquo; statement in Python is a good example. It creates a coroutine. When the &lsquo;yield ' is encountered the current state of the function is saved and control is returned to the calling function. The calling function can then transfer execution back to the yielding function and its state will be restored to the point where the &lsquo;yield&rsquo; was encountered and execution will continue.</p>
 </blockquote>
-
-<h3 id="一-用协程改写爬虫">一、用协程改写爬虫</h3>
-
+<h3 id="一用协程改写爬虫">一、用协程改写爬虫</h3>
 <p>之前说过，利用回调实现异步的话，会很容易丢失<code>控制流信息</code>，而且<code>共享状态</code>困难，有一个可以<code>保存控制流信息</code>和<code>共享状态</code>的办法就是用同步方式进行异步编程</p>
-
 <p>我们希望在一个函数内，执行<code>send</code>, <code>recv</code>操作，并且不退出函数即可得到结果，也就是希望:</p>
-
 <blockquote>
 <p>告诉<code>selector</code>说, 我希望执行<code>send/recv</code>然后暂停，执行完毕之后给我结果，我继续执行</p>
 </blockquote>
-
 <p>那么，该怎么做到这个呢？？？</p>
-
 <blockquote>
 <p>就比如张三给老板说，有砖的时候通知我一下，我来搬？那么老板会问，我该通知你？</p>
 </blockquote>
-
 <p>张三会说：</p>
-
 <blockquote>
 <p><code>以后</code>有砖的时候放进<code>篮子/仓库</code></p>
 </blockquote>
-
 <p>所以我们就可以把这种终将有东西放进去的地方叫做<code>Future</code>(或者叫<code>Promise</code>)</p>
-
 <p>那么真的有砖的时候，谁来真的来通知张三呢，总不能真的老板<code>selector</code>自己动手吧，这时候需要<code>秘书</code>或者随便什么人，就叫<code>Task</code>吧, 负责叫醒张三起床干活，通知张三结果</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -295,71 +266,71 @@
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">socket</span>
 <span class="kn">from</span> <span class="nn">selectors</span> <span class="kn">import</span> <span class="n">DefaultSelector</span><span class="p">,</span> <span class="n">EVENT_WRITE</span><span class="p">,</span> <span class="n">EVENT_READ</span>
 
-<span class="n">selector</span> <span class="o">=</span> <span class="n">DefaultSelector</span><span class="p">()</span>
+<span class="n">selector</span> <span class="o">=</span> <span class="n">DefaultSelector</span><span class="p">(</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">Future</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="bp">None</span>
 
-    <span class="k">def</span> <span class="nf">set_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
         <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="p">:</span>
             <span class="n">cb</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># self not result</span>
 
-    <span class="k">def</span> <span class="nf">add_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb</span><span class="p">)</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cb</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">Fetcher</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="s1">&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sock</span> <span class="o">=</span> <span class="bp">None</span>
 
-    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="s1">&#39;www.zhihu.com&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">www.zhihu.com</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">BlockingIOError</span><span class="p">:</span>
             <span class="k">pass</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">Future</span><span class="p">()</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">Future</span><span class="p">(</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">on_connected</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">on_connected</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
 
-        <span class="n">selector</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">EVENT_WRITE</span><span class="p">,</span> <span class="n">on_connected</span><span class="p">)</span>
+        <span class="n">selector</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">EVENT_WRITE</span><span class="p">,</span> <span class="n">on_connected</span><span class="p">)</span>
         <span class="k">yield</span> <span class="n">f</span>
-        <span class="n">selector</span><span class="o">.</span><span class="n">unregister</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;connected&#39;</span><span class="p">)</span>
-        <span class="n">request</span> <span class="o">=</span> <span class="s1">&#39;GET / HTTP1.1</span><span class="se">\r\n</span><span class="s1">Host: www.zhihu.com</span><span class="se">\r\n\r\n</span><span class="s1">&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">))</span>
+        <span class="n">selector</span><span class="o">.</span><span class="n">unregister</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">(</span><span class="p">)</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">connected</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">GET / HTTP1.1</span><span class="se">\r</span><span class="se">\n</span><span class="s1">Host: www.zhihu.com</span><span class="se">\r</span><span class="se">\n</span><span class="se">\r</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">ascii</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">)</span>
         <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-            <span class="n">f</span> <span class="o">=</span> <span class="n">Future</span><span class="p">()</span>
+            <span class="n">f</span> <span class="o">=</span> <span class="n">Future</span><span class="p">(</span><span class="p">)</span>
 
-            <span class="k">def</span> <span class="nf">on_readable</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
-                <span class="n">f</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">))</span>
+            <span class="k">def</span> <span class="nf">on_readable</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span><span class="p">:</span>
+                <span class="n">f</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span><span class="p">)</span>
 
-            <span class="n">selector</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">EVENT_READ</span><span class="p">,</span> <span class="n">on_readable</span><span class="p">)</span>
+            <span class="n">selector</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">EVENT_READ</span><span class="p">,</span> <span class="n">on_readable</span><span class="p">)</span>
 
             <span class="n">chunk</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">f</span>
-            <span class="n">selector</span><span class="o">.</span><span class="n">unregister</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
+            <span class="n">selector</span><span class="o">.</span><span class="n">unregister</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">(</span><span class="p">)</span><span class="p">)</span>
             <span class="k">if</span> <span class="n">chunk</span><span class="p">:</span>
-                <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">+=</span> <span class="n">chunk</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">+</span><span class="o">=</span> <span class="n">chunk</span>
             <span class="k">else</span><span class="p">:</span>
-                <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;recv: {len(self.response)}&#39;</span><span class="p">)</span>
+                <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">recv: {len(self.response)}</span><span class="s1">&#39;</span><span class="p">)</span>
                 <span class="k">break</span>
 
 
 <span class="k">class</span> <span class="nc">Task</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coro</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coro</span><span class="p">)</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coro</span> <span class="o">=</span> <span class="n">coro</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">Future</span><span class="p">()</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">Future</span><span class="p">(</span><span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">future</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">future</span><span class="p">)</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">next_future</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coro</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
@@ -367,26 +338,24 @@
         <span class="n">next_future</span><span class="o">.</span><span class="n">add_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">loop</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="p">)</span><span class="p">:</span>
     <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="n">events</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">select</span><span class="p">()</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">event_key</span><span class="p">,</span> <span class="n">event_mask</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
             <span class="n">cb</span> <span class="o">=</span> <span class="n">event_key</span><span class="o">.</span><span class="n">data</span>
             <span class="n">cb</span><span class="p">(</span><span class="n">event_key</span><span class="p">,</span> <span class="n">event_mask</span><span class="p">)</span>
 
 
-<span class="n">Task</span><span class="p">(</span><span class="n">Fetcher</span><span class="p">()</span><span class="o">.</span><span class="n">fetch</span><span class="p">())</span>
-<span class="n">loop</span><span class="p">()</span></code></pre></td></tr></table>
+<span class="n">Task</span><span class="p">(</span><span class="n">Fetcher</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="p">)</span><span class="p">)</span>
+<span class="n">loop</span><span class="p">(</span><span class="p">)</span>
+</code></pre></td></tr></table>
 </div>
-</div>
-<p>可以看到，所有的<code>控制流信息</code>,<code>状态信息</code>都在一个函数内，几乎跟同步一样的模式, 但是很明显代码还是有点丑</p>
-
-<h3 id="二-yield-from-改写代码">二、yield from 改写代码</h3>
-
+</div><p>可以看到，所有的<code>控制流信息</code>,<code>状态信息</code>都在一个函数内，几乎跟同步一样的模式, 但是很明显代码还是有点丑</p>
+<h3 id="二yield-from-改写代码">二、yield from 改写代码</h3>
 <p>张三搬砖久了，成了包工头，所以他把最无聊琐碎的<code>read</code>工作交给别人<code>李四</code>去做，他只负责通知李四干活，最后李四吧完整的结果<code>response</code>返回给他就行。</p>
 <div class="highlight"><div class="chroma">
 <table class="lntable"><tr><td class="lntd">
-<pre class="chroma"><code class="language-python" data-lang="python"><span class="lnt"> 1
+<pre class="chroma"><code><span class="lnt"> 1
 </span><span class="lnt"> 2
 </span><span class="lnt"> 3
 </span><span class="lnt"> 4
@@ -480,85 +449,86 @@
 </span><span class="lnt">92
 </span><span class="lnt">93
 </span><span class="lnt">94
+</span><span class="lnt">95
 </span></code></pre></td>
 <td class="lntd">
 <pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">import</span> <span class="nn">socket</span>
 <span class="kn">from</span> <span class="nn">selectors</span> <span class="kn">import</span> <span class="n">DefaultSelector</span><span class="p">,</span> <span class="n">EVENT_WRITE</span><span class="p">,</span> <span class="n">EVENT_READ</span>
 
-<span class="n">selector</span> <span class="o">=</span> <span class="n">DefaultSelector</span><span class="p">()</span>
+<span class="n">selector</span> <span class="o">=</span> <span class="n">DefaultSelector</span><span class="p">(</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">Future</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="bp">None</span>
 
-    <span class="k">def</span> <span class="nf">set_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">set_result</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">result</span><span class="p">)</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
         <span class="k">for</span> <span class="n">cb</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="p">:</span>
             <span class="n">cb</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>  <span class="c1"># self not result</span>
 
-    <span class="k">def</span> <span class="nf">add_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">add_callback</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cb</span><span class="p">)</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">callbacks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cb</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">Fetcher</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="s1">&#39;</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sock</span> <span class="o">=</span> <span class="bp">None</span>
 
-    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">()</span>
+    <span class="k">def</span> <span class="nf">fetch</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">:</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">setblocking</span><span class="p">(</span><span class="bp">False</span><span class="p">)</span>
         <span class="k">try</span><span class="p">:</span>
-            <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">connect</span><span class="p">((</span><span class="s1">&#39;www.zhihu.com&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">))</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">www.zhihu.com</span><span class="s1">&#39;</span><span class="p">,</span> <span class="mi">80</span><span class="p">)</span><span class="p">)</span>
         <span class="k">except</span> <span class="n">BlockingIOError</span><span class="p">:</span>
             <span class="k">pass</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">Future</span><span class="p">()</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">Future</span><span class="p">(</span><span class="p">)</span>
 
-        <span class="k">def</span> <span class="nf">on_connected</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
+        <span class="k">def</span> <span class="nf">on_connected</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span><span class="p">:</span>
             <span class="n">f</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
 
-        <span class="n">selector</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">EVENT_WRITE</span><span class="p">,</span> <span class="n">on_connected</span><span class="p">)</span>
+        <span class="n">selector</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">EVENT_WRITE</span><span class="p">,</span> <span class="n">on_connected</span><span class="p">)</span>
         <span class="k">yield</span> <span class="n">f</span>
-        <span class="n">selector</span><span class="o">.</span><span class="n">unregister</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
-        <span class="k">print</span><span class="p">(</span><span class="s1">&#39;connected&#39;</span><span class="p">)</span>
-        <span class="n">request</span> <span class="o">=</span> <span class="s1">&#39;GET / HTTP1.1</span><span class="se">\r\n</span><span class="s1">Host: www.zhihu.com</span><span class="se">\r\n\r\n</span><span class="s1">&#39;</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="s1">&#39;ascii&#39;</span><span class="p">))</span>
+        <span class="n">selector</span><span class="o">.</span><span class="n">unregister</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">(</span><span class="p">)</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">connected</span><span class="s1">&#39;</span><span class="p">)</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">GET / HTTP1.1</span><span class="se">\r</span><span class="se">\n</span><span class="s1">Host: www.zhihu.com</span><span class="se">\r</span><span class="se">\n</span><span class="se">\r</span><span class="se">\n</span><span class="s1">&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">request</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">ascii</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">response</span> <span class="o">=</span> <span class="k">yield</span> <span class="kn">from</span> <span class="nn">read_all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sock</span><span class="p">)</span>
-        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="s1">&#39;recv: {len(self.response)}&#39;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">f</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">recv: {len(self.response)}</span><span class="s1">&#39;</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">sock</span><span class="p">):</span>
-    <span class="n">f</span> <span class="o">=</span> <span class="n">Future</span><span class="p">()</span>
+<span class="k">def</span> <span class="nf">read</span><span class="p">(</span><span class="n">sock</span><span class="p">)</span><span class="p">:</span>
+    <span class="n">f</span> <span class="o">=</span> <span class="n">Future</span><span class="p">(</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">on_readable</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">mask</span><span class="p">):</span>
-        <span class="n">f</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="n">sock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">))</span>
+    <span class="k">def</span> <span class="nf">on_readable</span><span class="p">(</span><span class="n">key</span><span class="p">,</span> <span class="n">mask</span><span class="p">)</span><span class="p">:</span>
+        <span class="n">f</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="n">sock</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span><span class="p">)</span>
 
-    <span class="n">selector</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">(),</span> <span class="n">EVENT_READ</span><span class="p">,</span> <span class="n">on_readable</span><span class="p">)</span>
+    <span class="n">selector</span><span class="o">.</span><span class="n">register</span><span class="p">(</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">(</span><span class="p">)</span><span class="p">,</span> <span class="n">EVENT_READ</span><span class="p">,</span> <span class="n">on_readable</span><span class="p">)</span>
     <span class="n">chunk</span> <span class="o">=</span> <span class="k">yield</span> <span class="n">f</span>
-    <span class="n">selector</span><span class="o">.</span><span class="n">unregister</span><span class="p">(</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">())</span>
+    <span class="n">selector</span><span class="o">.</span><span class="n">unregister</span><span class="p">(</span><span class="n">sock</span><span class="o">.</span><span class="n">fileno</span><span class="p">(</span><span class="p">)</span><span class="p">)</span>
     <span class="k">return</span> <span class="n">chunk</span>
 
 
-<span class="k">def</span> <span class="nf">read_all</span><span class="p">(</span><span class="n">sock</span><span class="p">):</span>
-    <span class="n">response</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">def</span> <span class="nf">read_all</span><span class="p">(</span><span class="n">sock</span><span class="p">)</span><span class="p">:</span>
+    <span class="n">response</span> <span class="o">=</span> <span class="p">[</span><span class="p">]</span>
     <span class="n">chunk</span> <span class="o">=</span> <span class="k">yield</span> <span class="kn">from</span> <span class="nn">read</span><span class="p">(</span><span class="n">sock</span><span class="p">)</span>
     <span class="k">while</span> <span class="n">chunk</span><span class="p">:</span>
         <span class="n">response</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">chunk</span><span class="p">)</span>
         <span class="n">chunk</span> <span class="o">=</span> <span class="k">yield</span> <span class="kn">from</span> <span class="nn">read</span><span class="p">(</span><span class="n">sock</span><span class="p">)</span>
 
-    <span class="k">return</span> <span class="sa">b</span><span class="s1">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+    <span class="k">return</span> <span class="sa">b</span><span class="s1">&#39;</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
 
 
 <span class="k">class</span> <span class="nc">Task</span><span class="p">:</span>
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coro</span><span class="p">):</span>
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">coro</span><span class="p">)</span><span class="p">:</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">coro</span> <span class="o">=</span> <span class="n">coro</span>
-        <span class="n">f</span> <span class="o">=</span> <span class="n">Future</span><span class="p">()</span>
+        <span class="n">f</span> <span class="o">=</span> <span class="n">Future</span><span class="p">(</span><span class="p">)</span>
         <span class="n">f</span><span class="o">.</span><span class="n">set_result</span><span class="p">(</span><span class="bp">None</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
 
-    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">future</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">future</span><span class="p">)</span><span class="p">:</span>
         <span class="k">try</span><span class="p">:</span>
             <span class="n">next_future</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">coro</span><span class="o">.</span><span class="n">send</span><span class="p">(</span><span class="n">future</span><span class="o">.</span><span class="n">result</span><span class="p">)</span>
         <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
@@ -566,20 +536,20 @@
         <span class="n">next_future</span><span class="o">.</span><span class="n">add_callback</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">step</span><span class="p">)</span>
 
 
-<span class="k">def</span> <span class="nf">loop</span><span class="p">():</span>
+<span class="k">def</span> <span class="nf">loop</span><span class="p">(</span><span class="p">)</span><span class="p">:</span>
     <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
-        <span class="n">events</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">select</span><span class="p">()</span>
+        <span class="n">events</span> <span class="o">=</span> <span class="n">selector</span><span class="o">.</span><span class="n">select</span><span class="p">(</span><span class="p">)</span>
         <span class="k">for</span> <span class="n">event_key</span><span class="p">,</span> <span class="n">event_mask</span> <span class="ow">in</span> <span class="n">events</span><span class="p">:</span>
             <span class="n">cb</span> <span class="o">=</span> <span class="n">event_key</span><span class="o">.</span><span class="n">data</span>
             <span class="n">cb</span><span class="p">(</span><span class="n">event_key</span><span class="p">,</span> <span class="n">event_mask</span><span class="p">)</span>
 
 
-<span class="n">Task</span><span class="p">(</span><span class="n">Fetcher</span><span class="p">()</span><span class="o">.</span><span class="n">fetch</span><span class="p">())</span>
-<span class="n">loop</span><span class="p">()</span></code></pre></td></tr></table>
-</div>
-</div>
-<p>参考资料：</p>
+<span class="n">Task</span><span class="p">(</span><span class="n">Fetcher</span><span class="p">(</span><span class="p">)</span><span class="o">.</span><span class="n">fetch</span><span class="p">(</span><span class="p">)</span><span class="p">)</span>
+<span class="n">loop</span><span class="p">(</span><span class="p">)</span>
 
+</code></pre></td></tr></table>
+</div>
+</div><p>参考资料：</p>
 <ol>
 <li><a href="https://en.wikipedia.org/wiki/Coroutine#Comparison_with_threads">Coroutine</a></li>
 <li><a href="http://www.aosabook.org/en/500L/a-web-crawler-with-asyncio-coroutines.html">A Web Crawler With asyncio Coroutines</a></li>
@@ -587,7 +557,8 @@
 
     </div>
 
-    <footer class="post-footer">
+    
+<footer class="post-footer">
       <div class="post-tags">
           <a href="/tags/async/">async</a>
           <a href="/tags/yield-from/">yield from</a>
@@ -622,14 +593,18 @@
     </script>
     <noscript>Please enable JavaScript to view the <a href="http://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 
+  
+
+  
+
       </div>
     </main>
 
     <footer id="footer" class="footer">
       <div class="social-links">
       <a href="cangyufu@gmail.com" class="iconfont icon-email" title="email"></a>
-      <a href="https://github.com/fucangyu" class="iconfont icon-github" title="github"></a>
-  <a href="https://fucangyu.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+      <a href="https://github.com/zmn5" class="iconfont icon-github" title="github"></a>
+  <a href="https://ZmN5.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
 </div>
 
 <div class="copyright">
@@ -647,7 +622,7 @@
   <span class="copyright-year">
     &copy; 
     2017 - 
-    2019
+    2020
     <span class="heart">
       <i class="iconfont icon-heart"></i>
     </span>
@@ -664,7 +639,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
-<script type="text/javascript" src="/dist/even.ece58db6.min.js"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
 
 
 

@@ -1,22 +1,22 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>总结 on 租块墓地，俯瞰师范学院</title>
-    <link>https://fucangyu.github.io/categories/%E6%80%BB%E7%BB%93/</link>
-    <description>Recent content in 总结 on 租块墓地，俯瞰师范学院</description>
+    <title>总结 on 何时</title>
+    <link>https://ZmN5.github.io/categories/%E6%80%BB%E7%BB%93/</link>
+    <description>Recent content in 总结 on 何时</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Tue, 23 Jul 2019 21:51:21 +0800</lastBuildDate>
     
-	<atom:link href="https://fucangyu.github.io/categories/%E6%80%BB%E7%BB%93/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ZmN5.github.io/categories/%E6%80%BB%E7%BB%93/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>从上家公司学到的</title>
-      <link>https://fucangyu.github.io/post/learned-from-ein/</link>
+      <link>https://ZmN5.github.io/post/learned-from-ein/</link>
       <pubDate>Tue, 23 Jul 2019 21:51:21 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/learned-from-ein/</guid>
+      <guid>https://ZmN5.github.io/post/learned-from-ein/</guid>
       <description>从爱因离开快一个月了，感觉有些东西需要总结一下了。 坚持不写code smell的代码 祖师爷建议的一些规范，pep8/gofmt/isort之类</description>
     </item>
     

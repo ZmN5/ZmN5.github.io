@@ -1,32 +1,32 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>async on 租块墓地，俯瞰师范学院</title>
-    <link>https://fucangyu.github.io/categories/async/</link>
-    <description>Recent content in async on 租块墓地，俯瞰师范学院</description>
+    <title>async on 何时</title>
+    <link>https://ZmN5.github.io/categories/async/</link>
+    <description>Recent content in async on 何时</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
     <lastBuildDate>Sun, 30 Dec 2018 09:23:43 +0800</lastBuildDate>
     
-	<atom:link href="https://fucangyu.github.io/categories/async/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="https://ZmN5.github.io/categories/async/index.xml" rel="self" type="application/rss+xml" />
     
     
     <item>
       <title>怎么理解异步(2)</title>
-      <link>https://fucangyu.github.io/post/how-to-study-async2/</link>
+      <link>https://ZmN5.github.io/post/how-to-study-async2/</link>
       <pubDate>Sun, 30 Dec 2018 09:23:43 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/how-to-study-async2/</guid>
+      <guid>https://ZmN5.github.io/post/how-to-study-async2/</guid>
       <description>先回顾一下上一篇文章怎么理解异步(1) 对异步编程来说，需要代码段在把控制权移交给loop时候，保存当前continuation, 以便于事件发</description>
     </item>
     
     <item>
       <title>怎么理解异步?(1)</title>
-      <link>https://fucangyu.github.io/post/how-to-study-async/</link>
+      <link>https://ZmN5.github.io/post/how-to-study-async/</link>
       <pubDate>Sat, 29 Dec 2018 20:52:03 +0800</pubDate>
       
-      <guid>https://fucangyu.github.io/post/how-to-study-async/</guid>
-      <description>零 从刚开始学Python到现在，一直对异步都只有一个很模糊的印象。 什么是event_loop，event和loop是到底什么关系？ 具体的业务</description>
+      <guid>https://ZmN5.github.io/post/how-to-study-async/</guid>
+      <description></description>
     </item>
     
   </channel>
