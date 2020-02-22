@@ -6,10 +6,19 @@
     <description>Recent content in Posts on 何时</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Mon, 03 Feb 2020 17:28:37 +0800</lastBuildDate>
+    <lastBuildDate>Mon, 17 Feb 2020 21:54:25 +0800</lastBuildDate>
     
 	<atom:link href="https://ZmN5.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>软件随想录</title>
+      <link>https://ZmN5.github.io/post/read-more-joel-on-software/</link>
+      <pubDate>Mon, 17 Feb 2020 21:54:25 +0800</pubDate>
+      
+      <guid>https://ZmN5.github.io/post/read-more-joel-on-software/</guid>
+      <description></description>
+    </item>
     
     <item>
       <title>2019年终总结</title>
@@ -488,6 +497,55 @@
 &lt;li&gt;减肥中&lt;/li&gt;
 &lt;li&gt;现在&lt;del&gt;爱因互动&lt;/del&gt;美团工作&lt;/li&gt;
 &lt;/ul&gt;</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://ZmN5.github.io/post/static/2019-summary/ji/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://ZmN5.github.io/post/static/2019-summary/ji/</guid>
+      <description>query = Task.query.with_entities(Task.name).join( TaskCode, TaskCode.id == Task.task_code_id ).filter( Task.type == &#39;sync/hive2mysql/datalink&#39;, Task.status == 1, TaskCode.origin_code.contains(&#39;mysqlwriter&#39;), )  PYTHONPATH=/opt/meituan/xtdev_staging2/conf/ /opt/meituan/python27/bin/gunicorn -c /opt/meituan/xtdev_staging2/gunicorn_conf/staging2.py &amp;ndash;chdir /opt/meituan/xtdev_staging2 xtdev.web.app:app
+数据导入</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://ZmN5.github.io/post/static/2019-summary/jiji/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://ZmN5.github.io/post/static/2019-summary/jiji/</guid>
+      <description>curl &amp;ndash;XGET &amp;lsquo;http://0.0.0.0:44395/exapi/task_relation/flowinfo/?task_name=mart_fd.detail_cos_contract&amp;rsquo;
+http://etl.xt.vip.sankuai.com/exapi/sw/task/code/mhmart_finance.finance_client_balance_jl
+http://etl.xt.vip.sankuai.com/exapi/sw/task/code/hmart_finance.finance_client_balance_jl</description>
+    </item>
+    
+    <item>
+      <title></title>
+      <link>https://ZmN5.github.io/post/static/2019-summary/%E5%BA%94%E8%AF%A5%E5%8A%AA%E5%8A%9B%E6%9E%84%E9%80%A0%E4%B8%80%E7%A7%8D%E7%8E%AF%E5%A2%83%E6%88%91%E6%98%AF%E8%B0%81%E4%B8%8D%E9%87%8D%E8%A6%81%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E6%88%91%E6%98%AF%E5%AF%B9%E7%9A%84/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>https://ZmN5.github.io/post/static/2019-summary/%E5%BA%94%E8%AF%A5%E5%8A%AA%E5%8A%9B%E6%9E%84%E9%80%A0%E4%B8%80%E7%A7%8D%E7%8E%AF%E5%A2%83%E6%88%91%E6%98%AF%E8%B0%81%E4%B8%8D%E9%87%8D%E8%A6%81%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E6%88%91%E6%98%AF%E5%AF%B9%E7%9A%84/</guid>
+      <description>应该努力构造一种环境：我是谁不重要，重要的是我是对的
+  军事化管理
+  经济利益驱动法
+  它将内部激励变为了外部激励
+  人们会追求局部利益最大化，如果使用经济利益驱动法，就是在鼓励程序员和制度博弈
+最大的问题是，它其实不是管理，而是管理的退位
+    认同法
+ 创造内部激励    2020年计划：
+ 学打游戏 每周看一本书 减20斤 学完sicp  盘点/资产
+确实的能力
+组内的分享
+托管上 ones
+同步一下现在的情况，xt任务中有三种任务会涉及这个需求，sync/mysql2hive sync/hive2mysql sync/hive2mysql/datalink 其中：
+ sync/mysql2hive 支持分库分表，但是表名都是正则，做不了 sync/hive2mysql 不支持分库分表，只支持到表粒度 sync/hive2mysql/datalink 可以支持到分库分表粒度  后两种的逻辑大概为：
+​	1.在保存代码时候，会分析任务涉及的mysql表，分库分表规则，存起来，存的字段会拼接为dsnname.tablename/rulename
+2. 会把历史数据刷一遍 3. 暴露给dsn的接口会直接全等查这个字段  会尽力检查，但是不保证完全准确
+ sync/mysql2hive  建表收口
+血缘
+审批流程
+审计日志 - 李盼 - 输出/血缘 - 建立血缘关系 拉群</description>
     </item>
     
   </channel>
