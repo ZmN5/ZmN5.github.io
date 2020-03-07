@@ -86,14 +86,14 @@
   </url>
   
   <url>
-    <loc>https://ZmN5.github.io/tags/%E5%B7%A5%E5%85%B7/</loc>
+    <loc>https://ZmN5.github.io/categories/%E5%B7%A5%E5%85%B7/</loc>
     <lastmod>2019-06-30T17:40:01+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://ZmN5.github.io/categories/%E5%B7%A5%E5%85%B7/</loc>
+    <loc>https://ZmN5.github.io/tags/%E5%B7%A5%E5%85%B7/</loc>
     <lastmod>2019-06-30T17:40:01+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -149,14 +149,14 @@
   </url>
   
   <url>
-    <loc>https://ZmN5.github.io/categories/sticker/</loc>
+    <loc>https://ZmN5.github.io/tags/sticker/</loc>
     <lastmod>2019-01-17T01:03:13+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://ZmN5.github.io/tags/sticker/</loc>
+    <loc>https://ZmN5.github.io/categories/sticker/</loc>
     <lastmod>2019-01-17T01:03:13+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -184,14 +184,14 @@
   </url>
   
   <url>
-    <loc>https://ZmN5.github.io/categories/async/</loc>
+    <loc>https://ZmN5.github.io/tags/async/</loc>
     <lastmod>2018-12-30T09:23:43+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://ZmN5.github.io/tags/async/</loc>
+    <loc>https://ZmN5.github.io/categories/async/</loc>
     <lastmod>2018-12-30T09:23:43+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -293,21 +293,6 @@
     <lastmod>2018-11-10T20:59:00+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
-  </url>
-  
-  <url>
-    <loc>https://ZmN5.github.io/post/static/2019-summary/ji/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ZmN5.github.io/post/static/2019-summary/jiji/</loc>
-    <priority>0</priority>
-  </url>
-  
-  <url>
-    <loc>https://ZmN5.github.io/post/static/2019-summary/%E5%BA%94%E8%AF%A5%E5%8A%AA%E5%8A%9B%E6%9E%84%E9%80%A0%E4%B8%80%E7%A7%8D%E7%8E%AF%E5%A2%83%E6%88%91%E6%98%AF%E8%B0%81%E4%B8%8D%E9%87%8D%E8%A6%81%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E6%88%91%E6%98%AF%E5%AF%B9%E7%9A%84/</loc>
-    <priority>0</priority>
   </url>
   
 </urlset>

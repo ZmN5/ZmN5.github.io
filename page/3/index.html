@@ -422,26 +422,6 @@
   </div>
 </article>
 
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/static/2019-summary/ji/"></a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 0001-01-01 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      query = Task.query.with_entities(Task.name).join( TaskCode, TaskCode.id == Task.task_code_id ).filter( Task.type == 'sync/hive2mysql/datalink', Task.status == 1, TaskCode.origin_code.contains('mysqlwriter'), )  PYTHONPATH=/opt/meituan/xtdev_staging2/conf/ /opt/meituan/python27/bin/gunicorn -c /opt/meituan/xtdev_staging2/gunicorn_conf/staging2.py &ndash;chdir /opt/meituan/xtdev_staging2 xtdev.web.app:app
-数据导入
-    </div>
-    <div class="read-more">
-      <a href="/post/static/2019-summary/ji/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
     </section>
   
   <nav class="pagination">
@@ -449,10 +429,7 @@
         <i class="iconfont icon-left"></i>
         <span class="prev-text">上一页</span>
       </a>
-    <a class="next" href="/page/4/">
-        <span class="next-text">下一页</span>
-        <i class="iconfont icon-right"></i>
-      </a>
+    
   </nav>
         </div>
         
