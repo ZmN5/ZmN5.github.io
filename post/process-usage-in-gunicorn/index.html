@@ -48,7 +48,7 @@
 <meta itemprop="description" content="gunicorn是python中一个主流的wsgi server，本文只会关注其中关于进程管理的部分，顺便也会涉及其他关于进程的东西。 guni">
 <meta itemprop="datePublished" content="2020-04-04T20:13:41&#43;08:00" />
 <meta itemprop="dateModified" content="2020-04-04T20:13:41&#43;08:00" />
-<meta itemprop="wordCount" content="2675">
+<meta itemprop="wordCount" content="2674">
 
 
 
@@ -456,43 +456,43 @@
 </span><span class="lnt">37
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">    def handle_chld(self, sig, frame):
-        &#34;SIGCHLD handling&#34;
-        self.reap_workers()
-        self.wakeup()
+<pre class="chroma"><code class="language-python" data-lang="python">    <span class="k">def</span> <span class="nf">handle_chld</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sig</span><span class="p">,</span> <span class="n">frame</span><span class="p">)</span><span class="p">:</span>
+        <span class="sa"></span><span class="s2">&#34;</span><span class="s2">SIGCHLD handling</span><span class="s2">&#34;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">reap_workers</span><span class="p">(</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">wakeup</span><span class="p">(</span><span class="p">)</span>
 
-    def reap_workers(self):
-        &#34;&#34;&#34;\
-        Reap workers to avoid zombie processes
-        &#34;&#34;&#34;
-        try:
-            while True:
-				# 检查所有结束的子进程，立刻返回
-                wpid, status = os.waitpid(-1, os.WNOHANG)
-                if not wpid:
-                    break
-                if self.reexec_pid == wpid:
-                    self.reexec_pid = 0
-                else:
-                    # A worker was terminated. If the termination reason was
-                    # that it could not boot, we&#39;ll shut it down to avoid
-                    # infinite start/stop cycles.
-                    exitcode = status &gt;&gt; 8
-                    if exitcode == self.WORKER_BOOT_ERROR:
-                        reason = &#34;Worker failed to boot.&#34;
-                        raise HaltServer(reason, self.WORKER_BOOT_ERROR)
-                    if exitcode == self.APP_LOAD_ERROR:
-                        reason = &#34;App failed to load.&#34;
-                        raise HaltServer(reason, self.APP_LOAD_ERROR)
+    <span class="k">def</span> <span class="nf">reap_workers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span><span class="p">:</span>
+        <span class="sa"></span><span class="s2">&#34;&#34;&#34;</span><span class="se">\
+</span><span class="se"></span><span class="s2">        Reap workers to avoid zombie processes</span><span class="s2">
+</span><span class="s2"></span><span class="s2">        </span><span class="s2">&#34;&#34;&#34;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+				<span class="c1"># 检查所有结束的子进程，立刻返回</span>
+                <span class="n">wpid</span><span class="p">,</span> <span class="n">status</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">waitpid</span><span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">WNOHANG</span><span class="p">)</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="n">wpid</span><span class="p">:</span>
+                    <span class="k">break</span>
+                <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">reexec_pid</span> <span class="o">==</span> <span class="n">wpid</span><span class="p">:</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">reexec_pid</span> <span class="o">=</span> <span class="mi">0</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="c1"># A worker was terminated. If the termination reason was</span>
+                    <span class="c1"># that it could not boot, we&#39;ll shut it down to avoid</span>
+                    <span class="c1"># infinite start/stop cycles.</span>
+                    <span class="n">exitcode</span> <span class="o">=</span> <span class="n">status</span> <span class="o">&gt;&gt;</span> <span class="mi">8</span>
+                    <span class="k">if</span> <span class="n">exitcode</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">WORKER_BOOT_ERROR</span><span class="p">:</span>
+                        <span class="n">reason</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;</span><span class="s2">Worker failed to boot.</span><span class="s2">&#34;</span>
+                        <span class="k">raise</span> <span class="n">HaltServer</span><span class="p">(</span><span class="n">reason</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">WORKER_BOOT_ERROR</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="n">exitcode</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">APP_LOAD_ERROR</span><span class="p">:</span>
+                        <span class="n">reason</span> <span class="o">=</span> <span class="sa"></span><span class="s2">&#34;</span><span class="s2">App failed to load.</span><span class="s2">&#34;</span>
+                        <span class="k">raise</span> <span class="n">HaltServer</span><span class="p">(</span><span class="n">reason</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">APP_LOAD_ERROR</span><span class="p">)</span>
 
-                    worker = self.WORKERS.pop(wpid, None)
-                    if not worker:
-                        continue
-                    worker.tmp.close()
-                    self.cfg.child_exit(self, worker)
-        except OSError as e:
-            if e.errno != errno.ECHILD:
-                raise
+                    <span class="n">worker</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">WORKERS</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">wpid</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+                    <span class="k">if</span> <span class="ow">not</span> <span class="n">worker</span><span class="p">:</span>
+                        <span class="k">continue</span>
+                    <span class="n">worker</span><span class="o">.</span><span class="n">tmp</span><span class="o">.</span><span class="n">close</span><span class="p">(</span><span class="p">)</span>
+                    <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">child_exit</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">worker</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">OSError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">e</span><span class="o">.</span><span class="n">errno</span> <span class="o">!=</span> <span class="n">errno</span><span class="o">.</span><span class="n">ECHILD</span><span class="p">:</span>
+                <span class="k">raise</span>
 </code></pre></td></tr></table>
 </div>
 </div><ul>
@@ -562,9 +562,9 @@ The shell command kill generates SIGTERM by default.</p>
 </span><span class="lnt">3
 </span></code></pre></td>
 <td class="lntd">
-<pre class="chroma"><code class="language-fallback" data-lang="fallback">    # self.num_workers += 1 # ttin
-    self.num_workers -= 1 # ttou
-    self.manage_workers()
+<pre class="chroma"><code class="language-python" data-lang="python">    <span class="c1"># self.num_workers += 1 # ttin</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">num_workers</span> <span class="o">-</span><span class="o">=</span> <span class="mi">1</span> <span class="c1"># ttou</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">manage_workers</span><span class="p">(</span><span class="p">)</span>
 </code></pre></td></tr></table>
 </div>
 </div><h4 id="sigusr1"><code>SIGUSR1</code></h4>
