@@ -48,7 +48,7 @@
 <meta itemprop="description" content="gunicorn是python中一个主流的wsgi server，本文只会关注其中关于进程管理的部分，顺便也会涉及其他关于进程的东西。 guni">
 <meta itemprop="datePublished" content="2020-04-04T20:13:41&#43;08:00" />
 <meta itemprop="dateModified" content="2020-04-04T20:13:41&#43;08:00" />
-<meta itemprop="wordCount" content="2674">
+<meta itemprop="wordCount" content="2779">
 
 
 
@@ -496,6 +496,7 @@
 </code></pre></td></tr></table>
 </div>
 </div><ul>
+<li>利用os.waitpid清除已经退出的进程占用的资源，比如进程号</li>
 <li>如果子进程退出的原因为不能启动，整个服务down掉</li>
 <li>子进程退出时候，主进程会轮询查看是哪个子进程退出了，并从注册列表<code>self.WORKERS</code>里面清理掉</li>
 <li>如果有子进程退出时候的钩子函数，执行之</li>
@@ -536,7 +537,7 @@
 <p>The SIGTERM signal is a generic signal used to cause program termination. Unlike SIGKILL, this signal can be blocked, handled, and ignored. It is the normal way to politely ask a program to terminate.
 The shell command kill generates SIGTERM by default.</p>
 </blockquote>
-<p>gunicorn会直接抛<code>StopIteration</code>退出</p>
+<p>handler会直接抛<code>StopIteration</code>，<code>main loop</code>里面会进行拦截，然后给所有的子进程发送<code>SIGTERM</code>信号</p>
 <h4 id="sigint"><code>SIGINT</code></h4>
 <blockquote>
 <p>The SIGINT (“program interrupt”) signal is sent when the user types the INTR character (normally C-c). See Special Characters, for information about terminal driver support for C-c.</p>
@@ -630,6 +631,7 @@ The shell command kill generates SIGTERM by default.</p>
 <ol>
 <li>利用子进程改文件ctime时间，主进程不停的轮询达到心跳的目的</li>
 <li>利用各种系统信号，进行IPC</li>
+<li>gunicorn对待SIGCHLD信号和其他信号的不同处理也值得仔细思考一下🤔</li>
 </ol>
 <h3 id="参考">参考：</h3>
 <ul>
