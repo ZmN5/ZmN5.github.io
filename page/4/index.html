@@ -16,7 +16,7 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
 
 
-<meta name="author" content="fcy" /><meta name="description" content="enjoy coding, enjoy life." /><meta name="keywords" content="Hugo, theme, even" />
+<meta name="author" content="HeShi" /><meta name="description" content="enjoy coding, enjoy life." /><meta name="keywords" content="Hugo, theme, even" />
 
 
 
@@ -44,7 +44,7 @@
 <meta property="og:description" content="enjoy coding, enjoy life." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://ZmN5.github.io/" />
-<meta property="og:updated_time" content="2020-02-17T21:54:25+08:00" />
+<meta property="og:updated_time" content="2020-10-23T18:12:42+08:00" />
 <meta itemprop="name" content="何时">
 <meta itemprop="description" content="enjoy coding, enjoy life."><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="何时"/>
@@ -77,8 +77,8 @@
         <li class="mobile-menu-item">Home</li>
       </a><a href="/post/">
         <li class="mobile-menu-item">Archives</li>
-      </a><a href="/tags/">
-        <li class="mobile-menu-item">Tags</li>
+      </a><a href="/post/about/">
+        <li class="mobile-menu-item">About</li>
       </a><a href="/categories/">
         <li class="mobile-menu-item">Categories</li>
       </a>
@@ -97,7 +97,7 @@
       </li><li class="menu-item">
         <a class="menu-item-link" href="/post/">Archives</a>
       </li><li class="menu-item">
-        <a class="menu-item-link" href="/tags/">Tags</a>
+        <a class="menu-item-link" href="/post/about/">About</a>
       </li><li class="menu-item">
         <a class="menu-item-link" href="/categories/">Categories</a>
       </li>
@@ -111,59 +111,316 @@
           <section id="posts" class="posts">
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/static/2019-summary/jiji/"></a></h1>
+    <h1 class="post-title"><a class="post-link" href="/post/django-orm-change-field-name/">Django orm改字段名造成数据丢失</a></h1>
     <div class="post-meta">
-      <span class="post-time"> 0001-01-01 </span>
-      
+      <span class="post-time"> 2018-11-10 </span>
+      <div class="post-category">
+          <a href="/categories/python/"> python </a>
+          <a href="/categories/django/"> django </a>
+          </div>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      curl &ndash;XGET &lsquo;http://0.0.0.0:44395/exapi/task_relation/flowinfo/?task_name=mart_fd.detail_cos_contract&rsquo;
-http://etl.xt.vip.sankuai.com/exapi/sw/task/code/mhmart_finance.finance_client_balance_jl
-http://etl.xt.vip.sankuai.com/exapi/sw/task/code/hmart_finance.finance_client_balance_jl
+      <h3 id="一-现场">一. 现场：</h3>
+<p>以为是修改一个变量名，但在django orm内部并不这么认为：</p>
+<p>model:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="err">旧</span><span class="err">列</span><span class="err">名</span><span class="err">：</span>
+<span class="n">cos_path</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">存储路径</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="err">新</span><span class="err">列</span><span class="err">名</span><span class="p">:</span>
+<span class="n">storage_path</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span><span class="n">verbose_name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">存储路径</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>migrations:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">operations</span> <span class="o">=</span> <span class="p">[</span>
+    <span class="n">migrations</span><span class="o">.</span><span class="n">RemoveField</span><span class="p">(</span>
+        <span class="n">model_name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">insurancedocument</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">cos_path</span><span class="s1">&#39;</span><span class="p">,</span>
+    <span class="p">)</span><span class="p">,</span>
+    <span class="n">migrations</span><span class="o">.</span><span class="n">AddField</span><span class="p">(</span>
+        <span class="n">model_name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">insurancedocument</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="n">name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">storage_path</span><span class="s1">&#39;</span><span class="p">,</span>
+       <span class="n">field</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">存储路径</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">,</span>
+    <span class="p">)</span><span class="p">,</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>sql:</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">BEGIN</span><span class="p">;</span>
+<span class="c1">--
+</span><span class="c1"></span><span class="c1">-- Remove field cos_path from insurancedocument
+</span><span class="c1"></span><span class="c1">--
+</span><span class="c1"></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">apis_insurancedocument</span><span class="o">`</span> <span class="k">DROP</span> <span class="k">COLUMN</span> <span class="o">`</span><span class="n">cos_path</span><span class="o">`</span><span class="p">;</span>
+<span class="c1">--
+</span><span class="c1"></span><span class="c1">-- Add field storage_path to insurancedocument
+</span><span class="c1"></span><span class="c1">--
+</span><span class="c1"></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">apis_insurancedocument</span><span class="o">`</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="o">`</span><span class="n">storage_path</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span> <span class="k">NULL</span><span class="p">;</span>
+<span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>所以在Django orm里面认为这是删去了一个字段，然后又新增了一个字段，然后数据就丢了。</p>
+<h3 id="二-其他django改列名手段">二. 其他django改列名手段</h3>
+<h4 id="1-利用db_column-改名">1. 利用db_column 改名</h4>
+<p>操作如下，利用db_column来改变字段名的，然后：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">cos_path</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">存储路径</span><span class="s1">&#39;</span><span class="p">)</span>
+
+<span class="n">storage_path</span> <span class="o">=</span> <span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span><span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">db_column</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">cos_path</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">存储路径</span><span class="s1">&#39;</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql">
+<span class="k">BEGIN</span><span class="p">;</span>
+<span class="c1">--
+</span><span class="c1"></span><span class="c1">-- Remove field cos_path from insurancedocument
+</span><span class="c1"></span><span class="c1">--
+</span><span class="c1"></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">apis_insurancedocument</span><span class="o">`</span> <span class="k">DROP</span> <span class="k">COLUMN</span> <span class="o">`</span><span class="n">cos_path</span><span class="o">`</span><span class="p">;</span>
+<span class="c1">--
+</span><span class="c1"></span><span class="c1">-- Add field storage_path to insurancedocument
+</span><span class="c1"></span><span class="c1">--
+</span><span class="c1"></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">apis_insurancedocument</span><span class="o">`</span> <span class="k">ADD</span> <span class="k">COLUMN</span> <span class="o">`</span><span class="n">cos_path</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span> <span class="k">NULL</span><span class="p">;</span>
+<span class="k">COMMIT</span><span class="p">;</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>django orm会先把cos_path那个字段给drop掉，数据还会丢失。</p>
+<h4 id="2-利用rename-field改名">2. 利用rename field改名</h4>
+<p>(1) 利用python manage.py makemigrations &ndash;empty apis创建一个新的migrations文件, 编辑：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span><span class="lnt">21
+</span><span class="lnt">22
+</span><span class="lnt">23
+</span><span class="lnt">24
+</span><span class="lnt">25
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">migrations</span>
+<span class="kn">from</span> <span class="nn">django.db</span> <span class="kn">import</span> <span class="n">models</span>
+
+
+<span class="k">class</span> <span class="nc">Migration</span><span class="p">(</span><span class="n">migrations</span><span class="o">.</span><span class="n">Migration</span><span class="p">)</span><span class="p">:</span>
+
+    <span class="n">dependencies</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">(</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">apis</span><span class="s1">&#39;</span><span class="p">,</span> <span class="sa"></span><span class="s1">&#39;</span><span class="s1">0006_auto_20180724_1039</span><span class="s1">&#39;</span><span class="p">)</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">operations</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">migrations</span><span class="o">.</span><span class="n">AlterField</span><span class="p">(</span>
+            <span class="n">model_name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">insurancedocument</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="n">name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">cos_path</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="n">field</span><span class="o">=</span><span class="n">models</span><span class="o">.</span><span class="n">CharField</span><span class="p">(</span>
+                <span class="n">max_length</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span> <span class="n">null</span><span class="o">=</span><span class="bp">True</span><span class="p">,</span> <span class="n">verbose_name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">存储路径</span><span class="s1">&#39;</span>
+            <span class="p">)</span>
+        <span class="p">)</span><span class="p">,</span>
+        <span class="n">migrations</span><span class="o">.</span><span class="n">RenameField</span><span class="p">(</span>
+            <span class="n">model_name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">insurancedocument</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="n">old_name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">cos_path</span><span class="s1">&#39;</span><span class="p">,</span>
+            <span class="n">new_name</span><span class="o">=</span><span class="sa"></span><span class="s1">&#39;</span><span class="s1">storage_path</span><span class="s1">&#39;</span><span class="p">,</span>
+        <span class="p">)</span><span class="p">,</span>
+    <span class="p">]</span>
+
+</code></pre></td></tr></table>
+</div>
+</div><p>(2)执行的sql语句：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span><span class="lnt">7
+</span><span class="lnt">8
+</span><span class="lnt">9
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-sql" data-lang="sql"><span class="k">BEGIN</span><span class="p">;</span>
+<span class="c1">--
+</span><span class="c1"></span><span class="c1">-- Alter field cos_path on insurancedocument
+</span><span class="c1"></span><span class="c1">--
+</span><span class="c1"></span><span class="c1">--
+</span><span class="c1"></span><span class="c1">-- Rename field cos_path on insurancedocument to storage_path
+</span><span class="c1"></span><span class="c1">--
+</span><span class="c1"></span><span class="k">ALTER</span> <span class="k">TABLE</span> <span class="o">`</span><span class="n">apis_insurancedocument</span><span class="o">`</span> <span class="n">CHANGE</span> <span class="o">`</span><span class="n">cos_path</span><span class="o">`</span> <span class="o">`</span><span class="n">storage_path</span><span class="o">`</span> <span class="nb">varchar</span><span class="p">(</span><span class="mi">200</span><span class="p">)</span> <span class="k">NULL</span><span class="p">;</span>
+<span class="k">COMMIT</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>这时候django才认为执行的是改名操作， 查看migrate之后的数据库发现数据没有丢失。</p>
+<p>但是这种操作对mysql来说貌似都是重建一张新表，然后把旧表内容插入新表里面，耗时长, 需要停服 而且危险， 所以补充毅总说的一种方法：</p>
+<h4 id="3-不停服改名">3 不停服改名</h4>
+<ol>
+<li>先加列，改代码来读老列&amp;&amp;双写，</li>
+<li>通过 sql 或者代码复制原列数据到新列，</li>
+<li>代码再切换成读写新列，</li>
+<li>再做清理老列的事情</li>
+</ol>
+<h4 id="4-还是不要改名字了">4 还是不要改名字了</h4>
+<h2 id="反思">反思:</h2>
+<hr>
+<ol>
+<li>在线上执行这种需要Schema Operations的事情，确认是否必要</li>
+<li>还是不要用django migration了</li>
+<li>执行sqlmigrate， 确认django orm到底会干什么事情</li>
+<li>本地实验，证明操作无害</li>
+</ol>
     </div>
     <div class="read-more">
-      <a href="/post/static/2019-summary/jiji/" class="read-more-link">阅读更多</a>
+      <a href="/post/django-orm-change-field-name/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>
 
     <article class="post">
   <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/static/2019-summary/%E5%BA%94%E8%AF%A5%E5%8A%AA%E5%8A%9B%E6%9E%84%E9%80%A0%E4%B8%80%E7%A7%8D%E7%8E%AF%E5%A2%83%E6%88%91%E6%98%AF%E8%B0%81%E4%B8%8D%E9%87%8D%E8%A6%81%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E6%88%91%E6%98%AF%E5%AF%B9%E7%9A%84/"></a></h1>
+    <h1 class="post-title"><a class="post-link" href="/post/about/">About Me</a></h1>
     <div class="post-meta">
-      <span class="post-time"> 0001-01-01 </span>
-      
+      <span class="post-time"> 2018-11-10 </span>
+      <div class="post-category">
+          <a href="/categories/personal/"> personal </a>
+          </div>
     </div>
   </header>
   
   <div class="post-content">
     <div class="post-summary">
-      应该努力构造一种环境：我是谁不重要，重要的是我是对的
-  军事化管理
-  经济利益驱动法
-  它将内部激励变为了外部激励
-  人们会追求局部利益最大化，如果使用经济利益驱动法，就是在鼓励程序员和制度博弈
-最大的问题是，它其实不是管理，而是管理的退位
-    认同法
- 创造内部激励    2020年计划：
- 学打游戏 每周看一本书 减20斤 学完sicp  盘点/资产
-确实的能力
-组内的分享
-托管上 ones
-同步一下现在的情况，xt任务中有三种任务会涉及这个需求，sync/mysql2hive sync/hive2mysql sync/hive2mysql/datalink 其中：
- sync/mysql2hive 支持分库分表，但是表名都是正则，做不了 sync/hive2mysql 不支持分库分表，只支持到表粒度 sync/hive2mysql/datalink 可以支持到分库分表粒度  后两种的逻辑大概为：
-​	1.在保存代码时候，会分析任务涉及的mysql表，分库分表规则，存起来，存的字段会拼接为dsnname.tablename/rulename
-2. 会把历史数据刷一遍 3. 暴露给dsn的接口会直接全等查这个字段  会尽力检查，但是不保证完全准确
- sync/mysql2hive  建表收口
-血缘
-审批流程
-审计日志 - 李盼 - 输出/血缘 - 建立血缘关系 拉群
+      <ul>
+<li>在北京</li>
+<li>工作中主要使用Python</li>
+<li>脚本工程师，十八线程序员</li>
+<li>在学racket</li>
+<li>减肥中</li>
+<li>现在<del>爱因互动</del></li>
+<li>现在美团工作</li>
+</ul>
+<h2 id="2020年读书记录">2020年读书记录</h2>
+<ul>
+<li><input checked="" disabled="" type="checkbox">SICP （reading 今年一定要读完！！！）</li>
+<li><input checked="" disabled="" type="checkbox">系统化思维导论 [reading]</li>
+<li><input disabled="" type="checkbox">The Practice of Programming [TODO]</li>
+<li><input checked="" disabled="" type="checkbox">UNIX and Linux System Administration Handbook, 5th</li>
+<li><input disabled="" type="checkbox">系统架构 [TODO]</li>
+<li><input disabled="" type="checkbox">操作系统导论</li>
+<li><input checked="" disabled="" type="checkbox">软件随想录</li>
+<li><input checked="" disabled="" type="checkbox">曼昆经济学原理（宏观）</li>
+<li><input disabled="" type="checkbox">信息论基础</li>
+<li><input disabled="" type="checkbox">人月神话</li>
+</ul>
+<h2 id="2019年读书记录">2019年读书记录</h2>
+<ul>
+<li><input checked="" disabled="" type="checkbox">领域驱动设计</li>
+<li><input checked="" disabled="" type="checkbox">重构</li>
+<li><input checked="" disabled="" type="checkbox">性能之巅</li>
+<li><input checked="" disabled="" type="checkbox">亿级流量网站架构核心技术</li>
+<li><input checked="" disabled="" type="checkbox">web性能权威指南</li>
+<li><input checked="" disabled="" type="checkbox">自己动手写docker</li>
+<li><input checked="" disabled="" type="checkbox">docker容器与容器云</li>
+<li><input checked="" disabled="" type="checkbox">go programming</li>
+<li><input checked="" disabled="" type="checkbox">java编程思想</li>
+<li><input checked="" disabled="" type="checkbox">星船伞兵</li>
+</ul>
+<h2 id="2018年读书记录">2018年读书记录</h2>
+<ul>
+<li><input checked="" disabled="" type="checkbox">设计模式</li>
+<li><input checked="" disabled="" type="checkbox">代码大全</li>
+<li><input checked="" disabled="" type="checkbox">数据仓库工具箱</li>
+<li><input checked="" disabled="" type="checkbox">TCP/IP详解</li>
+<li><input checked="" disabled="" type="checkbox">程序员的自我修养</li>
+<li><input checked="" disabled="" type="checkbox">scala programming</li>
+<li><input checked="" disabled="" type="checkbox">乌合之众</li>
+<li><input checked="" disabled="" type="checkbox">编码 * 隐匿在计算机软硬件背后的语言</li>
+</ul>
+<h2 id="2017年读书笔记">2017年读书笔记</h2>
+<ul>
+<li><input checked="" disabled="" type="checkbox">python学习手册</li>
+<li><input checked="" disabled="" type="checkbox">流畅的Python</li>
+<li><input checked="" disabled="" type="checkbox">现代操作系统</li>
+<li><input checked="" disabled="" type="checkbox">计算机网络自顶向下</li>
+<li><input checked="" disabled="" type="checkbox">基地系列</li>
+</ul>
     </div>
     <div class="read-more">
-      <a href="/post/static/2019-summary/%E5%BA%94%E8%AF%A5%E5%8A%AA%E5%8A%9B%E6%9E%84%E9%80%A0%E4%B8%80%E7%A7%8D%E7%8E%AF%E5%A2%83%E6%88%91%E6%98%AF%E8%B0%81%E4%B8%8D%E9%87%8D%E8%A6%81%E9%87%8D%E8%A6%81%E7%9A%84%E6%98%AF%E6%88%91%E6%98%AF%E5%AF%B9%E7%9A%84/" class="read-more-link">阅读更多</a>
+      <a href="/post/about/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>
@@ -191,6 +448,7 @@ http://etl.xt.vip.sankuai.com/exapi/sw/task/code/hmart_finance.finance_client_ba
 </div>
 
 <div class="copyright">
+    <div style="display: none;">
   <span class="power-by">
     由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
   </span>
@@ -199,6 +457,7 @@ http://etl.xt.vip.sankuai.com/exapi/sw/task/code/hmart_finance.finance_client_ba
     主题 - 
     <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
   </span>
+    </div>
 
   
 
@@ -206,10 +465,7 @@ http://etl.xt.vip.sankuai.com/exapi/sw/task/code/hmart_finance.finance_client_ba
     &copy; 
     2017 - 
     2020
-    <span class="heart">
-      <i class="iconfont icon-heart"></i>
-    </span>
-    <span class="author">fcy</span>
+    <span class="author">HeShi</span>
   </span>
 </div>
     </footer>

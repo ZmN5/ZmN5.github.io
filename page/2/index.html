@@ -44,7 +44,7 @@
 <meta property="og:description" content="enjoy coding, enjoy life." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://ZmN5.github.io/" />
-<meta property="og:updated_time" content="2020-04-04T20:13:41+08:00" />
+<meta property="og:updated_time" content="2020-10-23T18:12:42+08:00" />
 <meta itemprop="name" content="何时">
 <meta itemprop="description" content="enjoy coding, enjoy life."><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="何时"/>
@@ -111,6 +111,120 @@
           <section id="posts" class="posts">
     <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/learned-from-ein/">从上家公司学到的</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2019-07-23 </span>
+      <div class="post-category">
+          <a href="/categories/%E6%80%BB%E7%BB%93/"> 总结 </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      从爱因离开快一个月了，感觉有些东西需要总结一下了。 坚持不写code smell的代码 祖师爷建议的一些规范，pep8/gofmt/isort之类
+    </div>
+    <div class="read-more">
+      <a href="/post/learned-from-ein/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/new-env/">初始化开发环境</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2019-06-30 </span>
+      <div class="post-category">
+          <a href="/categories/%E5%B7%A5%E5%85%B7/"> 工具 </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>最近入职新公司，用自己的电脑没有补贴，那当然用公司电脑喽，所以所有的环境都要重装。通过这次重装确认了几个对我来说，本地开发一定会用到的软件。</p>
+<ol>
+<li>
+<p>brew</p>
+<ol>
+<li>emmm，这个就不解释了，在mac下时必备的</li>
+</ol>
+</li>
+<li>
+<p>git</p>
+<ol>
+<li>brew install git</li>
+</ol>
+</li>
+<li>
+<p>Tmux</p>
+<ol>
+<li>安装： brew install tmux</li>
+<li>安装tpm：https://github.com/tmux-plugins/tpm</li>
+<li>配置参考：https://github.com/zmn5/my-config/blob/master/dot.tmux.conf</li>
+</ol>
+</li>
+<li>
+<p>Vim8</p>
+<ol>
+<li>brew reinstall vim &ndash;with-python3 &ndash;with-luajit</li>
+<li>安装插件管理工具Plug: <a href="https://github.com/junegunn/vim-plug">https://github.com/junegunn/vim-plug</a></li>
+<li>安装<code>universal-tags</code>:  <a href="https://github.com/universal-ctags/ctags">https://github.com/universal-ctags/ctags</a></li>
+<li>安装插件： <a href="https://github.com/zmn5/my-config/blob/master/dot.vimrc">https://github.com/zmn5/my-config/blob/master/dot.vimrc</a></li>
+</ol>
+</li>
+<li>
+<p>zsh/oh-my-zsh</p>
+<ol>
+<li>安装<code>zsh</code>: <a href="https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH">https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH</a></li>
+<li>安装<code>oh-my-zsh</code>: <a href="https://github.com/robbyrussell/oh-my-zsh">https://github.com/robbyrussell/oh-my-zsh</a></li>
+<li>安装包管理器<code>zplug</code>： brew install zplug</li>
+</ol>
+</li>
+<li>
+<p>安装fd：</p>
+<ol>
+<li>安装： <a href="https://github.com/sharkdp/fd">https://github.com/sharkdp/fd</a></li>
+</ol>
+</li>
+<li>
+<p>fzf</p>
+<ol>
+<li>安装： brew install fzf</li>
+<li>$(brew &ndash;prefix)/opt/fzf/install</li>
+</ol>
+</li>
+<li>
+<p>ag</p>
+<ol>
+<li>安装参考： <a href="https://github.com/ggreer/the_silver_searcher">https://github.com/ggreer/the_silver_searcher</a></li>
+</ol>
+</li>
+<li>
+<p>z jump</p>
+<ol>
+<li>安装参考： <a href="https://github.com/rupa/z">https://github.com/rupa/z</a></li>
+</ol>
+</li>
+<li>
+<p>vscode</p>
+<p>写前端代码时候，感觉用vim还是难受</p>
+</li>
+<li>
+<p>typora</p>
+<p>试过很多个<code>markdown</code>编辑工具，感觉还是这个比较好用</p>
+</li>
+</ol>
+    </div>
+    <div class="read-more">
+      <a href="/post/new-env/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/failed-k8s-cluster/">一次失败的k8s部署经历</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2019-03-30 </span>
@@ -164,106 +278,6 @@
     </div>
     <div class="read-more">
       <a href="/post/python-descriptor/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/a-interesting-deadlock/">一种有意思的死锁</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2019-01-17 </span>
-      <div class="post-category">
-          <a href="/categories/sticker/"> sticker </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>刚闲逛时候发现有<a href="https://python-gino.readthedocs.io/zh/latest/why.html#the-story">一篇文章</a>讲了一种有意思的死锁，不是亲身经历，但是也很有意思了。</p>
-<p>先会议一下死锁的定义是什么？翻出压箱底的<code>现代操作系统</code>:</p>
-<blockquote>
-<p>如果一个进程集合中的每个进程都只能等待由该进程集合中的其他进程才能引发的事件，那么，该进程集合就是死锁的。</p>
-</blockquote>
-<p>所以，还是不知道什么是死锁。</p>
-<p>举个例子，</p>
-<blockquote>
-<p>比如甲乙两人同时去食堂吃饭，食堂里面只有一个碗和一双筷子，甲抢到了碗，乙抢到了筷子，甲等乙放下筷子，乙等甲放下碗，结果两个人都饿死了。</p>
-</blockquote>
-<p>又比如:</p>
-<blockquote>
-<p>A和B两个进程同时去写数据库，A锁住了第n行去读第m行，B锁住了第m行去读第n行，结果A，B都无限期等下去了。</p>
-</blockquote>
-<p>无论是<code>甲</code>,<code>乙</code>,还是<code>A</code>,<code>B</code>,都在等待另一个已经死锁的进程释放资源。因为所有的进程都不能运行，所以资源永远无法被释放，所以所有进程都不能被唤醒。进程的数量以及占有和请求的资源数量都是无关紧要的，而无论资源和何种类型都会发生何种结果，所以这种死锁被称为资源死锁。</p>
-<p>好了，抄书结束，划重点。</p>
-<p>好吧，上面这段话都是重点。</p>
-<p>废话👆</p>
-<p>下面看<code>占有和请求的资源数量都是无关紧要的🌰</code></p>
-<blockquote>
-<p>For example, the first coroutine starts a transaction and updated a row, then the second coroutine tries to update the same row before the first coroutine closes the transaction. The second coroutine will block the whole thread at the non-async update, waiting for the row lock to be released, but the releasing is in the first coroutine which is blocked by the second coroutine. Thus it will block forever.</p>
-</blockquote>
-<p>之前在协程中，每时每刻实际都只有一件事在执行，发生死锁的概率应该不高吧。too young啊</p>
-<p>比如第一个协程发起事务更新数据库中的一行，这时候第二个协程试图更新同一行，如果第二个协程是非异步的更新，那么它就要等待第一个协程释放资源，但是这时候整个线程已经被第二个线程阻塞了，第一个协程无法释放资源，deadlock!</p>
-<p>回忆一下书本中关于资源死锁的四个条件，回忆一下:</p>
-<ol>
-<li>互斥条件</li>
-<li>占有和等待条件</li>
-<li>不可抢占条件</li>
-<li>环路等待条件</li>
-</ol>
-<p>这四个条件只要有一个不成立那么资源死锁就不会发生。</p>
-<p>好了现在套用一下上面这个例子。</p>
-<ol>
-<li>数据库行锁和当前线程执行都是互斥的，✅</li>
-<li>第一个协程占有了数据库中的锁等待线程执行权，第二个协程占有了当前协程的执行等待行锁，✅</li>
-<li>不可抢占，✅</li>
-<li>环路等待，第二个线程等待行锁，第一个线程等待有机会被执行，✅</li>
-</ol>
-<p>死锁bingo!</p>
-<p>怎么解决呢？</p>
-<blockquote>
-<p>A simple fix would be to defer the database operations into threads, so that they won&rsquo;t block the main thread, thus won&rsquo;t cause a dead lock easily. It usually works and there is even a library to do so. However when it comes to ORM, things become dirty.</p>
-</blockquote>
-<p>把数据库相关操作扔给其他线程去执行，确保不会阻塞主线程就行了。</p>
-<p>但是真的就行了吗？</p>
-<p>在一个复杂的项目中，你永远不知道哪一行代码会调用同步代码阻塞主线程，<code>Racing condition just happens under pressure, and anything that may block will eventually block</code>, 可能会发生的事情终将要发生。</p>
-<p>所以作者建议:</p>
-<blockquote>
-<p>This is usually the time when I suggest to separate the server into two parts: &ldquo;normal blocking with ORM&rdquo; and &ldquo;asynchronous without ORM&rdquo;.</p>
-</blockquote>
-<p>不过倒是想起另外一个问题了, 现在公司业务都是用的<code>gunicorn</code>+<code>gevent</code>, 这个内部是怎么解决这个问题的呢</p>
-<p>可以猜测一下：</p>
-<p>上面的例子造成死锁是因为有协程调用同步操作, 而gevent是通过<code>monkey_path</code>的操作从底层改变所有请求的行为，就没有这个问题了。</p>
-<p>不过还有其他问题。</p>
-<p><code>monkey_patch</code>针对Python代码有效，如果数据库连接器用的是c扩展，emmm&hellip;可以大胆的猜测一下可能的bug</p>
-<p>参考资料：</p>
-<ol>
-<li>现代操作系统</li>
-<li><a href="https://python-gino.readthedocs.io/zh/latest/why.html#the-story">https://python-gino.readthedocs.io/zh/latest/why.html#the-story</a></li>
-</ol>
-    </div>
-    <div class="read-more">
-      <a href="/post/a-interesting-deadlock/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/summary-2018/">2018小结</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2018-12-31 </span>
-      
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      2018过完了，马上就就要27了。 27了！！！ 2018是人生中第一个从始至终都在上班的年份，最大的感受就是，时间过的好快啊！ 一、身体： 明显的
-    </div>
-    <div class="read-more">
-      <a href="/post/summary-2018/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>

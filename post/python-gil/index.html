@@ -1,0 +1,1292 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Python Gil - 何时</title>
+  <meta name="renderer" content="webkit" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+<meta name="theme-color" content="#f8f5ec" />
+<meta name="msapplication-navbutton-color" content="#f8f5ec">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="#f8f5ec">
+
+
+<meta name="author" content="HeShi" /><meta name="description" content="一、 什么是GIL？ GIL的全称为Global Interpreter Lock，是CPython中的一种锁实现，目的是为了在同一时间，只允许一个线程控制解释器。
+二、为什么需要GIL？ Python的内存管理用的是引用计数，也就是每个对象都会有一个计数器来跟踪被引用的数量，如果计数器的值为0，则此对象占用的内存被释放。
+也就是这个引用计数的值需要避免竞态条件(race condition)，不能有多个线程同时修改对象引用计数器的值，否则会造成内存泄漏或者各种奇怪的bug。
+如果给每个对象都加锁的话，就很可能造成死锁（只有多个锁的情况下才可能造成死锁），同时影响单线程的性能。
+所以为了解决线程安全的内存管理这个问题，Guido的选择是，引入一个粗粒度的全局锁。
+其他没有GIL的语言(比如Java)，通过不同的GC方式，来解决这个问题，但是往往同时会引入其他技术来提升单进程的性能，比如JIT。
+三、GIL的影响 GIL的影响主要在多线程情况下，这里首先要明确几点：
+ python的线程都是原生操作系统线程 操作系统负责线程的调度  这里从IO-bound和CPU-bound两种不同的线程分开说。
+3.1 协作的IO-bound线程 在使用Python标注库的情况下进行IO操作时，比如网络请求、文件读写、数据库读写等，解释器会在IO操作之前释放GIL。
+1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20  /* s.connect((host, port)) method */ static PyObject * sock_connect(PySocketSockObject *s, PyObject *addro) { sock_addr_t addrbuf; int addrlen; int res; /* convert (host, port) tuple to C address */ getsockaddrarg(s, addro, SAS2SA(&amp;amp;addrbuf), &amp;amp;addrlen); Py_BEGIN_ALLOW_THREADS // 释放GIL  /* Others thread may run now */ /* sleep(timeout) */ /* write(fd, buffer, size) */ /* recv(sock, buffer, size, flags) */ Py_END_ALLOW_THREADS // 获取GIL  /* error handling and so on .... */ }   总结来说：
+ 在进行IO时候释放GIL 其他处于可执行状态的线程获得执行机会  有点协作的意味，所以在IO密集型操作中使用多线程，性能并不会太低。
+3.2 程序block，无法处理系统Signal 在Python2里面，如果一个线程从不进行任务IO，解释器每执行100ticks(1tick对应解释器中的一条指令)会进行一次check。
+每次执行check时候，会进行：
+ 在主线程中处理各种signal release &amp;amp; reacquire GIL  可以看到，
+ check的周期不是以时间为单位的 在一个周期内可以阻塞任何事情，执行不同的指令耗时相差很大  1 2 3 4 5 6  # test.py def block_everything(): nums = xrange(1000000000) -1 in nums block_everything()   执行这个脚本，然后ctrl&#43;c，会发现并不能使程序终止。
+1 2 3 4 5 6 7 8 9 10 11 12  dis.dis(block_everything) 0 LOAD_GLOBAL 0 (xrange) 3 LOAD_CONST 1 (1000000000) 6 CALL_FUNCTION 1 9 STORE_FAST 0 (nums) 12 LOAD_CONST 2 (-1) 15 LOAD_FAST 0 (nums) 18 COMPARE_OP 6 (in) 21 POP_TOP 22 LOAD_CONST 0 (None) 25 RETURN_VALUE   其中的原因是：
+ 其中一条指令（COMPARE_OP）耗时太久，而解释器在执行100ticks之后才会处理signals 主进程被block，无法处理signal  3.3 Python2的优先级倒置（Priority Inversion） 先谈谈GIL的实现：
+ GIL不仅仅是mutex 具体实现（Unix）要么是匿名信号量，要么是Pthreads条件变量 锁机制基于信号signal  获取GIL时候，检查锁，如果锁非空闲，休眠然后等待锁 释放GIL时候，释放锁并且发送signal给其他线程    由于线程的调度都是操作系统负责的，那么多个线程就会被调度到多核上同时执行，就会有CPU Battle的现象。
+就上图详细来说，线程t2被调度到CPU核上开始执行时候，拿不到GIL被block，t1释放GIL时候，通知t2来抢，但是这时候t1会被留在原先的CPU核上继续执行，GIL又被t1抢走了，t2继续block。
+t2: “怎么有种被调戏的感觉。。。”
+从代码大概是这样：
+1 2 3 4 5 6 7 8 9 10 11 12  if (interpreter_lock) { /* Give another thread a chance */ if (PyThreadState_Swap(Null) != tstate) { Py_FatalError(&amp;#34;Ceval, tstate mix-up.&amp;#34;) } PyThread_release_lock(interpreter_lock); /* Other thread may run now.*/ /* there is no code here. */ PyThread_acquire_lock(interpreter_lock, 1); }   从代码可以看出，这里最主要的问题是，从释放GIL到重新获取GIL，中间没有其他代码，这个过程只需要几纳秒，其他线程很难抢到GIL。
+这点在几个都是CPU-bound的线程上的影响就是，多线程比单线程执行更慢。 在同时有CPU-bound和IO-bound的线程上影响就是，优先级倒置（Priority Inversion）。本来应该高优先级的IO-bound线程，会很难拿到GIL去执行。
+最主要的问题是，这里掺杂了两个相冲突的目标：
+ 对Python解释器来说，只想在单线程上执行，但是同时又不做任何和线程调度相关的事情。 对操作系统来说，看到有多个线程，那么就调度到多个核上同时工作吧。  3.4 Python3的GIL 从python3.2开始，引入了新的GIL。
+ 新的GIL仍旧基于condition variable和signaling，但是和旧的完全不同，signal会显著减少 新的线程切换是基于时间的（time-based）, 不像过去一样，是基于ticks的  新GIL的设计基于几条原则：
+  是否要进行线程切换取决于一个全局变量。
+1  static volatile int gil_drop_request = 0;     线程将一直运行，直到全局变量的值变为1
+  全局变量变为1时候，线程必须释放GIL
+  来看看这些怎么发生的？
+3.4.1 如果只有一个线程 那么这个线程将会一直运行。
+3.4.2 如果有两个线程 假设有两个线程t1和t2，初始状态t1拿到线程。
+那么t2将执行cv_wait(gil, TIMEOUT)，等待GIL被释放，这时候将会有两种情况
+ t1主动释放GIL（sleep/io/等），t1给t2发送signal，t2开始执行 t2等t1执行完时间片，把全局变量gil_drop_request置为1，然后继续执行cv_wait t1将不再执行，放弃GIL，并且发送signal通知自己已经放弃GIL t1将开始等待一个gotgil的signal，表明GIL已经被其他线程获取  （默认的TIMEOUT时间是5ms）
+3.4.3影响  新的GIL将允许线程在忽略其他线程以及IO优先级的情况下执行5ms 一个CPU密集型线程将阻塞IO线程至少5ms 这将会影响响应时间 长时间执行的c/c&#43;&#43;扩展将影响线程切换，线程切换将不再是抢占式的  四、GIL不是什么？  在多线程编程中，即便有了GIL，你的代码仍然不一定是线程安全的，仍然需要其他同步原语  五、总结 毫无疑问，Python在时下这么流行是离不开GIL的：
+ GIL让单线程执行的更快 GIL让IO-bound的多线程执行的更快 GIL让C扩展实现的多线程编程执行的更快😂 实现及使用C扩展更加容易  python选择了粗粒度的GIL了保证内存安全，其他语言选择细粒度的锁实现真正的多线程，反过来说，Python也利用GIL也把GC时候的Stop the world，分解成为了一个个更细粒度的内存回收，其实换个角度来说，也就是换成了一个个更细粒度的Stop the world吧。
+参考:
+ What is the Python Global Interpreter Lock (GIL)? Python&amp;rsquo;s Infamous GIL by Larry Hastings Inside the Python GIL Inside the New GIL " /><meta name="keywords" content="Hugo, theme, even" />
+
+
+
+
+
+
+<meta name="generator" content="Hugo 0.63.2 with theme even" />
+
+
+<link rel="canonical" href="https://ZmN5.github.io/post/python-gil/" />
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+<link rel="manifest" href="/manifest.json">
+<link rel="mask-icon" href="/safari-pinned-tab.svg" color="#5bbad5">
+
+
+<link href="/dist/even.c2a46f00.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.css" integrity="sha256-7TyXnr2YU040zfSP+rEcz29ggW4j56/ujTPwjMzyqFY=" crossorigin="anonymous">
+
+
+<meta property="og:title" content="Python Gil" />
+<meta property="og:description" content="一、 什么是GIL？
+GIL的全称为Global Interpreter Lock，是CPython中的一种锁实现，目的是为了在同一时间，只允许一个线程控制解释器。
+二、为什么需要GIL？
+Python的内存管理用的是引用计数，也就是每个对象都会有一个计数器来跟踪被引用的数量，如果计数器的值为0，则此对象占用的内存被释放。
+也就是这个引用计数的值需要避免竞态条件(race condition)，不能有多个线程同时修改对象引用计数器的值，否则会造成内存泄漏或者各种奇怪的bug。
+如果给每个对象都加锁的话，就很可能造成死锁（只有多个锁的情况下才可能造成死锁），同时影响单线程的性能。
+所以为了解决线程安全的内存管理这个问题，Guido的选择是，引入一个粗粒度的全局锁。
+其他没有GIL的语言(比如Java)，通过不同的GC方式，来解决这个问题，但是往往同时会引入其他技术来提升单进程的性能，比如JIT。
+三、GIL的影响
+GIL的影响主要在多线程情况下，这里首先要明确几点：
+
+python的线程都是原生操作系统线程
+操作系统负责线程的调度
+
+这里从IO-bound和CPU-bound两种不同的线程分开说。
+3.1 协作的IO-bound线程
+在使用Python标注库的情况下进行IO操作时，比如网络请求、文件读写、数据库读写等，解释器会在IO操作之前释放GIL。
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+
+
+/* s.connect((host, port)) method */
+static PyObject *
+sock_connect(PySocketSockObject *s, PyObject *addro)
+{
+    sock_addr_t addrbuf;
+    int addrlen;
+    int res;
+
+    /* convert (host, port) tuple to C address */
+    getsockaddrarg(s, addro, SAS2SA(&amp;addrbuf), &amp;addrlen);
+
+    Py_BEGIN_ALLOW_THREADS // 释放GIL
+    /* Others thread may run now */
+    /* sleep(timeout) */
+    /* write(fd, buffer, size) */
+    /* recv(sock, buffer, size, flags) */
+    Py_END_ALLOW_THREADS // 获取GIL
+
+    /* error handling and so on .... */
+}
+
+
+总结来说：
+
+在进行IO时候释放GIL
+其他处于可执行状态的线程获得执行机会
+
+有点协作的意味，所以在IO密集型操作中使用多线程，性能并不会太低。
+3.2 程序block，无法处理系统Signal
+在Python2里面，如果一个线程从不进行任务IO，解释器每执行100ticks(1tick对应解释器中的一条指令)会进行一次check。
+每次执行check时候，会进行：
+
+在主线程中处理各种signal
+release &amp; reacquire GIL
+
+可以看到，
+
+check的周期不是以时间为单位的
+在一个周期内可以阻塞任何事情，执行不同的指令耗时相差很大
+
+
+
+1
+2
+3
+4
+5
+6
+
+
+# test.py
+def block_everything():
+    nums = xrange(1000000000)
+    -1 in nums
+
+block_everything()
+
+
+执行这个脚本，然后ctrl&#43;c，会发现并不能使程序终止。
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+
+
+dis.dis(block_everything)
+      0 LOAD_GLOBAL              0 (xrange)
+      3 LOAD_CONST               1 (1000000000)
+      6 CALL_FUNCTION            1
+      9 STORE_FAST               0 (nums)
+
+     12 LOAD_CONST               2 (-1)
+     15 LOAD_FAST                0 (nums)
+     18 COMPARE_OP               6 (in)
+     21 POP_TOP
+     22 LOAD_CONST               0 (None)
+     25 RETURN_VALUE
+
+
+其中的原因是：
+
+其中一条指令（COMPARE_OP）耗时太久，而解释器在执行100ticks之后才会处理signals
+主进程被block，无法处理signal
+
+3.3 Python2的优先级倒置（Priority Inversion）
+先谈谈GIL的实现：
+
+GIL不仅仅是mutex
+具体实现（Unix）要么是匿名信号量，要么是Pthreads条件变量
+锁机制基于信号signal
+
+获取GIL时候，检查锁，如果锁非空闲，休眠然后等待锁
+释放GIL时候，释放锁并且发送signal给其他线程
+
+
+
+
+由于线程的调度都是操作系统负责的，那么多个线程就会被调度到多核上同时执行，就会有CPU Battle的现象。
+
+就上图详细来说，线程t2被调度到CPU核上开始执行时候，拿不到GIL被block，t1释放GIL时候，通知t2来抢，但是这时候t1会被留在原先的CPU核上继续执行，GIL又被t1抢走了，t2继续block。
+t2: “怎么有种被调戏的感觉。。。”
+
+从代码大概是这样：
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+
+
+if (interpreter_lock) {
+  /* Give another thread a chance */
+    if (PyThreadState_Swap(Null) != tstate) {
+      Py_FatalError(&#34;Ceval, tstate mix-up.&#34;)
+    }
+    PyThread_release_lock(interpreter_lock);
+
+    /* Other thread may run now.*/ 
+    /* there is no code here. */
+
+    PyThread_acquire_lock(interpreter_lock, 1);
+}
+
+
+从代码可以看出，这里最主要的问题是，从释放GIL到重新获取GIL，中间没有其他代码，这个过程只需要几纳秒，其他线程很难抢到GIL。
+这点在几个都是CPU-bound的线程上的影响就是，多线程比单线程执行更慢。
+在同时有CPU-bound和IO-bound的线程上影响就是，优先级倒置（Priority Inversion）。本来应该高优先级的IO-bound线程，会很难拿到GIL去执行。
+最主要的问题是，这里掺杂了两个相冲突的目标：
+
+对Python解释器来说，只想在单线程上执行，但是同时又不做任何和线程调度相关的事情。
+对操作系统来说，看到有多个线程，那么就调度到多个核上同时工作吧。
+
+3.4 Python3的GIL
+从python3.2开始，引入了新的GIL。
+
+新的GIL仍旧基于condition variable和signaling，但是和旧的完全不同，signal会显著减少
+新的线程切换是基于时间的（time-based）, 不像过去一样，是基于ticks的
+
+新GIL的设计基于几条原则：
+
+
+是否要进行线程切换取决于一个全局变量。
+
+
+1
+
+
+static volatile int gil_drop_request = 0;
+
+
+
+
+线程将一直运行，直到全局变量的值变为1
+
+
+全局变量变为1时候，线程必须释放GIL
+
+
+来看看这些怎么发生的？
+3.4.1 如果只有一个线程
+那么这个线程将会一直运行。
+3.4.2 如果有两个线程
+假设有两个线程t1和t2，初始状态t1拿到线程。
+那么t2将执行cv_wait(gil, TIMEOUT)，等待GIL被释放，这时候将会有两种情况
+
+t1主动释放GIL（sleep/io/等），t1给t2发送signal，t2开始执行
+t2等t1执行完时间片，把全局变量gil_drop_request置为1，然后继续执行cv_wait
+t1将不再执行，放弃GIL，并且发送signal通知自己已经放弃GIL
+t1将开始等待一个gotgil的signal，表明GIL已经被其他线程获取
+
+（默认的TIMEOUT时间是5ms）
+3.4.3影响
+
+新的GIL将允许线程在忽略其他线程以及IO优先级的情况下执行5ms
+一个CPU密集型线程将阻塞IO线程至少5ms
+这将会影响响应时间
+长时间执行的c/c&#43;&#43;扩展将影响线程切换，线程切换将不再是抢占式的
+
+四、GIL不是什么？
+
+在多线程编程中，即便有了GIL，你的代码仍然不一定是线程安全的，仍然需要其他同步原语
+
+五、总结
+毫无疑问，Python在时下这么流行是离不开GIL的：
+
+GIL让单线程执行的更快
+GIL让IO-bound的多线程执行的更快
+GIL让C扩展实现的多线程编程执行的更快😂
+实现及使用C扩展更加容易
+
+python选择了粗粒度的GIL了保证内存安全，其他语言选择细粒度的锁实现真正的多线程，反过来说，Python也利用GIL也把GC时候的Stop the world，分解成为了一个个更细粒度的内存回收，其实换个角度来说，也就是换成了一个个更细粒度的Stop the world吧。
+参考:
+
+What is the Python Global Interpreter Lock (GIL)?
+Python&rsquo;s Infamous GIL by Larry Hastings
+Inside the Python GIL
+Inside the New GIL
+" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://ZmN5.github.io/post/python-gil/" />
+<meta property="article:published_time" content="2020-08-23T22:19:58+08:00" />
+<meta property="article:modified_time" content="2020-08-23T22:19:58+08:00" />
+<meta itemprop="name" content="Python Gil">
+<meta itemprop="description" content="一、 什么是GIL？
+GIL的全称为Global Interpreter Lock，是CPython中的一种锁实现，目的是为了在同一时间，只允许一个线程控制解释器。
+二、为什么需要GIL？
+Python的内存管理用的是引用计数，也就是每个对象都会有一个计数器来跟踪被引用的数量，如果计数器的值为0，则此对象占用的内存被释放。
+也就是这个引用计数的值需要避免竞态条件(race condition)，不能有多个线程同时修改对象引用计数器的值，否则会造成内存泄漏或者各种奇怪的bug。
+如果给每个对象都加锁的话，就很可能造成死锁（只有多个锁的情况下才可能造成死锁），同时影响单线程的性能。
+所以为了解决线程安全的内存管理这个问题，Guido的选择是，引入一个粗粒度的全局锁。
+其他没有GIL的语言(比如Java)，通过不同的GC方式，来解决这个问题，但是往往同时会引入其他技术来提升单进程的性能，比如JIT。
+三、GIL的影响
+GIL的影响主要在多线程情况下，这里首先要明确几点：
+
+python的线程都是原生操作系统线程
+操作系统负责线程的调度
+
+这里从IO-bound和CPU-bound两种不同的线程分开说。
+3.1 协作的IO-bound线程
+在使用Python标注库的情况下进行IO操作时，比如网络请求、文件读写、数据库读写等，解释器会在IO操作之前释放GIL。
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+
+
+/* s.connect((host, port)) method */
+static PyObject *
+sock_connect(PySocketSockObject *s, PyObject *addro)
+{
+    sock_addr_t addrbuf;
+    int addrlen;
+    int res;
+
+    /* convert (host, port) tuple to C address */
+    getsockaddrarg(s, addro, SAS2SA(&amp;addrbuf), &amp;addrlen);
+
+    Py_BEGIN_ALLOW_THREADS // 释放GIL
+    /* Others thread may run now */
+    /* sleep(timeout) */
+    /* write(fd, buffer, size) */
+    /* recv(sock, buffer, size, flags) */
+    Py_END_ALLOW_THREADS // 获取GIL
+
+    /* error handling and so on .... */
+}
+
+
+总结来说：
+
+在进行IO时候释放GIL
+其他处于可执行状态的线程获得执行机会
+
+有点协作的意味，所以在IO密集型操作中使用多线程，性能并不会太低。
+3.2 程序block，无法处理系统Signal
+在Python2里面，如果一个线程从不进行任务IO，解释器每执行100ticks(1tick对应解释器中的一条指令)会进行一次check。
+每次执行check时候，会进行：
+
+在主线程中处理各种signal
+release &amp; reacquire GIL
+
+可以看到，
+
+check的周期不是以时间为单位的
+在一个周期内可以阻塞任何事情，执行不同的指令耗时相差很大
+
+
+
+1
+2
+3
+4
+5
+6
+
+
+# test.py
+def block_everything():
+    nums = xrange(1000000000)
+    -1 in nums
+
+block_everything()
+
+
+执行这个脚本，然后ctrl&#43;c，会发现并不能使程序终止。
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+
+
+dis.dis(block_everything)
+      0 LOAD_GLOBAL              0 (xrange)
+      3 LOAD_CONST               1 (1000000000)
+      6 CALL_FUNCTION            1
+      9 STORE_FAST               0 (nums)
+
+     12 LOAD_CONST               2 (-1)
+     15 LOAD_FAST                0 (nums)
+     18 COMPARE_OP               6 (in)
+     21 POP_TOP
+     22 LOAD_CONST               0 (None)
+     25 RETURN_VALUE
+
+
+其中的原因是：
+
+其中一条指令（COMPARE_OP）耗时太久，而解释器在执行100ticks之后才会处理signals
+主进程被block，无法处理signal
+
+3.3 Python2的优先级倒置（Priority Inversion）
+先谈谈GIL的实现：
+
+GIL不仅仅是mutex
+具体实现（Unix）要么是匿名信号量，要么是Pthreads条件变量
+锁机制基于信号signal
+
+获取GIL时候，检查锁，如果锁非空闲，休眠然后等待锁
+释放GIL时候，释放锁并且发送signal给其他线程
+
+
+
+
+由于线程的调度都是操作系统负责的，那么多个线程就会被调度到多核上同时执行，就会有CPU Battle的现象。
+
+就上图详细来说，线程t2被调度到CPU核上开始执行时候，拿不到GIL被block，t1释放GIL时候，通知t2来抢，但是这时候t1会被留在原先的CPU核上继续执行，GIL又被t1抢走了，t2继续block。
+t2: “怎么有种被调戏的感觉。。。”
+
+从代码大概是这样：
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+
+
+if (interpreter_lock) {
+  /* Give another thread a chance */
+    if (PyThreadState_Swap(Null) != tstate) {
+      Py_FatalError(&#34;Ceval, tstate mix-up.&#34;)
+    }
+    PyThread_release_lock(interpreter_lock);
+
+    /* Other thread may run now.*/ 
+    /* there is no code here. */
+
+    PyThread_acquire_lock(interpreter_lock, 1);
+}
+
+
+从代码可以看出，这里最主要的问题是，从释放GIL到重新获取GIL，中间没有其他代码，这个过程只需要几纳秒，其他线程很难抢到GIL。
+这点在几个都是CPU-bound的线程上的影响就是，多线程比单线程执行更慢。
+在同时有CPU-bound和IO-bound的线程上影响就是，优先级倒置（Priority Inversion）。本来应该高优先级的IO-bound线程，会很难拿到GIL去执行。
+最主要的问题是，这里掺杂了两个相冲突的目标：
+
+对Python解释器来说，只想在单线程上执行，但是同时又不做任何和线程调度相关的事情。
+对操作系统来说，看到有多个线程，那么就调度到多个核上同时工作吧。
+
+3.4 Python3的GIL
+从python3.2开始，引入了新的GIL。
+
+新的GIL仍旧基于condition variable和signaling，但是和旧的完全不同，signal会显著减少
+新的线程切换是基于时间的（time-based）, 不像过去一样，是基于ticks的
+
+新GIL的设计基于几条原则：
+
+
+是否要进行线程切换取决于一个全局变量。
+
+
+1
+
+
+static volatile int gil_drop_request = 0;
+
+
+
+
+线程将一直运行，直到全局变量的值变为1
+
+
+全局变量变为1时候，线程必须释放GIL
+
+
+来看看这些怎么发生的？
+3.4.1 如果只有一个线程
+那么这个线程将会一直运行。
+3.4.2 如果有两个线程
+假设有两个线程t1和t2，初始状态t1拿到线程。
+那么t2将执行cv_wait(gil, TIMEOUT)，等待GIL被释放，这时候将会有两种情况
+
+t1主动释放GIL（sleep/io/等），t1给t2发送signal，t2开始执行
+t2等t1执行完时间片，把全局变量gil_drop_request置为1，然后继续执行cv_wait
+t1将不再执行，放弃GIL，并且发送signal通知自己已经放弃GIL
+t1将开始等待一个gotgil的signal，表明GIL已经被其他线程获取
+
+（默认的TIMEOUT时间是5ms）
+3.4.3影响
+
+新的GIL将允许线程在忽略其他线程以及IO优先级的情况下执行5ms
+一个CPU密集型线程将阻塞IO线程至少5ms
+这将会影响响应时间
+长时间执行的c/c&#43;&#43;扩展将影响线程切换，线程切换将不再是抢占式的
+
+四、GIL不是什么？
+
+在多线程编程中，即便有了GIL，你的代码仍然不一定是线程安全的，仍然需要其他同步原语
+
+五、总结
+毫无疑问，Python在时下这么流行是离不开GIL的：
+
+GIL让单线程执行的更快
+GIL让IO-bound的多线程执行的更快
+GIL让C扩展实现的多线程编程执行的更快😂
+实现及使用C扩展更加容易
+
+python选择了粗粒度的GIL了保证内存安全，其他语言选择细粒度的锁实现真正的多线程，反过来说，Python也利用GIL也把GC时候的Stop the world，分解成为了一个个更细粒度的内存回收，其实换个角度来说，也就是换成了一个个更细粒度的Stop the world吧。
+参考:
+
+What is the Python Global Interpreter Lock (GIL)?
+Python&rsquo;s Infamous GIL by Larry Hastings
+Inside the Python GIL
+Inside the New GIL
+">
+<meta itemprop="datePublished" content="2020-08-23T22:19:58&#43;08:00" />
+<meta itemprop="dateModified" content="2020-08-23T22:19:58&#43;08:00" />
+<meta itemprop="wordCount" content="2647">
+
+
+
+<meta itemprop="keywords" content="" /><meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Python Gil"/>
+<meta name="twitter:description" content="一、 什么是GIL？
+GIL的全称为Global Interpreter Lock，是CPython中的一种锁实现，目的是为了在同一时间，只允许一个线程控制解释器。
+二、为什么需要GIL？
+Python的内存管理用的是引用计数，也就是每个对象都会有一个计数器来跟踪被引用的数量，如果计数器的值为0，则此对象占用的内存被释放。
+也就是这个引用计数的值需要避免竞态条件(race condition)，不能有多个线程同时修改对象引用计数器的值，否则会造成内存泄漏或者各种奇怪的bug。
+如果给每个对象都加锁的话，就很可能造成死锁（只有多个锁的情况下才可能造成死锁），同时影响单线程的性能。
+所以为了解决线程安全的内存管理这个问题，Guido的选择是，引入一个粗粒度的全局锁。
+其他没有GIL的语言(比如Java)，通过不同的GC方式，来解决这个问题，但是往往同时会引入其他技术来提升单进程的性能，比如JIT。
+三、GIL的影响
+GIL的影响主要在多线程情况下，这里首先要明确几点：
+
+python的线程都是原生操作系统线程
+操作系统负责线程的调度
+
+这里从IO-bound和CPU-bound两种不同的线程分开说。
+3.1 协作的IO-bound线程
+在使用Python标注库的情况下进行IO操作时，比如网络请求、文件读写、数据库读写等，解释器会在IO操作之前释放GIL。
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+
+
+/* s.connect((host, port)) method */
+static PyObject *
+sock_connect(PySocketSockObject *s, PyObject *addro)
+{
+    sock_addr_t addrbuf;
+    int addrlen;
+    int res;
+
+    /* convert (host, port) tuple to C address */
+    getsockaddrarg(s, addro, SAS2SA(&amp;addrbuf), &amp;addrlen);
+
+    Py_BEGIN_ALLOW_THREADS // 释放GIL
+    /* Others thread may run now */
+    /* sleep(timeout) */
+    /* write(fd, buffer, size) */
+    /* recv(sock, buffer, size, flags) */
+    Py_END_ALLOW_THREADS // 获取GIL
+
+    /* error handling and so on .... */
+}
+
+
+总结来说：
+
+在进行IO时候释放GIL
+其他处于可执行状态的线程获得执行机会
+
+有点协作的意味，所以在IO密集型操作中使用多线程，性能并不会太低。
+3.2 程序block，无法处理系统Signal
+在Python2里面，如果一个线程从不进行任务IO，解释器每执行100ticks(1tick对应解释器中的一条指令)会进行一次check。
+每次执行check时候，会进行：
+
+在主线程中处理各种signal
+release &amp; reacquire GIL
+
+可以看到，
+
+check的周期不是以时间为单位的
+在一个周期内可以阻塞任何事情，执行不同的指令耗时相差很大
+
+
+
+1
+2
+3
+4
+5
+6
+
+
+# test.py
+def block_everything():
+    nums = xrange(1000000000)
+    -1 in nums
+
+block_everything()
+
+
+执行这个脚本，然后ctrl&#43;c，会发现并不能使程序终止。
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+
+
+dis.dis(block_everything)
+      0 LOAD_GLOBAL              0 (xrange)
+      3 LOAD_CONST               1 (1000000000)
+      6 CALL_FUNCTION            1
+      9 STORE_FAST               0 (nums)
+
+     12 LOAD_CONST               2 (-1)
+     15 LOAD_FAST                0 (nums)
+     18 COMPARE_OP               6 (in)
+     21 POP_TOP
+     22 LOAD_CONST               0 (None)
+     25 RETURN_VALUE
+
+
+其中的原因是：
+
+其中一条指令（COMPARE_OP）耗时太久，而解释器在执行100ticks之后才会处理signals
+主进程被block，无法处理signal
+
+3.3 Python2的优先级倒置（Priority Inversion）
+先谈谈GIL的实现：
+
+GIL不仅仅是mutex
+具体实现（Unix）要么是匿名信号量，要么是Pthreads条件变量
+锁机制基于信号signal
+
+获取GIL时候，检查锁，如果锁非空闲，休眠然后等待锁
+释放GIL时候，释放锁并且发送signal给其他线程
+
+
+
+
+由于线程的调度都是操作系统负责的，那么多个线程就会被调度到多核上同时执行，就会有CPU Battle的现象。
+
+就上图详细来说，线程t2被调度到CPU核上开始执行时候，拿不到GIL被block，t1释放GIL时候，通知t2来抢，但是这时候t1会被留在原先的CPU核上继续执行，GIL又被t1抢走了，t2继续block。
+t2: “怎么有种被调戏的感觉。。。”
+
+从代码大概是这样：
+
+
+ 1
+ 2
+ 3
+ 4
+ 5
+ 6
+ 7
+ 8
+ 9
+10
+11
+12
+
+
+if (interpreter_lock) {
+  /* Give another thread a chance */
+    if (PyThreadState_Swap(Null) != tstate) {
+      Py_FatalError(&#34;Ceval, tstate mix-up.&#34;)
+    }
+    PyThread_release_lock(interpreter_lock);
+
+    /* Other thread may run now.*/ 
+    /* there is no code here. */
+
+    PyThread_acquire_lock(interpreter_lock, 1);
+}
+
+
+从代码可以看出，这里最主要的问题是，从释放GIL到重新获取GIL，中间没有其他代码，这个过程只需要几纳秒，其他线程很难抢到GIL。
+这点在几个都是CPU-bound的线程上的影响就是，多线程比单线程执行更慢。
+在同时有CPU-bound和IO-bound的线程上影响就是，优先级倒置（Priority Inversion）。本来应该高优先级的IO-bound线程，会很难拿到GIL去执行。
+最主要的问题是，这里掺杂了两个相冲突的目标：
+
+对Python解释器来说，只想在单线程上执行，但是同时又不做任何和线程调度相关的事情。
+对操作系统来说，看到有多个线程，那么就调度到多个核上同时工作吧。
+
+3.4 Python3的GIL
+从python3.2开始，引入了新的GIL。
+
+新的GIL仍旧基于condition variable和signaling，但是和旧的完全不同，signal会显著减少
+新的线程切换是基于时间的（time-based）, 不像过去一样，是基于ticks的
+
+新GIL的设计基于几条原则：
+
+
+是否要进行线程切换取决于一个全局变量。
+
+
+1
+
+
+static volatile int gil_drop_request = 0;
+
+
+
+
+线程将一直运行，直到全局变量的值变为1
+
+
+全局变量变为1时候，线程必须释放GIL
+
+
+来看看这些怎么发生的？
+3.4.1 如果只有一个线程
+那么这个线程将会一直运行。
+3.4.2 如果有两个线程
+假设有两个线程t1和t2，初始状态t1拿到线程。
+那么t2将执行cv_wait(gil, TIMEOUT)，等待GIL被释放，这时候将会有两种情况
+
+t1主动释放GIL（sleep/io/等），t1给t2发送signal，t2开始执行
+t2等t1执行完时间片，把全局变量gil_drop_request置为1，然后继续执行cv_wait
+t1将不再执行，放弃GIL，并且发送signal通知自己已经放弃GIL
+t1将开始等待一个gotgil的signal，表明GIL已经被其他线程获取
+
+（默认的TIMEOUT时间是5ms）
+3.4.3影响
+
+新的GIL将允许线程在忽略其他线程以及IO优先级的情况下执行5ms
+一个CPU密集型线程将阻塞IO线程至少5ms
+这将会影响响应时间
+长时间执行的c/c&#43;&#43;扩展将影响线程切换，线程切换将不再是抢占式的
+
+四、GIL不是什么？
+
+在多线程编程中，即便有了GIL，你的代码仍然不一定是线程安全的，仍然需要其他同步原语
+
+五、总结
+毫无疑问，Python在时下这么流行是离不开GIL的：
+
+GIL让单线程执行的更快
+GIL让IO-bound的多线程执行的更快
+GIL让C扩展实现的多线程编程执行的更快😂
+实现及使用C扩展更加容易
+
+python选择了粗粒度的GIL了保证内存安全，其他语言选择细粒度的锁实现真正的多线程，反过来说，Python也利用GIL也把GC时候的Stop the world，分解成为了一个个更细粒度的内存回收，其实换个角度来说，也就是换成了一个个更细粒度的Stop the world吧。
+参考:
+
+What is the Python Global Interpreter Lock (GIL)?
+Python&rsquo;s Infamous GIL by Larry Hastings
+Inside the Python GIL
+Inside the New GIL
+"/>
+
+<!--[if lte IE 9]>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/classlist/1.1.20170427/classList.min.js"></script>
+<![endif]-->
+
+<!--[if lt IE 9]>
+  <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
+<![endif]-->
+
+</head>
+<body>
+  <div id="mobile-navbar" class="mobile-navbar">
+  <div class="mobile-header-logo">
+    <a href="/" class="logo">何时</a>
+  </div>
+  <div class="mobile-navbar-icon">
+    <span></span>
+    <span></span>
+    <span></span>
+  </div>
+</div>
+<nav id="mobile-menu" class="mobile-menu slideout-menu">
+  <ul class="mobile-menu-list">
+    <a href="/">
+        <li class="mobile-menu-item">Home</li>
+      </a><a href="/post/">
+        <li class="mobile-menu-item">Archives</li>
+      </a><a href="/post/about/">
+        <li class="mobile-menu-item">About</li>
+      </a><a href="/categories/">
+        <li class="mobile-menu-item">Categories</li>
+      </a>
+  </ul>
+</nav>
+  <div class="container" id="mobile-panel">
+    <header id="header" class="header">
+        <div class="logo-wrapper">
+  <a href="/" class="logo">何时</a>
+</div>
+
+<nav class="site-navbar">
+  <ul id="menu" class="menu">
+    <li class="menu-item">
+        <a class="menu-item-link" href="/">Home</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/">Archives</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/post/about/">About</a>
+      </li><li class="menu-item">
+        <a class="menu-item-link" href="/categories/">Categories</a>
+      </li>
+  </ul>
+</nav>
+    </header>
+
+    <main id="main" class="main">
+      <div class="content-wrapper">
+        <div id="content" class="content">
+          <article class="post">
+    
+    <header class="post-header">
+      <h1 class="post-title">Python Gil</h1>
+
+      <div class="post-meta">
+        <span class="post-time"> 2020-08-23 </span>
+        <div class="post-category">
+            <a href="/categories/python/"> python </a>
+            </div>
+        
+      </div>
+    </header>
+
+    
+    <div class="post-content">
+      <h1 id="一-什么是gil">一、 什么是GIL？</h1>
+<p>GIL的全称为<code>Global Interpreter Lock</code>，是CPython中的一种锁实现，目的是为了在同一时间，只允许一个线程控制解释器。</p>
+<h1 id="二为什么需要gil">二、为什么需要GIL？</h1>
+<p>Python的内存管理用的是引用计数，也就是每个对象都会有一个计数器来跟踪被引用的数量，如果计数器的值为0，则此对象占用的内存被释放。</p>
+<p>也就是这个引用计数的值需要避免竞态条件(race condition)，不能有多个线程同时修改对象引用计数器的值，否则会造成内存泄漏或者各种奇怪的bug。</p>
+<p>如果给每个对象都加锁的话，就很可能造成死锁（只有多个锁的情况下才可能造成死锁），同时影响单线程的性能。</p>
+<p>所以为了解决线程安全的内存管理这个问题，Guido的选择是，引入一个粗粒度的全局锁。</p>
+<p>其他没有GIL的语言(比如Java)，通过不同的GC方式，来解决这个问题，但是往往同时会引入其他技术来提升单进程的性能，比如JIT。</p>
+<h1 id="三gil的影响">三、GIL的影响</h1>
+<p>GIL的影响主要在多线程情况下，这里首先要明确几点：</p>
+<ol>
+<li>python的线程都是原生操作系统线程</li>
+<li>操作系统负责线程的调度</li>
+</ol>
+<p>这里从IO-bound和CPU-bound两种不同的线程分开说。</p>
+<h2 id="31-协作的io-bound线程">3.1 协作的IO-bound线程</h2>
+<p>在使用Python标注库的情况下进行IO操作时，比如网络请求、文件读写、数据库读写等，解释器会在IO操作之前释放GIL。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-C" data-lang="C"><span class="cm">/* s.connect((host, port)) method */</span>
+<span class="k">static</span> <span class="n">PyObject</span> <span class="o">*</span>
+<span class="nf">sock_connect</span><span class="p">(</span><span class="n">PySocketSockObject</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">addro</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">sock_addr_t</span> <span class="n">addrbuf</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">addrlen</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
+
+    <span class="cm">/* convert (host, port) tuple to C address */</span>
+    <span class="n">getsockaddrarg</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">addro</span><span class="p">,</span> <span class="n">SAS2SA</span><span class="p">(</span><span class="o">&amp;</span><span class="n">addrbuf</span><span class="p">)</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">addrlen</span><span class="p">)</span><span class="p">;</span>
+
+    <span class="n">Py_BEGIN_ALLOW_THREADS</span> <span class="c1">// 释放GIL
+</span><span class="c1"></span>    <span class="cm">/* Others thread may run now */</span>
+    <span class="cm">/* sleep(timeout) */</span>
+    <span class="cm">/* write(fd, buffer, size) */</span>
+    <span class="cm">/* recv(sock, buffer, size, flags) */</span>
+    <span class="n">Py_END_ALLOW_THREADS</span> <span class="c1">// 获取GIL
+</span><span class="c1"></span>
+    <span class="cm">/* error handling and so on .... */</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>总结来说：</p>
+<ol>
+<li>在进行IO时候释放GIL</li>
+<li>其他处于可执行状态的线程获得执行机会</li>
+</ol>
+<p>有点协作的意味，所以在IO密集型操作中使用多线程，性能并不会太低。</p>
+<h2 id="32-程序block无法处理系统signal">3.2 程序block，无法处理系统Signal</h2>
+<p>在Python2里面，如果一个线程从不进行任务IO，解释器每执行<code>100ticks</code>(1tick对应解释器中的一条指令)会进行一次<code>check</code>。</p>
+<p>每次执行<code>check</code>时候，会进行：</p>
+<ol>
+<li>在主线程中处理各种<code>signal</code></li>
+<li>release &amp; reacquire GIL</li>
+</ol>
+<p>可以看到，</p>
+<ol>
+<li>check的周期不是以时间为单位的</li>
+<li>在一个周期内可以阻塞任何事情，执行不同的指令耗时相差很大</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># test.py</span>
+<span class="k">def</span> <span class="nf">block_everything</span><span class="p">(</span><span class="p">)</span><span class="p">:</span>
+    <span class="n">nums</span> <span class="o">=</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1000000000</span><span class="p">)</span>
+    <span class="o">-</span><span class="mi">1</span> <span class="ow">in</span> <span class="n">nums</span>
+
+<span class="n">block_everything</span><span class="p">(</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>执行这个脚本，然后<code>ctrl+c</code>，会发现并不能使程序终止。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">dis</span><span class="o">.</span><span class="n">dis</span><span class="p">(</span><span class="n">block_everything</span><span class="p">)</span>
+      <span class="mi">0</span> <span class="n">LOAD_GLOBAL</span>              <span class="mi">0</span> <span class="p">(</span><span class="nb">xrange</span><span class="p">)</span>
+      <span class="mi">3</span> <span class="n">LOAD_CONST</span>               <span class="mi">1</span> <span class="p">(</span><span class="mi">1000000000</span><span class="p">)</span>
+      <span class="mi">6</span> <span class="n">CALL_FUNCTION</span>            <span class="mi">1</span>
+      <span class="mi">9</span> <span class="n">STORE_FAST</span>               <span class="mi">0</span> <span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+
+     <span class="mi">12</span> <span class="n">LOAD_CONST</span>               <span class="mi">2</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+     <span class="mi">15</span> <span class="n">LOAD_FAST</span>                <span class="mi">0</span> <span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+     <span class="mi">18</span> <span class="n">COMPARE_OP</span>               <span class="mi">6</span> <span class="p">(</span><span class="ow">in</span><span class="p">)</span>
+     <span class="mi">21</span> <span class="n">POP_TOP</span>
+     <span class="mi">22</span> <span class="n">LOAD_CONST</span>               <span class="mi">0</span> <span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+     <span class="mi">25</span> <span class="n">RETURN_VALUE</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中的原因是：</p>
+<ol>
+<li>其中一条指令（<code>COMPARE_OP</code>）耗时太久，而解释器在执行100ticks之后才会处理signals</li>
+<li>主进程被block，无法处理signal</li>
+</ol>
+<h2 id="33-python2的优先级倒置priority-inversion">3.3 Python2的优先级倒置（Priority Inversion）</h2>
+<p>先谈谈GIL的实现：</p>
+<ul>
+<li>GIL不仅仅是mutex</li>
+<li>具体实现（Unix）要么是匿名信号量，要么是Pthreads条件变量</li>
+<li>锁机制基于信号signal
+<ul>
+<li>获取GIL时候，检查锁，如果锁非空闲，休眠然后等待锁</li>
+<li>释放GIL时候，释放锁并且发送signal给其他线程</li>
+</ul>
+</li>
+</ul>
+<p><img src="/post/static/python-gil/gil-locking.jpg" alt="GIL"></p>
+<p>由于线程的调度都是操作系统负责的，那么多个线程就会被调度到多核上同时执行，就会有CPU Battle的现象。</p>
+<p><img src="/post/static/python-gil/CPU-battle.jpg" alt="CPU_battle"></p>
+<p>就上图详细来说，线程t2被调度到CPU核上开始执行时候，拿不到GIL被block，t1释放GIL时候，通知t2来抢，但是这时候t1会被留在原先的CPU核上继续执行，GIL又被t1抢走了，t2继续block。</p>
+<p>t2: “怎么有种被调戏的感觉。。。”</p>
+<p><img src="/post/static/python-gil/CPU-battle-summary.jpg" alt="CPU_battle_summary"></p>
+<p>从代码大概是这样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">if</span> <span class="p">(</span><span class="n">interpreter_lock</span><span class="p">)</span> <span class="p">{</span>
+  <span class="cm">/* Give another thread a chance */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">PyThreadState_Swap</span><span class="p">(</span><span class="n">Null</span><span class="p">)</span> <span class="o">!</span><span class="o">=</span> <span class="n">tstate</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">Py_FatalError</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">Ceval, tstate mix-up.</span><span class="s">&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">PyThread_release_lock</span><span class="p">(</span><span class="n">interpreter_lock</span><span class="p">)</span><span class="p">;</span>
+
+    <span class="cm">/* Other thread may run now.*/</span> 
+    <span class="cm">/* there is no code here. */</span>
+
+    <span class="n">PyThread_acquire_lock</span><span class="p">(</span><span class="n">interpreter_lock</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>从代码可以看出，这里最主要的问题是，从释放GIL到重新获取GIL，中间没有其他代码，这个过程只需要几纳秒，其他线程很难抢到GIL。</p>
+<p>这点在几个都是CPU-bound的线程上的影响就是，多线程比单线程执行更慢。
+在同时有CPU-bound和IO-bound的线程上影响就是，优先级倒置（Priority Inversion）。本来应该高优先级的IO-bound线程，会很难拿到GIL去执行。</p>
+<p>最主要的问题是，这里掺杂了两个相冲突的目标：</p>
+<ol>
+<li>对Python解释器来说，只想在单线程上执行，但是同时又不做任何和线程调度相关的事情。</li>
+<li>对操作系统来说，看到有多个线程，那么就调度到多个核上同时工作吧。</li>
+</ol>
+<h2 id="34-python3的gil">3.4 Python3的GIL</h2>
+<p>从python3.2开始，引入了新的GIL。</p>
+<ol>
+<li>新的GIL仍旧基于<code>condition variable</code>和<code>signaling</code>，但是和旧的完全不同，signal会显著减少</li>
+<li>新的线程切换是基于时间的（<code>time-based</code>）, 不像过去一样，是基于ticks的</li>
+</ol>
+<p>新GIL的设计基于几条原则：</p>
+<ol>
+<li>
+<p>是否要进行线程切换取决于一个全局变量。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">static</span> <span class="k">volatile</span> <span class="kt">int</span> <span class="n">gil_drop_request</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>线程将一直运行，直到全局变量的值变为1</p>
+</li>
+<li>
+<p>全局变量变为1时候，线程必须释放GIL</p>
+</li>
+</ol>
+<p>来看看这些怎么发生的？</p>
+<h3 id="341-如果只有一个线程">3.4.1 如果只有一个线程</h3>
+<p>那么这个线程将会一直运行。</p>
+<h3 id="342-如果有两个线程">3.4.2 如果有两个线程</h3>
+<p>假设有两个线程t1和t2，初始状态t1拿到线程。</p>
+<p>那么t2将执行cv_wait(gil, TIMEOUT)，等待GIL被释放，这时候将会有两种情况</p>
+<ol>
+<li>t1主动释放GIL（sleep/io/等），t1给t2发送signal，t2开始执行</li>
+<li>t2等t1执行完时间片，把全局变量gil_drop_request置为1，然后继续执行cv_wait</li>
+<li>t1将不再执行，放弃GIL，并且发送signal通知自己已经放弃GIL</li>
+<li>t1将开始等待一个<code>gotgil</code>的signal，表明GIL已经被其他线程获取</li>
+</ol>
+<p>（默认的TIMEOUT时间是5ms）</p>
+<h3 id="343影响">3.4.3影响</h3>
+<ol>
+<li>新的GIL将允许线程在忽略其他线程以及IO优先级的情况下执行5ms</li>
+<li>一个CPU密集型线程将阻塞IO线程至少5ms</li>
+<li>这将会影响响应时间</li>
+<li>长时间执行的c/c++扩展将影响线程切换，线程切换将不再是抢占式的</li>
+</ol>
+<h1 id="四gil不是什么">四、GIL不是什么？</h1>
+<ol>
+<li>在多线程编程中，即便有了GIL，你的代码仍然不一定是线程安全的，仍然需要其他同步原语</li>
+</ol>
+<h1 id="五总结">五、总结</h1>
+<p>毫无疑问，Python在时下这么流行是离不开GIL的：</p>
+<ol>
+<li>GIL让单线程执行的更快</li>
+<li>GIL让IO-bound的多线程执行的更快</li>
+<li>GIL让C扩展实现的多线程编程执行的更快😂</li>
+<li>实现及使用C扩展更加容易</li>
+</ol>
+<p>python选择了粗粒度的GIL了保证内存安全，其他语言选择细粒度的锁实现真正的多线程，反过来说，Python也利用GIL也把GC时候的<code>Stop the world</code>，分解成为了一个个更细粒度的内存回收，其实换个角度来说，也就是换成了一个个更细粒度的<code>Stop the world</code>吧。</p>
+<p>参考:</p>
+<ul>
+<li><a href="https://realpython.com/python-gil/">What is the Python Global Interpreter Lock (GIL)?</a></li>
+<li><a href="https://www.youtube.com/watch?v=KVKufdTphKs">Python&rsquo;s Infamous GIL by Larry Hastings</a></li>
+<li><a href="http://www.dabeaz.com/python/GIL.pdf">Inside the Python GIL</a></li>
+<li><a href="http://www.dabeaz.com/python/NewGIL.pdf">Inside the New GIL</a></li>
+</ul>
+    </div>
+
+    
+<footer class="post-footer">
+      
+      <nav class="post-nav">
+        <a class="prev" href="/post/things-about-lose-weight/">
+            <i class="iconfont icon-left"></i>
+            <span class="prev-text nav-default">减肥</span>
+            <span class="prev-text nav-mobile">上一篇</span>
+          </a>
+        <a class="next" href="/post/process-usage-in-gunicorn/">
+            <span class="next-text nav-default">gunicorn中的进程管理</span>
+            <span class="next-text nav-mobile">下一篇</span>
+            <i class="iconfont icon-right"></i>
+          </a>
+      </nav>
+    </footer>
+  </article>
+        </div>
+        <div id="gitalk-container"></div>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.css" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/gitalk@1/dist/gitalk.min.js" crossorigin="anonymous"></script>
+    <script type="text/javascript">
+      var gitalk = new Gitalk({
+        id: '2020-08-23 22:19:58 \x2b0800 CST',
+        title: 'Python Gil',
+        clientID: 'f7b95d0d35cab20e663a',
+        clientSecret: 'f1f38e0bc508a071a67b513fcf88485e73790cdc',
+        repo: 'blog-comments',
+        owner: 'ZmN5',
+        admin: ['ZmN5'],
+        body: decodeURI(location.href)
+      });
+      gitalk.render('gitalk-container');
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://github.com/gitalk/gitalk">comments powered by gitalk.</a></noscript>
+
+  
+
+  
+
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="social-links">
+      <a href="cangyufu@gmail.com" class="iconfont icon-email" title="email"></a>
+      <a href="https://github.com/zmn5" class="iconfont icon-github" title="github"></a>
+  <a href="https://ZmN5.github.io/index.xml" type="application/rss+xml" class="iconfont icon-rss" title="rss"></a>
+</div>
+
+<div class="copyright">
+    <div style="display: none;">
+  <span class="power-by">
+    由 <a class="hexo-link" href="https://gohugo.io">Hugo</a> 强力驱动
+  </span>
+  <span class="division">|</span>
+  <span class="theme-info">
+    主题 - 
+    <a class="theme-link" href="https://github.com/olOwOlo/hugo-theme-even">Even</a>
+  </span>
+    </div>
+
+  
+
+  <span class="copyright-year">
+    &copy; 
+    2017 - 
+    2020
+    <span class="author">HeShi</span>
+  </span>
+</div>
+    </footer>
+
+    <div class="back-to-top" id="back-to-top">
+      <i class="iconfont icon-up"></i>
+    </div>
+  </div>
+  
+  <script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/slideout@1.0.1/dist/slideout.min.js" integrity="sha256-t+zJ/g8/KXIJMjSVQdnibt4dlaDxc9zXr/9oNPeWqdg=" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@3.1.20/dist/jquery.fancybox.min.js" integrity="sha256-XVLffZaxoWfGUEbdzuLi7pwaUJv1cecsQJQqGLe7axY=" crossorigin="anonymous"></script>
+<script type="text/javascript" src="/dist/even.26188efa.min.js"></script>
+
+
+
+
+
+
+
+
+</body>
+</html>

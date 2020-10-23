@@ -44,7 +44,7 @@
 <meta property="og:description" content="enjoy coding, enjoy life." />
 <meta property="og:type" content="website" />
 <meta property="og:url" content="https://ZmN5.github.io/" />
-<meta property="og:updated_time" content="2020-04-04T20:13:41+08:00" />
+<meta property="og:updated_time" content="2020-10-23T18:12:42+08:00" />
 <meta itemprop="name" content="何时">
 <meta itemprop="description" content="enjoy coding, enjoy life."><meta name="twitter:card" content="summary"/>
 <meta name="twitter:title" content="何时"/>
@@ -111,6 +111,320 @@
           <section id="posts" class="posts">
     <article class="post">
   <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/things-about-lose-weight/">减肥</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2020-10-23 </span>
+      <div class="post-category">
+          <a href="/categories/%E7%94%9F%E6%B4%BB/"> 生活 </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <p>我又开始减肥了，已经数不清是第几次了。这次目标140斤，仍然相信这次目标肯定可以达成。</p>
+<p>大致方案是：</p>
+<ol>
+<li>早上吃燕麦、牛奶、或者全麦面包的组合</li>
+<li>中午晚上吃草</li>
+<li>晚上下班骑车回家</li>
+<li>每周末吃一顿好的</li>
+</ol>
+<p>总之原则就是，远离碳水化合物。</p>
+<p>回想一下毕业三年到现在，想要突破的几件事情都需要极大坚持才能做到了：</p>
+<ol>
+<li>减肥，原因很明显，已经开始影响健康了</li>
+<li>学英语，这次目标主要是听、说达到熟练吧，还好这次有我对象辅导</li>
+<li>技术更进一步，要学的东西太多了</li>
+</ol>
+<p>加油！</p>
+    </div>
+    <div class="read-more">
+      <a href="/post/things-about-lose-weight/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
+    <h1 class="post-title"><a class="post-link" href="/post/python-gil/">Python Gil</a></h1>
+    <div class="post-meta">
+      <span class="post-time"> 2020-08-23 </span>
+      <div class="post-category">
+          <a href="/categories/python/"> python </a>
+          </div>
+    </div>
+  </header>
+  
+  <div class="post-content">
+    <div class="post-summary">
+      <h1 id="一-什么是gil">一、 什么是GIL？</h1>
+<p>GIL的全称为<code>Global Interpreter Lock</code>，是CPython中的一种锁实现，目的是为了在同一时间，只允许一个线程控制解释器。</p>
+<h1 id="二为什么需要gil">二、为什么需要GIL？</h1>
+<p>Python的内存管理用的是引用计数，也就是每个对象都会有一个计数器来跟踪被引用的数量，如果计数器的值为0，则此对象占用的内存被释放。</p>
+<p>也就是这个引用计数的值需要避免竞态条件(race condition)，不能有多个线程同时修改对象引用计数器的值，否则会造成内存泄漏或者各种奇怪的bug。</p>
+<p>如果给每个对象都加锁的话，就很可能造成死锁（只有多个锁的情况下才可能造成死锁），同时影响单线程的性能。</p>
+<p>所以为了解决线程安全的内存管理这个问题，Guido的选择是，引入一个粗粒度的全局锁。</p>
+<p>其他没有GIL的语言(比如Java)，通过不同的GC方式，来解决这个问题，但是往往同时会引入其他技术来提升单进程的性能，比如JIT。</p>
+<h1 id="三gil的影响">三、GIL的影响</h1>
+<p>GIL的影响主要在多线程情况下，这里首先要明确几点：</p>
+<ol>
+<li>python的线程都是原生操作系统线程</li>
+<li>操作系统负责线程的调度</li>
+</ol>
+<p>这里从IO-bound和CPU-bound两种不同的线程分开说。</p>
+<h2 id="31-协作的io-bound线程">3.1 协作的IO-bound线程</h2>
+<p>在使用Python标注库的情况下进行IO操作时，比如网络请求、文件读写、数据库读写等，解释器会在IO操作之前释放GIL。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span><span class="lnt">13
+</span><span class="lnt">14
+</span><span class="lnt">15
+</span><span class="lnt">16
+</span><span class="lnt">17
+</span><span class="lnt">18
+</span><span class="lnt">19
+</span><span class="lnt">20
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-C" data-lang="C"><span class="cm">/* s.connect((host, port)) method */</span>
+<span class="k">static</span> <span class="n">PyObject</span> <span class="o">*</span>
+<span class="nf">sock_connect</span><span class="p">(</span><span class="n">PySocketSockObject</span> <span class="o">*</span><span class="n">s</span><span class="p">,</span> <span class="n">PyObject</span> <span class="o">*</span><span class="n">addro</span><span class="p">)</span>
+<span class="p">{</span>
+    <span class="n">sock_addr_t</span> <span class="n">addrbuf</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">addrlen</span><span class="p">;</span>
+    <span class="kt">int</span> <span class="n">res</span><span class="p">;</span>
+
+    <span class="cm">/* convert (host, port) tuple to C address */</span>
+    <span class="n">getsockaddrarg</span><span class="p">(</span><span class="n">s</span><span class="p">,</span> <span class="n">addro</span><span class="p">,</span> <span class="n">SAS2SA</span><span class="p">(</span><span class="o">&amp;</span><span class="n">addrbuf</span><span class="p">)</span><span class="p">,</span> <span class="o">&amp;</span><span class="n">addrlen</span><span class="p">)</span><span class="p">;</span>
+
+    <span class="n">Py_BEGIN_ALLOW_THREADS</span> <span class="c1">// 释放GIL
+</span><span class="c1"></span>    <span class="cm">/* Others thread may run now */</span>
+    <span class="cm">/* sleep(timeout) */</span>
+    <span class="cm">/* write(fd, buffer, size) */</span>
+    <span class="cm">/* recv(sock, buffer, size, flags) */</span>
+    <span class="n">Py_END_ALLOW_THREADS</span> <span class="c1">// 获取GIL
+</span><span class="c1"></span>
+    <span class="cm">/* error handling and so on .... */</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>总结来说：</p>
+<ol>
+<li>在进行IO时候释放GIL</li>
+<li>其他处于可执行状态的线程获得执行机会</li>
+</ol>
+<p>有点协作的意味，所以在IO密集型操作中使用多线程，性能并不会太低。</p>
+<h2 id="32-程序block无法处理系统signal">3.2 程序block，无法处理系统Signal</h2>
+<p>在Python2里面，如果一个线程从不进行任务IO，解释器每执行<code>100ticks</code>(1tick对应解释器中的一条指令)会进行一次<code>check</code>。</p>
+<p>每次执行<code>check</code>时候，会进行：</p>
+<ol>
+<li>在主线程中处理各种<code>signal</code></li>
+<li>release &amp; reacquire GIL</li>
+</ol>
+<p>可以看到，</p>
+<ol>
+<li>check的周期不是以时间为单位的</li>
+<li>在一个周期内可以阻塞任何事情，执行不同的指令耗时相差很大</li>
+</ol>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span><span class="lnt">2
+</span><span class="lnt">3
+</span><span class="lnt">4
+</span><span class="lnt">5
+</span><span class="lnt">6
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="c1"># test.py</span>
+<span class="k">def</span> <span class="nf">block_everything</span><span class="p">(</span><span class="p">)</span><span class="p">:</span>
+    <span class="n">nums</span> <span class="o">=</span> <span class="nb">xrange</span><span class="p">(</span><span class="mi">1000000000</span><span class="p">)</span>
+    <span class="o">-</span><span class="mi">1</span> <span class="ow">in</span> <span class="n">nums</span>
+
+<span class="n">block_everything</span><span class="p">(</span><span class="p">)</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>执行这个脚本，然后<code>ctrl+c</code>，会发现并不能使程序终止。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-python" data-lang="python"><span class="n">dis</span><span class="o">.</span><span class="n">dis</span><span class="p">(</span><span class="n">block_everything</span><span class="p">)</span>
+      <span class="mi">0</span> <span class="n">LOAD_GLOBAL</span>              <span class="mi">0</span> <span class="p">(</span><span class="nb">xrange</span><span class="p">)</span>
+      <span class="mi">3</span> <span class="n">LOAD_CONST</span>               <span class="mi">1</span> <span class="p">(</span><span class="mi">1000000000</span><span class="p">)</span>
+      <span class="mi">6</span> <span class="n">CALL_FUNCTION</span>            <span class="mi">1</span>
+      <span class="mi">9</span> <span class="n">STORE_FAST</span>               <span class="mi">0</span> <span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+
+     <span class="mi">12</span> <span class="n">LOAD_CONST</span>               <span class="mi">2</span> <span class="p">(</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+     <span class="mi">15</span> <span class="n">LOAD_FAST</span>                <span class="mi">0</span> <span class="p">(</span><span class="n">nums</span><span class="p">)</span>
+     <span class="mi">18</span> <span class="n">COMPARE_OP</span>               <span class="mi">6</span> <span class="p">(</span><span class="ow">in</span><span class="p">)</span>
+     <span class="mi">21</span> <span class="n">POP_TOP</span>
+     <span class="mi">22</span> <span class="n">LOAD_CONST</span>               <span class="mi">0</span> <span class="p">(</span><span class="bp">None</span><span class="p">)</span>
+     <span class="mi">25</span> <span class="n">RETURN_VALUE</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>其中的原因是：</p>
+<ol>
+<li>其中一条指令（<code>COMPARE_OP</code>）耗时太久，而解释器在执行100ticks之后才会处理signals</li>
+<li>主进程被block，无法处理signal</li>
+</ol>
+<h2 id="33-python2的优先级倒置priority-inversion">3.3 Python2的优先级倒置（Priority Inversion）</h2>
+<p>先谈谈GIL的实现：</p>
+<ul>
+<li>GIL不仅仅是mutex</li>
+<li>具体实现（Unix）要么是匿名信号量，要么是Pthreads条件变量</li>
+<li>锁机制基于信号signal
+<ul>
+<li>获取GIL时候，检查锁，如果锁非空闲，休眠然后等待锁</li>
+<li>释放GIL时候，释放锁并且发送signal给其他线程</li>
+</ul>
+</li>
+</ul>
+<p><img src="/post/static/python-gil/gil-locking.jpg" alt="GIL"></p>
+<p>由于线程的调度都是操作系统负责的，那么多个线程就会被调度到多核上同时执行，就会有CPU Battle的现象。</p>
+<p><img src="/post/static/python-gil/CPU-battle.jpg" alt="CPU_battle"></p>
+<p>就上图详细来说，线程t2被调度到CPU核上开始执行时候，拿不到GIL被block，t1释放GIL时候，通知t2来抢，但是这时候t1会被留在原先的CPU核上继续执行，GIL又被t1抢走了，t2继续block。</p>
+<p>t2: “怎么有种被调戏的感觉。。。”</p>
+<p><img src="/post/static/python-gil/CPU-battle-summary.jpg" alt="CPU_battle_summary"></p>
+<p>从代码大概是这样：</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt"> 1
+</span><span class="lnt"> 2
+</span><span class="lnt"> 3
+</span><span class="lnt"> 4
+</span><span class="lnt"> 5
+</span><span class="lnt"> 6
+</span><span class="lnt"> 7
+</span><span class="lnt"> 8
+</span><span class="lnt"> 9
+</span><span class="lnt">10
+</span><span class="lnt">11
+</span><span class="lnt">12
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">if</span> <span class="p">(</span><span class="n">interpreter_lock</span><span class="p">)</span> <span class="p">{</span>
+  <span class="cm">/* Give another thread a chance */</span>
+    <span class="k">if</span> <span class="p">(</span><span class="n">PyThreadState_Swap</span><span class="p">(</span><span class="n">Null</span><span class="p">)</span> <span class="o">!</span><span class="o">=</span> <span class="n">tstate</span><span class="p">)</span> <span class="p">{</span>
+      <span class="n">Py_FatalError</span><span class="p">(</span><span class="sa"></span><span class="s">&#34;</span><span class="s">Ceval, tstate mix-up.</span><span class="s">&#34;</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">PyThread_release_lock</span><span class="p">(</span><span class="n">interpreter_lock</span><span class="p">)</span><span class="p">;</span>
+
+    <span class="cm">/* Other thread may run now.*/</span> 
+    <span class="cm">/* there is no code here. */</span>
+
+    <span class="n">PyThread_acquire_lock</span><span class="p">(</span><span class="n">interpreter_lock</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span><span class="p">;</span>
+<span class="p">}</span>
+</code></pre></td></tr></table>
+</div>
+</div><p>从代码可以看出，这里最主要的问题是，从释放GIL到重新获取GIL，中间没有其他代码，这个过程只需要几纳秒，其他线程很难抢到GIL。</p>
+<p>这点在几个都是CPU-bound的线程上的影响就是，多线程比单线程执行更慢。
+在同时有CPU-bound和IO-bound的线程上影响就是，优先级倒置（Priority Inversion）。本来应该高优先级的IO-bound线程，会很难拿到GIL去执行。</p>
+<p>最主要的问题是，这里掺杂了两个相冲突的目标：</p>
+<ol>
+<li>对Python解释器来说，只想在单线程上执行，但是同时又不做任何和线程调度相关的事情。</li>
+<li>对操作系统来说，看到有多个线程，那么就调度到多个核上同时工作吧。</li>
+</ol>
+<h2 id="34-python3的gil">3.4 Python3的GIL</h2>
+<p>从python3.2开始，引入了新的GIL。</p>
+<ol>
+<li>新的GIL仍旧基于<code>condition variable</code>和<code>signaling</code>，但是和旧的完全不同，signal会显著减少</li>
+<li>新的线程切换是基于时间的（<code>time-based</code>）, 不像过去一样，是基于ticks的</li>
+</ol>
+<p>新GIL的设计基于几条原则：</p>
+<ol>
+<li>
+<p>是否要进行线程切换取决于一个全局变量。</p>
+<div class="highlight"><div class="chroma">
+<table class="lntable"><tr><td class="lntd">
+<pre class="chroma"><code><span class="lnt">1
+</span></code></pre></td>
+<td class="lntd">
+<pre class="chroma"><code class="language-c" data-lang="c"><span class="k">static</span> <span class="k">volatile</span> <span class="kt">int</span> <span class="n">gil_drop_request</span> <span class="o">=</span> <span class="mi">0</span><span class="p">;</span>
+</code></pre></td></tr></table>
+</div>
+</div></li>
+<li>
+<p>线程将一直运行，直到全局变量的值变为1</p>
+</li>
+<li>
+<p>全局变量变为1时候，线程必须释放GIL</p>
+</li>
+</ol>
+<p>来看看这些怎么发生的？</p>
+<h3 id="341-如果只有一个线程">3.4.1 如果只有一个线程</h3>
+<p>那么这个线程将会一直运行。</p>
+<h3 id="342-如果有两个线程">3.4.2 如果有两个线程</h3>
+<p>假设有两个线程t1和t2，初始状态t1拿到线程。</p>
+<p>那么t2将执行cv_wait(gil, TIMEOUT)，等待GIL被释放，这时候将会有两种情况</p>
+<ol>
+<li>t1主动释放GIL（sleep/io/等），t1给t2发送signal，t2开始执行</li>
+<li>t2等t1执行完时间片，把全局变量gil_drop_request置为1，然后继续执行cv_wait</li>
+<li>t1将不再执行，放弃GIL，并且发送signal通知自己已经放弃GIL</li>
+<li>t1将开始等待一个<code>gotgil</code>的signal，表明GIL已经被其他线程获取</li>
+</ol>
+<p>（默认的TIMEOUT时间是5ms）</p>
+<h3 id="343影响">3.4.3影响</h3>
+<ol>
+<li>新的GIL将允许线程在忽略其他线程以及IO优先级的情况下执行5ms</li>
+<li>一个CPU密集型线程将阻塞IO线程至少5ms</li>
+<li>这将会影响响应时间</li>
+<li>长时间执行的c/c++扩展将影响线程切换，线程切换将不再是抢占式的</li>
+</ol>
+<h1 id="四gil不是什么">四、GIL不是什么？</h1>
+<ol>
+<li>在多线程编程中，即便有了GIL，你的代码仍然不一定是线程安全的，仍然需要其他同步原语</li>
+</ol>
+<h1 id="五总结">五、总结</h1>
+<p>毫无疑问，Python在时下这么流行是离不开GIL的：</p>
+<ol>
+<li>GIL让单线程执行的更快</li>
+<li>GIL让IO-bound的多线程执行的更快</li>
+<li>GIL让C扩展实现的多线程编程执行的更快😂</li>
+<li>实现及使用C扩展更加容易</li>
+</ol>
+<p>python选择了粗粒度的GIL了保证内存安全，其他语言选择细粒度的锁实现真正的多线程，反过来说，Python也利用GIL也把GC时候的<code>Stop the world</code>，分解成为了一个个更细粒度的内存回收，其实换个角度来说，也就是换成了一个个更细粒度的<code>Stop the world</code>吧。</p>
+<p>参考:</p>
+<ul>
+<li><a href="https://realpython.com/python-gil/">What is the Python Global Interpreter Lock (GIL)?</a></li>
+<li><a href="https://www.youtube.com/watch?v=KVKufdTphKs">Python&rsquo;s Infamous GIL by Larry Hastings</a></li>
+<li><a href="http://www.dabeaz.com/python/GIL.pdf">Inside the Python GIL</a></li>
+<li><a href="http://www.dabeaz.com/python/NewGIL.pdf">Inside the New GIL</a></li>
+</ul>
+    </div>
+    <div class="read-more">
+      <a href="/post/python-gil/" class="read-more-link">阅读更多</a>
+    </div>
+  </div>
+</article>
+
+    <article class="post">
+  <header class="post-header">
     <h1 class="post-title"><a class="post-link" href="/post/process-usage-in-gunicorn/">gunicorn中的进程管理</a></h1>
     <div class="post-meta">
       <span class="post-time"> 2020-04-04 </span>
@@ -166,120 +480,6 @@
     </div>
     <div class="read-more">
       <a href="/post/2019-summary/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/learned-from-ein/">从上家公司学到的</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2019-07-23 </span>
-      <div class="post-category">
-          <a href="/categories/%E6%80%BB%E7%BB%93/"> 总结 </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      从爱因离开快一个月了，感觉有些东西需要总结一下了。 坚持不写code smell的代码 祖师爷建议的一些规范，pep8/gofmt/isort之类
-    </div>
-    <div class="read-more">
-      <a href="/post/learned-from-ein/" class="read-more-link">阅读更多</a>
-    </div>
-  </div>
-</article>
-
-    <article class="post">
-  <header class="post-header">
-    <h1 class="post-title"><a class="post-link" href="/post/new-env/">初始化开发环境</a></h1>
-    <div class="post-meta">
-      <span class="post-time"> 2019-06-30 </span>
-      <div class="post-category">
-          <a href="/categories/%E5%B7%A5%E5%85%B7/"> 工具 </a>
-          </div>
-    </div>
-  </header>
-  
-  <div class="post-content">
-    <div class="post-summary">
-      <p>最近入职新公司，用自己的电脑没有补贴，那当然用公司电脑喽，所以所有的环境都要重装。通过这次重装确认了几个对我来说，本地开发一定会用到的软件。</p>
-<ol>
-<li>
-<p>brew</p>
-<ol>
-<li>emmm，这个就不解释了，在mac下时必备的</li>
-</ol>
-</li>
-<li>
-<p>git</p>
-<ol>
-<li>brew install git</li>
-</ol>
-</li>
-<li>
-<p>Tmux</p>
-<ol>
-<li>安装： brew install tmux</li>
-<li>安装tpm：https://github.com/tmux-plugins/tpm</li>
-<li>配置参考：https://github.com/zmn5/my-config/blob/master/dot.tmux.conf</li>
-</ol>
-</li>
-<li>
-<p>Vim8</p>
-<ol>
-<li>brew reinstall vim &ndash;with-python3 &ndash;with-luajit</li>
-<li>安装插件管理工具Plug: <a href="https://github.com/junegunn/vim-plug">https://github.com/junegunn/vim-plug</a></li>
-<li>安装<code>universal-tags</code>:  <a href="https://github.com/universal-ctags/ctags">https://github.com/universal-ctags/ctags</a></li>
-<li>安装插件： <a href="https://github.com/zmn5/my-config/blob/master/dot.vimrc">https://github.com/zmn5/my-config/blob/master/dot.vimrc</a></li>
-</ol>
-</li>
-<li>
-<p>zsh/oh-my-zsh</p>
-<ol>
-<li>安装<code>zsh</code>: <a href="https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH">https://github.com/robbyrussell/oh-my-zsh/wiki/Installing-ZSH</a></li>
-<li>安装<code>oh-my-zsh</code>: <a href="https://github.com/robbyrussell/oh-my-zsh">https://github.com/robbyrussell/oh-my-zsh</a></li>
-<li>安装包管理器<code>zplug</code>： brew install zplug</li>
-</ol>
-</li>
-<li>
-<p>安装fd：</p>
-<ol>
-<li>安装： <a href="https://github.com/sharkdp/fd">https://github.com/sharkdp/fd</a></li>
-</ol>
-</li>
-<li>
-<p>fzf</p>
-<ol>
-<li>安装： brew install fzf</li>
-<li>$(brew &ndash;prefix)/opt/fzf/install</li>
-</ol>
-</li>
-<li>
-<p>ag</p>
-<ol>
-<li>安装参考： <a href="https://github.com/ggreer/the_silver_searcher">https://github.com/ggreer/the_silver_searcher</a></li>
-</ol>
-</li>
-<li>
-<p>z jump</p>
-<ol>
-<li>安装参考： <a href="https://github.com/rupa/z">https://github.com/rupa/z</a></li>
-</ol>
-</li>
-<li>
-<p>vscode</p>
-<p>写前端代码时候，感觉用vim还是难受</p>
-</li>
-<li>
-<p>typora</p>
-<p>试过很多个<code>markdown</code>编辑工具，感觉还是这个比较好用</p>
-</li>
-</ol>
-    </div>
-    <div class="read-more">
-      <a href="/post/new-env/" class="read-more-link">阅读更多</a>
     </div>
   </div>
 </article>

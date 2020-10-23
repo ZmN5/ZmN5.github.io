@@ -6,10 +6,300 @@
     <description>Recent content in Posts on 何时</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en</language>
-    <lastBuildDate>Sat, 04 Apr 2020 20:13:41 +0800</lastBuildDate>
+    <lastBuildDate>Fri, 23 Oct 2020 18:12:42 +0800</lastBuildDate>
     
 	<atom:link href="https://ZmN5.github.io/post/index.xml" rel="self" type="application/rss+xml" />
     
+    
+    <item>
+      <title>减肥</title>
+      <link>https://ZmN5.github.io/post/things-about-lose-weight/</link>
+      <pubDate>Fri, 23 Oct 2020 18:12:42 +0800</pubDate>
+      
+      <guid>https://ZmN5.github.io/post/things-about-lose-weight/</guid>
+      <description>&lt;p&gt;我又开始减肥了，已经数不清是第几次了。这次目标140斤，仍然相信这次目标肯定可以达成。&lt;/p&gt;
+&lt;p&gt;大致方案是：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;早上吃燕麦、牛奶、或者全麦面包的组合&lt;/li&gt;
+&lt;li&gt;中午晚上吃草&lt;/li&gt;
+&lt;li&gt;晚上下班骑车回家&lt;/li&gt;
+&lt;li&gt;每周末吃一顿好的&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;总之原则就是，远离碳水化合物。&lt;/p&gt;
+&lt;p&gt;回想一下毕业三年到现在，想要突破的几件事情都需要极大坚持才能做到了：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;减肥，原因很明显，已经开始影响健康了&lt;/li&gt;
+&lt;li&gt;学英语，这次目标主要是听、说达到熟练吧，还好这次有我对象辅导&lt;/li&gt;
+&lt;li&gt;技术更进一步，要学的东西太多了&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;加油！&lt;/p&gt;</description>
+    </item>
+    
+    <item>
+      <title>Python Gil</title>
+      <link>https://ZmN5.github.io/post/python-gil/</link>
+      <pubDate>Sun, 23 Aug 2020 22:19:58 +0800</pubDate>
+      
+      <guid>https://ZmN5.github.io/post/python-gil/</guid>
+      <description>&lt;h1 id=&#34;一-什么是gil&#34;&gt;一、 什么是GIL？&lt;/h1&gt;
+&lt;p&gt;GIL的全称为&lt;code&gt;Global Interpreter Lock&lt;/code&gt;，是CPython中的一种锁实现，目的是为了在同一时间，只允许一个线程控制解释器。&lt;/p&gt;
+&lt;h1 id=&#34;二为什么需要gil&#34;&gt;二、为什么需要GIL？&lt;/h1&gt;
+&lt;p&gt;Python的内存管理用的是引用计数，也就是每个对象都会有一个计数器来跟踪被引用的数量，如果计数器的值为0，则此对象占用的内存被释放。&lt;/p&gt;
+&lt;p&gt;也就是这个引用计数的值需要避免竞态条件(race condition)，不能有多个线程同时修改对象引用计数器的值，否则会造成内存泄漏或者各种奇怪的bug。&lt;/p&gt;
+&lt;p&gt;如果给每个对象都加锁的话，就很可能造成死锁（只有多个锁的情况下才可能造成死锁），同时影响单线程的性能。&lt;/p&gt;
+&lt;p&gt;所以为了解决线程安全的内存管理这个问题，Guido的选择是，引入一个粗粒度的全局锁。&lt;/p&gt;
+&lt;p&gt;其他没有GIL的语言(比如Java)，通过不同的GC方式，来解决这个问题，但是往往同时会引入其他技术来提升单进程的性能，比如JIT。&lt;/p&gt;
+&lt;h1 id=&#34;三gil的影响&#34;&gt;三、GIL的影响&lt;/h1&gt;
+&lt;p&gt;GIL的影响主要在多线程情况下，这里首先要明确几点：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;python的线程都是原生操作系统线程&lt;/li&gt;
+&lt;li&gt;操作系统负责线程的调度&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;这里从IO-bound和CPU-bound两种不同的线程分开说。&lt;/p&gt;
+&lt;h2 id=&#34;31-协作的io-bound线程&#34;&gt;3.1 协作的IO-bound线程&lt;/h2&gt;
+&lt;p&gt;在使用Python标注库的情况下进行IO操作时，比如网络请求、文件读写、数据库读写等，解释器会在IO操作之前释放GIL。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;13
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;14
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;15
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;16
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;17
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;18
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;19
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;20
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-C&#34; data-lang=&#34;C&#34;&gt;&lt;span class=&#34;cm&#34;&gt;/* s.connect((host, port)) method */&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;PyObject&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;
+&lt;span class=&#34;nf&#34;&gt;sock_connect&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PySocketSockObject&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;PyObject&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;*&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;addro&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;sock_addr_t&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;addrbuf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;addrlen&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+    &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;res&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+
+    &lt;span class=&#34;cm&#34;&gt;/* convert (host, port) tuple to C address */&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;getsockaddrarg&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;addro&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;SAS2SA&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;addrbuf&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;&amp;amp;&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;addrlen&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+
+    &lt;span class=&#34;n&#34;&gt;Py_BEGIN_ALLOW_THREADS&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 释放GIL
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;    &lt;span class=&#34;cm&#34;&gt;/* Others thread may run now */&lt;/span&gt;
+    &lt;span class=&#34;cm&#34;&gt;/* sleep(timeout) */&lt;/span&gt;
+    &lt;span class=&#34;cm&#34;&gt;/* write(fd, buffer, size) */&lt;/span&gt;
+    &lt;span class=&#34;cm&#34;&gt;/* recv(sock, buffer, size, flags) */&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;Py_END_ALLOW_THREADS&lt;/span&gt; &lt;span class=&#34;c1&#34;&gt;// 获取GIL
+&lt;/span&gt;&lt;span class=&#34;c1&#34;&gt;&lt;/span&gt;
+    &lt;span class=&#34;cm&#34;&gt;/* error handling and so on .... */&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;总结来说：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;在进行IO时候释放GIL&lt;/li&gt;
+&lt;li&gt;其他处于可执行状态的线程获得执行机会&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;有点协作的意味，所以在IO密集型操作中使用多线程，性能并不会太低。&lt;/p&gt;
+&lt;h2 id=&#34;32-程序block无法处理系统signal&#34;&gt;3.2 程序block，无法处理系统Signal&lt;/h2&gt;
+&lt;p&gt;在Python2里面，如果一个线程从不进行任务IO，解释器每执行&lt;code&gt;100ticks&lt;/code&gt;(1tick对应解释器中的一条指令)会进行一次&lt;code&gt;check&lt;/code&gt;。&lt;/p&gt;
+&lt;p&gt;每次执行&lt;code&gt;check&lt;/code&gt;时候，会进行：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;在主线程中处理各种&lt;code&gt;signal&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;release &amp;amp; reacquire GIL&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;可以看到，&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;check的周期不是以时间为单位的&lt;/li&gt;
+&lt;li&gt;在一个周期内可以阻塞任何事情，执行不同的指令耗时相差很大&lt;/li&gt;
+&lt;/ol&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;c1&#34;&gt;# test.py&lt;/span&gt;
+&lt;span class=&#34;k&#34;&gt;def&lt;/span&gt; &lt;span class=&#34;nf&#34;&gt;block_everything&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;:&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;nb&#34;&gt;xrange&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1000000000&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;
+
+&lt;span class=&#34;n&#34;&gt;block_everything&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;执行这个脚本，然后&lt;code&gt;ctrl+c&lt;/code&gt;，会发现并不能使程序终止。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-python&#34; data-lang=&#34;python&#34;&gt;&lt;span class=&#34;n&#34;&gt;dis&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;dis&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;block_everything&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+      &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;LOAD_GLOBAL&lt;/span&gt;              &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;nb&#34;&gt;xrange&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+      &lt;span class=&#34;mi&#34;&gt;3&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;LOAD_CONST&lt;/span&gt;               &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1000000000&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+      &lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;CALL_FUNCTION&lt;/span&gt;            &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;
+      &lt;span class=&#34;mi&#34;&gt;9&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;STORE_FAST&lt;/span&gt;               &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+
+     &lt;span class=&#34;mi&#34;&gt;12&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;LOAD_CONST&lt;/span&gt;               &lt;span class=&#34;mi&#34;&gt;2&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;-&lt;/span&gt;&lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+     &lt;span class=&#34;mi&#34;&gt;15&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;LOAD_FAST&lt;/span&gt;                &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;nums&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+     &lt;span class=&#34;mi&#34;&gt;18&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;COMPARE_OP&lt;/span&gt;               &lt;span class=&#34;mi&#34;&gt;6&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;ow&#34;&gt;in&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+     &lt;span class=&#34;mi&#34;&gt;21&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;POP_TOP&lt;/span&gt;
+     &lt;span class=&#34;mi&#34;&gt;22&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;LOAD_CONST&lt;/span&gt;               &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;bp&#34;&gt;None&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+     &lt;span class=&#34;mi&#34;&gt;25&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;RETURN_VALUE&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;其中的原因是：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;其中一条指令（&lt;code&gt;COMPARE_OP&lt;/code&gt;）耗时太久，而解释器在执行100ticks之后才会处理signals&lt;/li&gt;
+&lt;li&gt;主进程被block，无法处理signal&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;33-python2的优先级倒置priority-inversion&#34;&gt;3.3 Python2的优先级倒置（Priority Inversion）&lt;/h2&gt;
+&lt;p&gt;先谈谈GIL的实现：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;GIL不仅仅是mutex&lt;/li&gt;
+&lt;li&gt;具体实现（Unix）要么是匿名信号量，要么是Pthreads条件变量&lt;/li&gt;
+&lt;li&gt;锁机制基于信号signal
+&lt;ul&gt;
+&lt;li&gt;获取GIL时候，检查锁，如果锁非空闲，休眠然后等待锁&lt;/li&gt;
+&lt;li&gt;释放GIL时候，释放锁并且发送signal给其他线程&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;img src=&#34;https://ZmN5.github.io/post/static/python-gil/gil-locking.jpg&#34; alt=&#34;GIL&#34;&gt;&lt;/p&gt;
+&lt;p&gt;由于线程的调度都是操作系统负责的，那么多个线程就会被调度到多核上同时执行，就会有CPU Battle的现象。&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ZmN5.github.io/post/static/python-gil/CPU-battle.jpg&#34; alt=&#34;CPU_battle&#34;&gt;&lt;/p&gt;
+&lt;p&gt;就上图详细来说，线程t2被调度到CPU核上开始执行时候，拿不到GIL被block，t1释放GIL时候，通知t2来抢，但是这时候t1会被留在原先的CPU核上继续执行，GIL又被t1抢走了，t2继续block。&lt;/p&gt;
+&lt;p&gt;t2: “怎么有种被调戏的感觉。。。”&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://ZmN5.github.io/post/static/python-gil/CPU-battle-summary.jpg&#34; alt=&#34;CPU_battle_summary&#34;&gt;&lt;/p&gt;
+&lt;p&gt;从代码大概是这样：&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt; 1
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 2
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 3
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 4
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 5
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 6
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 7
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 8
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt; 9
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;10
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;11
+&lt;/span&gt;&lt;span class=&#34;lnt&#34;&gt;12
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;interpreter_lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+  &lt;span class=&#34;cm&#34;&gt;/* Give another thread a chance */&lt;/span&gt;
+    &lt;span class=&#34;k&#34;&gt;if&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;PyThreadState_Swap&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;Null&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;!&lt;/span&gt;&lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;tstate&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt; &lt;span class=&#34;p&#34;&gt;{&lt;/span&gt;
+      &lt;span class=&#34;n&#34;&gt;Py_FatalError&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;sa&#34;&gt;&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;Ceval, tstate mix-up.&lt;/span&gt;&lt;span class=&#34;s&#34;&gt;&amp;#34;&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;
+    &lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+    &lt;span class=&#34;n&#34;&gt;PyThread_release_lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;interpreter_lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+
+    &lt;span class=&#34;cm&#34;&gt;/* Other thread may run now.*/&lt;/span&gt; 
+    &lt;span class=&#34;cm&#34;&gt;/* there is no code here. */&lt;/span&gt;
+
+    &lt;span class=&#34;n&#34;&gt;PyThread_acquire_lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;n&#34;&gt;interpreter_lock&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;,&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;)&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;span class=&#34;p&#34;&gt;}&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;从代码可以看出，这里最主要的问题是，从释放GIL到重新获取GIL，中间没有其他代码，这个过程只需要几纳秒，其他线程很难抢到GIL。&lt;/p&gt;
+&lt;p&gt;这点在几个都是CPU-bound的线程上的影响就是，多线程比单线程执行更慢。
+在同时有CPU-bound和IO-bound的线程上影响就是，优先级倒置（Priority Inversion）。本来应该高优先级的IO-bound线程，会很难拿到GIL去执行。&lt;/p&gt;
+&lt;p&gt;最主要的问题是，这里掺杂了两个相冲突的目标：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;对Python解释器来说，只想在单线程上执行，但是同时又不做任何和线程调度相关的事情。&lt;/li&gt;
+&lt;li&gt;对操作系统来说，看到有多个线程，那么就调度到多个核上同时工作吧。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;34-python3的gil&#34;&gt;3.4 Python3的GIL&lt;/h2&gt;
+&lt;p&gt;从python3.2开始，引入了新的GIL。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;新的GIL仍旧基于&lt;code&gt;condition variable&lt;/code&gt;和&lt;code&gt;signaling&lt;/code&gt;，但是和旧的完全不同，signal会显著减少&lt;/li&gt;
+&lt;li&gt;新的线程切换是基于时间的（&lt;code&gt;time-based&lt;/code&gt;）, 不像过去一样，是基于ticks的&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;新GIL的设计基于几条原则：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;是否要进行线程切换取决于一个全局变量。&lt;/p&gt;
+&lt;div class=&#34;highlight&#34;&gt;&lt;div class=&#34;chroma&#34;&gt;
+&lt;table class=&#34;lntable&#34;&gt;&lt;tr&gt;&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code&gt;&lt;span class=&#34;lnt&#34;&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class=&#34;lntd&#34;&gt;
+&lt;pre class=&#34;chroma&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span class=&#34;k&#34;&gt;static&lt;/span&gt; &lt;span class=&#34;k&#34;&gt;volatile&lt;/span&gt; &lt;span class=&#34;kt&#34;&gt;int&lt;/span&gt; &lt;span class=&#34;n&#34;&gt;gil_drop_request&lt;/span&gt; &lt;span class=&#34;o&#34;&gt;=&lt;/span&gt; &lt;span class=&#34;mi&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;p&#34;&gt;;&lt;/span&gt;
+&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;线程将一直运行，直到全局变量的值变为1&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;全局变量变为1时候，线程必须释放GIL&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;来看看这些怎么发生的？&lt;/p&gt;
+&lt;h3 id=&#34;341-如果只有一个线程&#34;&gt;3.4.1 如果只有一个线程&lt;/h3&gt;
+&lt;p&gt;那么这个线程将会一直运行。&lt;/p&gt;
+&lt;h3 id=&#34;342-如果有两个线程&#34;&gt;3.4.2 如果有两个线程&lt;/h3&gt;
+&lt;p&gt;假设有两个线程t1和t2，初始状态t1拿到线程。&lt;/p&gt;
+&lt;p&gt;那么t2将执行cv_wait(gil, TIMEOUT)，等待GIL被释放，这时候将会有两种情况&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;t1主动释放GIL（sleep/io/等），t1给t2发送signal，t2开始执行&lt;/li&gt;
+&lt;li&gt;t2等t1执行完时间片，把全局变量gil_drop_request置为1，然后继续执行cv_wait&lt;/li&gt;
+&lt;li&gt;t1将不再执行，放弃GIL，并且发送signal通知自己已经放弃GIL&lt;/li&gt;
+&lt;li&gt;t1将开始等待一个&lt;code&gt;gotgil&lt;/code&gt;的signal，表明GIL已经被其他线程获取&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;（默认的TIMEOUT时间是5ms）&lt;/p&gt;
+&lt;h3 id=&#34;343影响&#34;&gt;3.4.3影响&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;新的GIL将允许线程在忽略其他线程以及IO优先级的情况下执行5ms&lt;/li&gt;
+&lt;li&gt;一个CPU密集型线程将阻塞IO线程至少5ms&lt;/li&gt;
+&lt;li&gt;这将会影响响应时间&lt;/li&gt;
+&lt;li&gt;长时间执行的c/c++扩展将影响线程切换，线程切换将不再是抢占式的&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;四gil不是什么&#34;&gt;四、GIL不是什么？&lt;/h1&gt;
+&lt;ol&gt;
+&lt;li&gt;在多线程编程中，即便有了GIL，你的代码仍然不一定是线程安全的，仍然需要其他同步原语&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h1 id=&#34;五总结&#34;&gt;五、总结&lt;/h1&gt;
+&lt;p&gt;毫无疑问，Python在时下这么流行是离不开GIL的：&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;GIL让单线程执行的更快&lt;/li&gt;
+&lt;li&gt;GIL让IO-bound的多线程执行的更快&lt;/li&gt;
+&lt;li&gt;GIL让C扩展实现的多线程编程执行的更快😂&lt;/li&gt;
+&lt;li&gt;实现及使用C扩展更加容易&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;python选择了粗粒度的GIL了保证内存安全，其他语言选择细粒度的锁实现真正的多线程，反过来说，Python也利用GIL也把GC时候的&lt;code&gt;Stop the world&lt;/code&gt;，分解成为了一个个更细粒度的内存回收，其实换个角度来说，也就是换成了一个个更细粒度的&lt;code&gt;Stop the world&lt;/code&gt;吧。&lt;/p&gt;
+&lt;p&gt;参考:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a href=&#34;https://realpython.com/python-gil/&#34;&gt;What is the Python Global Interpreter Lock (GIL)?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;https://www.youtube.com/watch?v=KVKufdTphKs&#34;&gt;Python&amp;rsquo;s Infamous GIL by Larry Hastings&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.dabeaz.com/python/GIL.pdf&#34;&gt;Inside the Python GIL&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;http://www.dabeaz.com/python/NewGIL.pdf&#34;&gt;Inside the New GIL&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;</description>
+    </item>
     
     <item>
       <title>gunicorn中的进程管理</title>
