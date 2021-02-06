@@ -2,21 +2,28 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://ZmN5.github.io/categories/</loc>
-    <lastmod>2020-10-23T18:12:42+08:00</lastmod>
+    <loc>https://ZmN5.github.io/post/2020-summary/</loc>
+    <lastmod>2021-02-06T15:47:35+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ZmN5.github.io/post/</loc>
-    <lastmod>2020-10-23T18:12:42+08:00</lastmod>
+    <lastmod>2021-02-06T15:47:35+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
     <loc>https://ZmN5.github.io/</loc>
+    <lastmod>2021-02-06T15:47:35+08:00</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.5</priority>
+  </url>
+  
+  <url>
+    <loc>https://ZmN5.github.io/categories/</loc>
     <lastmod>2020-10-23T18:12:42+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -177,14 +184,14 @@
   </url>
   
   <url>
-    <loc>https://ZmN5.github.io/categories/sticker/</loc>
+    <loc>https://ZmN5.github.io/tags/sticker/</loc>
     <lastmod>2019-01-17T01:03:13+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://ZmN5.github.io/tags/sticker/</loc>
+    <loc>https://ZmN5.github.io/categories/sticker/</loc>
     <lastmod>2019-01-17T01:03:13+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
@@ -282,14 +289,14 @@
   </url>
   
   <url>
-    <loc>https://ZmN5.github.io/tags/django/</loc>
+    <loc>https://ZmN5.github.io/categories/django/</loc>
     <lastmod>2018-11-10T21:34:22+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
   </url>
   
   <url>
-    <loc>https://ZmN5.github.io/categories/django/</loc>
+    <loc>https://ZmN5.github.io/tags/django/</loc>
     <lastmod>2018-11-10T21:34:22+08:00</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.5</priority>
